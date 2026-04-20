@@ -1,0 +1,52 @@
+<svg
+  viewBox="0 0 400 260"
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMidYMid slice"
+>
+  <defs>
+    <linearGradient id="tourSky3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b8d0e4" />
+      <stop offset="100%" stop-color="#f4e0c4" />
+    </linearGradient>
+    <linearGradient id="tourMeadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6fa860" />
+      <stop offset="100%" stop-color="#3d7a3a" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#tourSky3)" />
+  <circle cx="320" cy="60" r="26" fill="#f0a95c" opacity="0.9" />
+  <path
+    d="M0 140 L60 90 L130 120 L200 80 L270 115 L340 85 L400 120 L400 170 L0 170 Z"
+    fill="#8aa5c0"
+  />
+  <path d="M180 90 L200 80 L220 100 L200 112 Z" fill="#fbfaf5" />
+  <path
+    d="M0 170 Q100 160 200 170 Q300 180 400 165 L400 260 L0 260 Z"
+    fill="url(#tourMeadow)"
+  />
+  <g transform="translate(120 175)">
+    <rect x="0" y="10" width="44" height="28" fill="#8a5a3a" />
+    <polygon points="-4,10 22,-8 48,10" fill="#5a2f20" />
+    <rect x="16" y="22" width="10" height="16" fill="#3a1f10" />
+    <rect x="6" y="16" width="6" height="6" fill="#f0d8a0" />
+    <rect x="32" y="16" width="6" height="6" fill="#f0d8a0" />
+  </g>
+  <g>
+    <g transform="translate(60 195)">
+      <polygon points="0,0 -8,14 8,14" fill="#1f4a36" />
+      <polygon points="0,-10 -10,6 10,6" fill="#1f4a36" />
+      <polygon points="0,-20 -11,-4 11,-4" fill="#1f4a36" />
+    </g>
+    <g transform="translate(300 200)">
+      <polygon points="0,0 -8,14 8,14" fill="#1f4a36" />
+      <polygon points="0,-10 -10,6 10,6" fill="#1f4a36" />
+    </g>
+  </g>
+  <g>
+    <circle cx="40" cy="230" r="2" fill="#f0a95c" />
+    <circle cx="70" cy="240" r="2" fill="#f4e0c4" />
+    <circle cx="220" cy="235" r="2" fill="#f0a95c" />
+    <circle cx="260" cy="245" r="2" fill="#fbfaf5" />
+    <circle cx="350" cy="232" r="2" fill="#f0a95c" />
+  </g>
+</svg>

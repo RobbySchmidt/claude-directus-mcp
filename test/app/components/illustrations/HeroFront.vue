@@ -1,0 +1,70 @@
+<template>
+  <svg
+    viewBox="0 0 1440 720"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMax slice"
+    aria-hidden="true"
+    class="h-full w-full"
+  >
+    <defs>
+      <linearGradient id="heroFrontRidge" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a5a4a" />
+        <stop offset="100%" stop-color="#2f6b4e" />
+      </linearGradient>
+      <linearGradient id="heroValley" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2f6b4e" />
+        <stop offset="100%" stop-color="#1f4a36" />
+      </linearGradient>
+    </defs>
+
+    <!-- Near ridge -->
+    <path
+      d="M0 640 L160 560 L320 600 L480 540 L640 580 L820 520 L980 560 L1160 520 L1320 560 L1440 540 L1440 720 L0 720 Z"
+      fill="url(#heroFrontRidge)"
+    />
+
+    <!-- Tree silhouettes along the ridge -->
+    <g fill="#1f4a36">
+      <polygon points="140,580 150,560 160,580" />
+      <polygon points="200,585 210,568 220,585" />
+      <polygon points="340,600 350,585 360,600" />
+      <polygon points="500,560 510,542 520,560" />
+      <polygon points="620,580 632,562 644,580" />
+      <polygon points="780,540 790,522 800,540" />
+      <polygon points="900,560 910,545 920,560" />
+      <polygon points="1020,565 1032,548 1044,565" />
+      <polygon points="1200,545 1212,527 1224,545" />
+      <polygon points="1340,565 1352,548 1364,565" />
+    </g>
+
+    <!-- Valley -->
+    <path d="M0 680 L1440 680 L1440 720 L0 720 Z" fill="url(#heroValley)" />
+
+    <!-- Trail -->
+    <path
+      d="M640 720 Q700 690 740 685 Q800 680 820 670"
+      stroke="#e8d4b0"
+      stroke-width="6"
+      fill="none"
+      stroke-linecap="round"
+      opacity="0.9"
+    />
+
+    <!-- Hiker -->
+    <g transform="translate(720 654)" fill="#1f2b3a">
+      <rect x="-6" y="-2" width="10" height="14" rx="2" fill="#2f6b4e" />
+      <path d="M-3 0 L5 0 L4 16 L-2 16 Z" />
+      <circle cx="1" cy="-6" r="4" />
+      <path d="M-2 16 L-3 26 L0 26 L1 18 L3 26 L5 26 L4 16 Z" />
+      <line x1="-6" y1="26" x2="-4" y2="2" stroke="#5a3a20" stroke-width="1.2" stroke-linecap="round" />
+    </g>
+
+    <!-- Foreground grass tufts -->
+    <g fill="#1f4a36" opacity="0.95">
+      <path d="M0 720 L20 700 L40 720 Z" />
+      <path d="M80 720 L100 705 L120 720 Z" />
+      <path d="M1320 720 L1340 702 L1360 720 Z" />
+      <path d="M1400 720 L1420 706 L1440 720 Z" />
+    </g>
+  </svg>
+</template>

@@ -1,0 +1,33 @@
+<svg
+  viewBox="0 0 400 260"
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMidYMid slice"
+>
+  <defs>
+    <linearGradient id="tourSky1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cfe0ee" />
+      <stop offset="100%" stop-color="#f0d8c0" />
+    </linearGradient>
+    <linearGradient id="tourLake1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7aacd0" />
+      <stop offset="100%" stop-color="#3d6b90" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="260" fill="url(#tourSky1)" />
+  <circle cx="310" cy="70" r="22" fill="#f0a95c" opacity="0.9" />
+  <path
+    d="M0 180 L70 110 L130 150 L200 80 L270 140 L340 100 L400 150 L400 200 L0 200 Z"
+    fill="#5a7a98"
+  />
+  <path d="M180 90 L200 80 L220 100 L200 110 Z" fill="#fbfaf5" />
+  <path
+    d="M0 200 L60 170 L140 190 L220 160 L300 185 L400 170 L400 220 L0 220 Z"
+    fill="#2f6b4e"
+  />
+  <rect x="0" y="220" width="400" height="40" fill="url(#tourLake1)" />
+  <g stroke="#fbfaf5" opacity="0.3" stroke-width="1">
+    <line x1="40" y1="232" x2="80" y2="232" />
+    <line x1="140" y1="240" x2="200" y2="240" />
+    <line x1="260" y1="234" x2="320" y2="234" />
+  </g>
+</svg>

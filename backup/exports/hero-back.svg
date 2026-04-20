@@ -1,0 +1,24 @@
+<svg
+  viewBox="0 0 1440 720"
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMidYMax slice"
+>
+  <defs>
+    <linearGradient id="heroBackPeak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8ca9c4" />
+      <stop offset="100%" stop-color="#5a7a98" />
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M0 480 L180 340 L280 400 L420 280 L560 380 L700 320 L860 400 L1000 300 L1160 380 L1280 320 L1440 400 L1440 720 L0 720 Z"
+    fill="url(#heroBackPeak)"
+    opacity="0.82"
+  />
+
+  <g fill="#fbfaf5" opacity="0.55">
+    <path d="M410 290 L420 280 L432 292 L420 302 Z" />
+    <path d="M990 312 L1000 300 L1012 314 L1000 322 Z" />
+    <path d="M1272 328 L1280 320 L1290 332 L1280 340 Z" />
+  </g>
+</svg>

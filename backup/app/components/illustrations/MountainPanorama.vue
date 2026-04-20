@@ -1,0 +1,100 @@
+<template>
+  <svg
+    viewBox="0 0 800 600"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid slice"
+    aria-hidden="true"
+    class="h-full w-full"
+  >
+    <defs>
+      <linearGradient id="panoSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c8dcee" />
+        <stop offset="100%" stop-color="#e8c5a8" />
+      </linearGradient>
+      <linearGradient id="panoLake" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#6b9bc8" />
+        <stop offset="100%" stop-color="#3a5a7a" />
+      </linearGradient>
+      <linearGradient id="panoPeakBack" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#8aa5c0" />
+        <stop offset="100%" stop-color="#5a7a98" />
+      </linearGradient>
+      <linearGradient id="panoPeakFront" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3a5a4a" />
+        <stop offset="100%" stop-color="#2f6b4e" />
+      </linearGradient>
+    </defs>
+
+    <rect width="800" height="600" fill="url(#panoSky)" />
+
+    <!-- Sun -->
+    <circle cx="600" cy="140" r="42" fill="#f0a95c" opacity="0.9" />
+    <circle cx="600" cy="140" r="70" fill="#f0a95c" opacity="0.18" />
+
+    <!-- Clouds -->
+    <g fill="#fbfaf5" opacity="0.6">
+      <ellipse cx="180" cy="110" rx="60" ry="8" />
+      <ellipse cx="400" cy="150" rx="80" ry="9" />
+    </g>
+
+    <!-- Back peaks (snow) -->
+    <path
+      d="M0 360 L100 240 L180 300 L280 200 L380 300 L480 220 L580 310 L680 250 L800 320 L800 420 L0 420 Z"
+      fill="url(#panoPeakBack)"
+    />
+    <path
+      d="M260 220 L280 200 L300 220 L280 240 Z M460 240 L480 220 L500 240 L480 258 Z"
+      fill="#fbfaf5"
+    />
+
+    <!-- Mid peaks (green) -->
+    <path
+      d="M0 420 L80 360 L200 400 L340 340 L480 400 L620 360 L760 400 L800 380 L800 460 L0 460 Z"
+      fill="url(#panoPeakFront)"
+    />
+
+    <!-- Trees -->
+    <g fill="#1f4a36">
+      <polygon points="100,420 108,400 116,420" />
+      <polygon points="180,430 188,410 196,430" />
+      <polygon points="260,420 268,400 276,420" />
+      <polygon points="380,410 388,390 396,410" />
+      <polygon points="500,430 508,412 516,430" />
+      <polygon points="620,420 628,402 636,420" />
+      <polygon points="700,430 708,412 716,430" />
+    </g>
+
+    <!-- Lake -->
+    <path d="M0 460 L800 460 L800 520 L0 520 Z" fill="url(#panoLake)" />
+
+    <!-- Lake reflections -->
+    <g stroke="#fbfaf5" stroke-width="1" opacity="0.35">
+      <line x1="80" y1="475" x2="140" y2="475" />
+      <line x1="220" y1="485" x2="300" y2="485" />
+      <line x1="380" y1="478" x2="460" y2="478" />
+      <line x1="540" y1="490" x2="620" y2="490" />
+    </g>
+
+    <!-- Foreground shore -->
+    <path
+      d="M0 520 Q200 508 400 515 Q600 522 800 510 L800 600 L0 600 Z"
+      fill="#2f6b4e"
+    />
+
+    <!-- Foreground pine trees -->
+    <g>
+      <g transform="translate(60 540)">
+        <polygon points="0,0 -12,20 12,20" fill="#1f4a36" />
+        <polygon points="0,-15 -14,10 14,10" fill="#1f4a36" />
+        <polygon points="0,-30 -16,-2 16,-2" fill="#1f4a36" />
+        <rect x="-2" y="18" width="4" height="8" fill="#5a3a20" />
+      </g>
+      <g transform="translate(720 545)">
+        <polygon points="0,0 -10,16 10,16" fill="#1f4a36" />
+        <polygon points="0,-12 -12,8 12,8" fill="#1f4a36" />
+        <polygon points="0,-24 -14,-2 14,-2" fill="#1f4a36" />
+        <rect x="-2" y="14" width="4" height="8" fill="#5a3a20" />
+      </g>
+    </g>
+  </svg>
+</template>
