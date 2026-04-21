@@ -44,8 +44,8 @@ const altFor = (img: TourGalleryImage, idx: number) =>
             </div>
           </CarouselItem>
         </CarouselContent>
-        <CarouselPrevious class="ml-12 active:not-aria-[haspopup]:translate-y-0" />
-        <CarouselNext class="mr-12 active:not-aria-[haspopup]:translate-y-0" />
+        <CarouselPrevious class="ml-12 active:-translate-y-1/2!" />
+        <CarouselNext class="mr-12 active:-translate-y-1/2!" />
       </Carousel>
     </div>
   </section>
