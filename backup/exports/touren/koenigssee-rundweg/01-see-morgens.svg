@@ -1,0 +1,77 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Königssee im Morgendunst">
+  <defs>
+    <linearGradient id="ks1-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9dbcd6" />
+      <stop offset="55%" stop-color="#f0d8c0" />
+      <stop offset="100%" stop-color="#f0a95c" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="ks1-lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b8d4e8" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#6a9cbe" />
+    </linearGradient>
+    <linearGradient id="ks1-mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbfaf5" stop-opacity="0" />
+      <stop offset="100%" stop-color="#fbfaf5" stop-opacity="0.55" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#ks1-sky)" />
+
+  <!-- Sun (low, upper right) -->
+  <circle cx="650" cy="105" r="34" fill="#f0a95c" opacity="0.85" />
+  <circle cx="650" cy="105" r="52" fill="#f0a95c" opacity="0.18" />
+
+  <!-- Far mountain range (left, muted blue-grey) -->
+  <path
+    d="M0 270 L80 170 L160 230 L260 140 L360 210 L440 155 L540 220 L620 165 L700 220 L800 180 L800 320 L0 320 Z"
+    fill="#8aa8c2"
+  />
+  <!-- Snow caps on far peaks -->
+  <path d="M240 165 L260 140 L280 168 L260 178 Z" fill="#fbfaf5" opacity="0.85" />
+  <path d="M420 174 L440 155 L458 178 L440 188 Z" fill="#fbfaf5" opacity="0.85" />
+  <path d="M600 184 L620 165 L640 187 L620 196 Z" fill="#fbfaf5" opacity="0.75" />
+
+  <!-- Mid mountain range (darker) -->
+  <path
+    d="M0 320 L100 255 L200 295 L320 240 L420 280 L520 248 L640 285 L740 255 L800 275 L800 380 L0 380 Z"
+    fill="#4a7090"
+  />
+
+  <!-- Mist band across water surface -->
+  <rect x="0" y="355" width="800" height="60" fill="url(#ks1-mist)" />
+
+  <!-- Lake -->
+  <rect x="0" y="370" width="800" height="130" fill="url(#ks1-lake)" />
+
+  <!-- Lake reflection lines -->
+  <g stroke="#fbfaf5" stroke-width="1.2" opacity="0.25">
+    <line x1="60" y1="395" x2="180" y2="395" />
+    <line x1="280" y1="408" x2="460" y2="408" />
+    <line x1="540" y1="400" x2="700" y2="400" />
+    <line x1="100" y1="425" x2="220" y2="425" />
+    <line x1="360" y1="432" x2="520" y2="432" />
+  </g>
+
+  <!-- Foreground treeline / shoreline -->
+  <path
+    d="M0 370 Q80 360 160 372 Q240 380 320 368 Q400 358 500 372 Q600 382 700 368 L800 370 L800 390 L0 390 Z"
+    fill="#2f6b4e"
+  />
+  <!-- A few fir tree silhouettes on near shore -->
+  <g fill="#1f4a36">
+    <polygon points="30,370 22,390 38,390" />
+    <polygon points="30,360 20,376 40,376" />
+    <polygon points="30,350 21,364 39,364" />
+
+    <polygon points="70,368 62,388 78,388" />
+    <polygon points="70,358 61,374 79,374" />
+
+    <polygon points="740,366 732,386 748,386" />
+    <polygon points="740,356 731,372 749,372" />
+    <polygon points="740,346 730,362 750,362" />
+
+    <polygon points="775,372 767,390 783,390" />
+    <polygon points="775,362 766,378 784,378" />
+  </g>
+</svg>

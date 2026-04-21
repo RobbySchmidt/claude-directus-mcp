@@ -1,0 +1,115 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Uferweg am Königssee mit Wanderern">
+  <defs>
+    <linearGradient id="ks2-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7aacd0" />
+      <stop offset="100%" stop-color="#cde3f0" />
+    </linearGradient>
+    <linearGradient id="ks2-lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7aacd0" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#3d6b90" />
+    </linearGradient>
+    <linearGradient id="ks2-path" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c8b89a" />
+      <stop offset="100%" stop-color="#a89070" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#ks2-sky)" />
+
+  <!-- Clouds -->
+  <ellipse cx="200" cy="80" rx="70" ry="12" fill="#fbfaf5" opacity="0.55" />
+  <ellipse cx="560" cy="60" rx="85" ry="10" fill="#fbfaf5" opacity="0.45" />
+
+  <!-- Far mountains -->
+  <path
+    d="M0 240 L100 150 L200 200 L320 120 L440 185 L560 140 L680 195 L800 155 L800 290 L0 290 Z"
+    fill="#6a8aa8"
+  />
+  <path d="M300 140 L320 120 L340 145 L320 157 Z" fill="#fbfaf5" opacity="0.8" />
+  <path d="M540 158 L560 140 L578 162 L560 172 Z" fill="#fbfaf5" opacity="0.75" />
+
+  <!-- Mid forested slope (right side — lake side) -->
+  <path
+    d="M420 290 L800 270 L800 500 L420 500 Z"
+    fill="#3a6888"
+  />
+
+  <!-- Lake (right half) -->
+  <path
+    d="M420 290 L800 270 L800 500 L300 500 Z"
+    fill="url(#ks2-lake)"
+  />
+  <!-- Lake ripples -->
+  <g stroke="#fbfaf5" stroke-width="1" opacity="0.2">
+    <line x1="500" y1="330" x2="640" y2="325" />
+    <line x1="550" y1="360" x2="720" y2="354" />
+    <line x1="480" y1="390" x2="660" y2="384" />
+    <line x1="520" y1="420" x2="700" y2="415" />
+  </g>
+
+  <!-- Ground / path area -->
+  <path
+    d="M0 290 Q200 285 400 300 L400 500 L0 500 Z"
+    fill="#4a6e42"
+  />
+
+  <!-- Narrow dirt path running left to right -->
+  <path
+    d="M0 390 Q100 385 200 380 Q320 375 420 378 L420 395 Q320 392 200 397 Q100 402 0 407 Z"
+    fill="url(#ks2-path)"
+  />
+
+  <!-- Trees (left side, firs) -->
+  <g fill="#1f4a36">
+    <!-- Tree 1 -->
+    <polygon points="60,390 50,415 70,415" />
+    <polygon points="60,374 48,396 72,396" />
+    <polygon points="60,360 46,380 74,380" />
+    <rect x="57" y="412" width="6" height="10" fill="#5a3a20" />
+
+    <!-- Tree 2 -->
+    <polygon points="120,395 110,418 130,418" />
+    <polygon points="120,380 108,400 132,400" />
+    <polygon points="120,366 107,384 133,384" />
+    <rect x="117" y="415" width="6" height="10" fill="#5a3a20" />
+
+    <!-- Tree 3 -->
+    <polygon points="20,386 11,408 29,408" />
+    <polygon points="20,372 10,392 30,392" />
+    <rect x="17" y="406" width="6" height="8" fill="#5a3a20" />
+
+    <!-- Tree 4 (background) -->
+    <polygon points="180,370 170,392 190,392" opacity="0.65" />
+    <polygon points="180,356 169,376 191,376" opacity="0.65" />
+
+    <!-- Tree 5 -->
+    <polygon points="240,368 230,390 250,390" opacity="0.55" />
+    <polygon points="240,354 229,374 251,374" opacity="0.55" />
+  </g>
+
+  <!-- Wanderer silhouette 1 (leading) -->
+  <g fill="#1f2b3a" transform="translate(320 360)">
+    <!-- body -->
+    <rect x="-4" y="-24" width="8" height="18" rx="2" />
+    <!-- head -->
+    <circle cx="0" cy="-28" r="6" />
+    <!-- backpack bump -->
+    <rect x="3" y="-22" width="7" height="12" rx="2" />
+    <!-- legs -->
+    <line x1="-2" y1="-6" x2="-6" y2="10" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <line x1="2" y1="-6" x2="5" y2="10" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <!-- walking stick -->
+    <line x1="8" y1="-14" x2="14" y2="12" stroke="#1f2b3a" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Wanderer silhouette 2 (following, slightly back) -->
+  <g fill="#1f2b3a" transform="translate(280 365)">
+    <rect x="-4" y="-22" width="8" height="16" rx="2" />
+    <circle cx="0" cy="-26" r="5.5" />
+    <rect x="3" y="-20" width="6" height="10" rx="2" />
+    <line x1="-2" y1="-6" x2="-5" y2="8" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <line x1="2" y1="-6" x2="4" y2="8" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <line x1="-6" y1="-12" x2="-11" y2="10" stroke="#1f2b3a" stroke-width="2" stroke-linecap="round" />
+  </g>
+</svg>

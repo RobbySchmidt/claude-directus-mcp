@@ -1,0 +1,82 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Gipfelkreuz am Watzmann">
+  <defs>
+    <linearGradient id="wm1-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3a6a" />
+      <stop offset="45%" stop-color="#4a7ab0" />
+      <stop offset="100%" stop-color="#9dbcd6" />
+    </linearGradient>
+    <linearGradient id="wm1-peak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8a9aaa" />
+      <stop offset="100%" stop-color="#3a4a58" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#wm1-sky)" />
+
+  <!-- Sea of peaks (multiple rows fading into distance) -->
+  <!-- Furthest row -->
+  <path
+    d="M0 280 L50 230 L110 260 L180 215 L250 250 L320 210 L390 248 L460 205 L530 242 L600 200 L670 238 L740 205 L800 228 L800 310 L0 310 Z"
+    fill="#3a5a78" opacity="0.6"
+  />
+  <!-- Mid-far row -->
+  <path
+    d="M0 310 L60 258 L130 290 L210 240 L290 278 L370 235 L450 272 L530 230 L610 268 L690 238 L770 265 L800 250 L800 345 L0 345 Z"
+    fill="#4a6a88" opacity="0.75"
+  />
+  <!-- Near row -->
+  <path
+    d="M0 345 L80 290 L170 330 L260 275 L350 315 L440 268 L530 308 L620 272 L710 305 L800 278 L800 390 L0 390 Z"
+    fill="#5a7a98"
+  />
+  <!-- Snow caps on near peaks -->
+  <path d="M242 292 L260 275 L278 296 L260 307 Z" fill="#fbfaf5" opacity="0.75" />
+  <path d="M422 283 L440 268 L458 286 L440 298 Z" fill="#fbfaf5" opacity="0.7" />
+  <path d="M602 286 L620 272 L637 288 L620 300 Z" fill="#fbfaf5" opacity="0.7" />
+
+  <!-- Summit plateau / Gipfel foreground -->
+  <path
+    d="M150 390 Q400 370 650 390 L750 420 L800 500 L0 500 L50 420 Z"
+    fill="url(#wm1-peak)"
+  />
+  <!-- Snow on summit -->
+  <path
+    d="M200 395 Q400 378 600 395 L580 405 Q400 390 220 405 Z"
+    fill="#fbfaf5" opacity="0.55"
+  />
+
+  <!-- Some rock boulders at summit -->
+  <g fill="#2a3a4a">
+    <ellipse cx="200" cy="420" rx="28" ry="12" />
+    <ellipse cx="620" cy="425" rx="22" ry="10" />
+    <ellipse cx="720" cy="445" rx="18" ry="8" />
+    <ellipse cx="100" cy="450" rx="20" ry="9" />
+  </g>
+
+  <!-- Summit cross (Gipfelkreuz) -- center stage -->
+  <g transform="translate(400 320)">
+    <!-- Vertical beam -->
+    <rect x="-5" y="-80" width="10" height="110" rx="2" fill="#7a5a38" />
+    <!-- Horizontal beam -->
+    <rect x="-38" y="-55" width="76" height="9" rx="2" fill="#7a5a38" />
+    <!-- Metal plaques suggestion -->
+    <rect x="-8" y="-20" width="16" height="22" rx="1" fill="#b0903a" opacity="0.7" />
+  </g>
+
+  <!-- Wanderer silhouette before the cross -->
+  <g fill="#1f2b3a" transform="translate(430 368)">
+    <!-- body -->
+    <rect x="-5" y="-28" width="10" height="20" rx="2" />
+    <!-- head -->
+    <circle cx="0" cy="-33" r="7" />
+    <!-- backpack -->
+    <rect x="4" y="-26" width="9" height="14" rx="2" />
+    <!-- legs (standing) -->
+    <rect x="-5" y="-8" width="4" height="20" rx="1" />
+    <rect x="1" y="-8" width="4" height="20" rx="1" />
+    <!-- arms raised slightly -->
+    <line x1="-5" y1="-20" x2="-14" y2="-10" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <line x1="5" y1="-20" x2="14" y2="-10" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+  </g>
+</svg>

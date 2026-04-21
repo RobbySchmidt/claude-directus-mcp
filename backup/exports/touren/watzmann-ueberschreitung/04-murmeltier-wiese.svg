@@ -1,0 +1,134 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Murmeltier auf der Almwiese">
+  <defs>
+    <linearGradient id="wm4-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a90c0" />
+      <stop offset="100%" stop-color="#b8d8f0" />
+    </linearGradient>
+    <linearGradient id="wm4-meadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6ab050" />
+      <stop offset="100%" stop-color="#2f6b4e" />
+    </linearGradient>
+    <linearGradient id="wm4-marmot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b8905a" />
+      <stop offset="100%" stop-color="#7a5030" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#wm4-sky)" />
+
+  <!-- Clouds (fair weather cumulus) -->
+  <ellipse cx="160" cy="90" rx="80" ry="15" fill="#fbfaf5" opacity="0.6" />
+  <ellipse cx="210" cy="80" rx="60" ry="12" fill="#fbfaf5" opacity="0.5" />
+  <ellipse cx="560" cy="75" rx="95" ry="14" fill="#fbfaf5" opacity="0.55" />
+  <ellipse cx="610" cy="65" rx="70" ry="11" fill="#fbfaf5" opacity="0.45" />
+
+  <!-- Background mountains (Watzmann) -->
+  <path
+    d="M0 240 L80 160 L160 200 L260 130 L340 170 L420 125 L500 168 L580 142 L660 180 L740 148 L800 175 L800 300 L0 300 Z"
+    fill="#6a8aaa"
+  />
+  <!-- Snow on Watzmann summit -->
+  <path d="M242 147 L260 130 L278 150 L260 163 Z" fill="#fbfaf5" opacity="0.85" />
+  <path d="M402 140 L420 125 L438 143 L420 156 Z" fill="#fbfaf5" opacity="0.85" />
+  <!-- Secondary snow caps -->
+  <path d="M562 156 L580 142 L597 158 L580 169 Z" fill="#fbfaf5" opacity="0.7" />
+
+  <!-- Mid hill / treeline -->
+  <path
+    d="M0 300 Q200 285 400 295 Q600 305 800 290 L800 360 L0 360 Z"
+    fill="#3a6838"
+  />
+  <!-- Fir trees -->
+  <g fill="#1f4a36">
+    <polygon points="100,300 91,322 109,322" />
+    <polygon points="100,284 90,305 110,305" />
+    <polygon points="100,268 89,288 111,288" />
+    <rect x="97" y="320" width="6" height="12" fill="#5a3a20" />
+
+    <polygon points="200,296 191,318 209,318" />
+    <polygon points="200,280 190,301 210,301" />
+    <rect x="197" y="316" width="6" height="12" fill="#5a3a20" />
+
+    <polygon points="650,292 641,314 659,314" />
+    <polygon points="650,276 640,297 660,297" />
+    <polygon points="650,260 639,280 661,280" />
+    <rect x="647" y="312" width="6" height="12" fill="#5a3a20" />
+
+    <polygon points="730,298 721,320 739,320" />
+    <polygon points="730,282 720,303 740,303" />
+    <rect x="727" y="318" width="6" height="12" fill="#5a3a20" />
+  </g>
+
+  <!-- Meadow -->
+  <path
+    d="M0 348 Q200 338 400 348 Q600 358 800 342 L800 500 L0 500 Z"
+    fill="url(#wm4-meadow)"
+  />
+
+  <!-- Wildflowers scattered across meadow -->
+  <g>
+    <!-- Orange flowers -->
+    <circle cx="60" cy="380" r="4" fill="#f0a95c" />
+    <circle cx="90" cy="400" r="3.5" fill="#f0a95c" />
+    <circle cx="160" cy="390" r="4" fill="#f0a95c" />
+    <circle cx="230" cy="408" r="3.5" fill="#f0a95c" />
+    <!-- White flowers -->
+    <circle cx="130" cy="375" r="3.5" fill="#fbfaf5" />
+    <circle cx="200" cy="395" r="3" fill="#fbfaf5" />
+    <circle cx="360" cy="382" r="4" fill="#fbfaf5" />
+    <!-- More orange right side -->
+    <circle cx="580" cy="376" r="4" fill="#f0a95c" />
+    <circle cx="640" cy="395" r="3.5" fill="#f0a95c" />
+    <circle cx="700" cy="382" r="4" fill="#f0a95c" />
+    <circle cx="750" cy="400" r="3.5" fill="#fbfaf5" />
+    <!-- Lavender-ish (using light blue from palette) -->
+    <circle cx="480" cy="390" r="3.5" fill="#9dbcd6" />
+    <circle cx="520" cy="405" r="3" fill="#9dbcd6" />
+  </g>
+
+  <!-- Some grass tufts -->
+  <g stroke="#2f6b4e" stroke-width="1.5" fill="none">
+    <path d="M420 380 Q415 370 418 362" />
+    <path d="M425 380 Q428 368 424 360" />
+    <path d="M300 375 Q295 365 298 357" />
+    <path d="M305 375 Q308 363 304 355" />
+  </g>
+
+  <!-- Marmot (upright/alert, front and center) -->
+  <g transform="translate(390 395)">
+    <!-- Body (sitting upright) -->
+    <ellipse cx="0" cy="0" rx="18" ry="28" fill="url(#wm4-marmot)" />
+    <!-- Belly (lighter) -->
+    <ellipse cx="0" cy="6" rx="10" ry="18" fill="#d4a870" opacity="0.7" />
+    <!-- Head -->
+    <ellipse cx="0" cy="-32" rx="16" ry="14" fill="#a87848" />
+    <!-- Ears -->
+    <ellipse cx="-10" cy="-43" rx="5" ry="7" fill="#a87848" />
+    <ellipse cx="10" cy="-43" rx="5" ry="7" fill="#a87848" />
+    <ellipse cx="-10" cy="-43" rx="2.5" ry="4" fill="#c8906a" />
+    <ellipse cx="10" cy="-43" rx="2.5" ry="4" fill="#c8906a" />
+    <!-- Eyes -->
+    <circle cx="-6" cy="-34" r="3.5" fill="#1a1008" />
+    <circle cx="6" cy="-34" r="3.5" fill="#1a1008" />
+    <circle cx="-5" cy="-35" r="1.2" fill="#fbfaf5" opacity="0.7" />
+    <circle cx="7" cy="-35" r="1.2" fill="#fbfaf5" opacity="0.7" />
+    <!-- Nose -->
+    <ellipse cx="0" cy="-24" rx="4" ry="2.5" fill="#7a4828" />
+    <!-- Front paws (held up alert) -->
+    <path d="M-18,0 Q-26,-6 -24,4" fill="none" stroke="#a87848" stroke-width="4" stroke-linecap="round" />
+    <path d="M18,0 Q26,-6 24,4" fill="none" stroke="#a87848" stroke-width="4" stroke-linecap="round" />
+    <!-- Tail -->
+    <path d="M0,26 Q-14,38 -8,50" fill="none" stroke="#7a5030" stroke-width="5" stroke-linecap="round" />
+  </g>
+
+  <!-- Second marmot in background (smaller, grazing) -->
+  <g transform="translate(480 415) scale(0.6)">
+    <ellipse cx="0" cy="0" rx="22" ry="14" fill="#a87848" />
+    <ellipse cx="-18" cy="-4" rx="12" ry="10" fill="#a87848" />
+    <circle cx="-24" cy="-5" r="2" fill="#1a1008" />
+    <rect x="-12" y="10" width="5" height="12" rx="1" fill="#8a5838" />
+    <rect x="0" y="10" width="5" height="12" rx="1" fill="#8a5838" />
+    <rect x="10" y="10" width="5" height="12" rx="1" fill="#8a5838" />
+  </g>
+</svg>
