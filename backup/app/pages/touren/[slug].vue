@@ -32,7 +32,7 @@ useSeoMeta({
 <template>
   <div v-if="tour" class="min-h-screen bg-background text-foreground antialiased pb-24 md:pb-0">
     <SectionsTheHeader />
-    <main>
+    <main class="pt-20">
       <nav aria-label="Breadcrumb" class="mx-auto max-w-7xl px-4 pt-f-8 text-sm text-muted-foreground sm:px-6 lg:px-8">
         <ol class="flex items-center gap-2">
           <li><NuxtLink to="/" class="hover:text-foreground">Home</NuxtLink></li>
