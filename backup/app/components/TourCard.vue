@@ -19,7 +19,7 @@ const difficultyColor = {
 
 <template>
   <article
-    class="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+    class="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:-translate-y-1 focus-within:shadow-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
   >
     <div class="relative aspect-4/3 overflow-hidden bg-muted">
       <IllustrationsTourIllustration :variant="variant" class="transition-transform duration-500 group-hover:scale-105" />
@@ -37,7 +37,12 @@ const difficultyColor = {
           {{ region }}
         </p>
         <h3 class="mt-1 font-heading text-f-2xl font-medium text-foreground">
-          {{ title }}
+          <NuxtLink
+            :to="`/touren/${slug}`"
+            class="outline-none before:absolute before:inset-0 before:content-['']"
+          >
+            {{ title }}
+          </NuxtLink>
         </h3>
       </div>
 
@@ -56,15 +61,15 @@ const difficultyColor = {
         </div>
       </dl>
 
-      <NuxtLink
-        :to="`/touren/${slug}`"
-        class="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      <span
+        aria-hidden="true"
+        class="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors group-hover:bg-primary/90"
       >
         Tour ansehen
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14" />
         </svg>
-      </NuxtLink>
+      </span>
     </div>
   </article>
 </template>
