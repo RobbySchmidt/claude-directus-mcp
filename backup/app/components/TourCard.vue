@@ -1,5 +1,6 @@
 <script setup lang="ts">
 defineProps<{
+  slug: string
   title: string
   region: string
   difficulty: 'leicht' | 'mittel' | 'schwer'
@@ -20,7 +21,7 @@ const difficultyColor = {
   <article
     class="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
   >
-    <div class="relative aspect-[4/3] overflow-hidden bg-muted">
+    <div class="relative aspect-4/3 overflow-hidden bg-muted">
       <IllustrationsTourIllustration :variant="variant" class="transition-transform duration-500 group-hover:scale-105" />
       <span
         class="absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-medium uppercase tracking-wider backdrop-blur-sm"
@@ -40,7 +41,7 @@ const difficultyColor = {
         </h3>
       </div>
 
-      <dl class="mt-auto grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
+      <dl class="grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
         <div>
           <dt class="text-xs text-muted-foreground">Strecke</dt>
           <dd class="mt-0.5 text-sm font-semibold text-foreground">{{ distance }}</dd>
@@ -54,6 +55,16 @@ const difficultyColor = {
           <dd class="mt-0.5 text-sm font-semibold text-foreground">{{ duration }}</dd>
         </div>
       </dl>
+
+      <NuxtLink
+        :to="`/touren/${slug}`"
+        class="mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      >
+        Tour ansehen
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14" />
+        </svg>
+      </NuxtLink>
     </div>
   </article>
 </template>
