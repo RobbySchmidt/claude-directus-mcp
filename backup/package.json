@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "touren:schema": "node scripts/touren-schema.mjs"
   },
   "dependencies": {
     "@directus/sdk": "^21.2.2",
