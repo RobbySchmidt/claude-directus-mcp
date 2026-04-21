@@ -32,7 +32,7 @@ useSeoMeta({
 <template>
   <div v-if="tour" class="min-h-screen bg-background text-foreground antialiased pb-24 md:pb-0">
     <SectionsTheHeader />
-    <main class="pt-20">
+    <main class="pt-[68px]">
       <TourHero
         :title="tour.title"
         :subtitle="tour.subtitle"
