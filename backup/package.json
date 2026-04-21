@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "touren:schema": "node scripts/touren-schema.mjs",
     "touren:upload": "node scripts/touren-upload-gallery.mjs",
-    "touren:seed": "node scripts/touren-seed.mjs"
+    "touren:seed": "node scripts/touren-seed.mjs",
+    "touren:migrate": "node scripts/touren-migrate-blockgrid.mjs"
   },
   "dependencies": {
     "@directus/sdk": "^21.2.2",

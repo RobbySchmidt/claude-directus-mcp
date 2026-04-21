@@ -1,0 +1,35 @@
+[
+  {
+    "id": "9992cbac-4ffc-4cc0-b6fd-88e3cbe0681e",
+    "headline": "Wanderungen, die man nicht vergisst",
+    "tours": [
+      {
+        "title": "Königssee-Rundweg",
+        "ascent": "420 hm",
+        "region": "Berchtesgadener Alpen",
+        "variant": "alpine-see",
+        "distance": "14 km",
+        "duration": "5 Std.",
+        "difficulty": "leicht"
+      },
+      {
+        "title": "Drei-Zinnen-Umrundung",
+        "ascent": "380 hm",
+        "region": "Dolomiten, Südtirol",
+        "variant": "hochgebirge",
+        "distance": "10 km",
+        "duration": "4 Std.",
+        "difficulty": "mittel"
+      },
+      {
+        "title": "Watzmann-Überschreitung",
+        "ascent": "2.100 hm",
+        "region": "Bayerische Alpen",
+        "variant": "almwiese",
+        "distance": "22 km",
+        "duration": "2 Tage",
+        "difficulty": "schwer"
+      }
+    ]
+  }
+]
