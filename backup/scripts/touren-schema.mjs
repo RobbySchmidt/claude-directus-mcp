@@ -93,7 +93,7 @@ async function run() {
   // On a fresh install this is a noop (field doesn't exist yet; ensureFields below creates
   // it with required=true). On existing installs this corrects the oversight.
   {
-    const existingFields = await directus.request(readFieldsByCollection('touren')).catch(() => []);
+    const existingFields = await directus.request(readFieldsByCollection('touren'));
     const statusField = existingFields.find((f) => f.field === 'status');
     if (statusField && !statusField.meta?.required) {
       await directus.request(updateField('touren', 'status', {
