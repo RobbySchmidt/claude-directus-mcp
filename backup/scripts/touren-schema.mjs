@@ -11,6 +11,7 @@ import {
   readRelations,
   createCollection,
   createField,
+  updateField,
   createRelation,
 } from '@directus/sdk';
 
@@ -88,6 +89,20 @@ async function run() {
     unarchive_value: 'draft',
   });
 
+  // Patch: ensure touren.status has meta.required=true (was missing in initial version).
+  // On a fresh install this is a noop (field doesn't exist yet; ensureFields below creates
+  // it with required=true). On existing installs this corrects the oversight.
+  {
+    const existingFields = await directus.request(readFieldsByCollection('touren')).catch(() => []);
+    const statusField = existingFields.find((f) => f.field === 'status');
+    if (statusField && !statusField.meta?.required) {
+      await directus.request(updateField('touren', 'status', {
+        meta: { ...statusField.meta, required: true },
+      }));
+      console.log('  ✓ patched touren.status meta.required=true');
+    }
+  }
+
   await ensureFields('touren', [
     {
       field: 'status',
@@ -97,6 +112,7 @@ async function run() {
         interface: 'select-dropdown',
         options: STATUS_CHOICES,
         width: 'half',
+        required: true,
         display: 'labels',
         display_options: {
           choices: STATUS_CHOICES.choices,
@@ -280,6 +296,12 @@ async function run() {
 
   await ensureFields('touren_files', [
     {
+      // Note: Directus reports this field as type='string' in /fields/touren_files
+      // (curl /fields/touren_files returns type=string for touren_id, type=uuid for
+      // directus_files_id). This appears to be a Directus quirk with special=['m2o']
+      // vs special=['file']. Investigation confirmed the M2M relation works correctly:
+      // /items/touren?fields=slug,gallery.directus_files_id.id populates the gallery
+      // array as expected. No schema change needed — cosmetic only.
       field: 'touren_id',
       type: 'uuid',
       schema: {},
