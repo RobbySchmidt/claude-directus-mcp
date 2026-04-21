@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const tours = [
   {
+    slug: 'koenigssee-rundweg',
     title: 'Königssee-Rundweg',
     region: 'Berchtesgadener Alpen',
     difficulty: 'leicht' as const,
@@ -10,6 +11,7 @@ const tours = [
     variant: 'alpine-see' as const,
   },
   {
+    slug: 'drei-zinnen-umrundung',
     title: 'Drei-Zinnen-Umrundung',
     region: 'Dolomiten, Südtirol',
     difficulty: 'mittel' as const,
@@ -19,6 +21,7 @@ const tours = [
     variant: 'hochgebirge' as const,
   },
   {
+    slug: 'watzmann-ueberschreitung',
     title: 'Watzmann-Überschreitung',
     region: 'Bayerische Alpen',
     difficulty: 'schwer' as const,
