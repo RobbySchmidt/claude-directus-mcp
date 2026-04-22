@@ -1,21 +1,11 @@
-import { readItems, readMe } from '@directus/sdk'
+import { readItems } from '@directus/sdk'
 import type { BuchungListItem, BuchungResult } from '~~/shared/types/buchung'
 import { useDirectusServer } from '~~/server/utils/directus'
-import { getAccessToken } from '~~/server/utils/auth-cookies'
-import { createUserClient } from '~~/server/utils/directus-user'
+import { getCurrentUserId } from '~~/server/utils/require-user'
 
 export default defineEventHandler(async (event): Promise<BuchungResult<BuchungListItem[]>> => {
-  const token = getAccessToken(event)
-  if (!token) return { ok: false, error: 'unauthorized', message: 'Bitte melde dich an.' }
-
-  let userId: string
-  try {
-    const client = createUserClient(token)
-    const me = (await client.request(readMe({ fields: ['id'] }))) as { id: string }
-    userId = me.id
-  } catch {
-    return { ok: false, error: 'unauthorized', message: 'Session ungültig.' }
-  }
+  const userId = await getCurrentUserId(event)
+  if (!userId) return { ok: false, error: 'unauthorized', message: 'Bitte melde dich an.' }
 
   const directus = useDirectusServer()
   const rows = (await directus.request(

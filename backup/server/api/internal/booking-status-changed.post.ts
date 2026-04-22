@@ -2,6 +2,7 @@ import { readItems, updateItem } from '@directus/sdk'
 import type { BuchungDetail, BuchungStatus } from '~~/shared/types/buchung'
 import { useDirectusServer } from '~~/server/utils/directus'
 import { sendMail, renderBuchungTemplate } from '~~/server/utils/mailer'
+import { BUCHUNG_DETAIL_FIELDS_WITH_INTERNAL } from '~~/server/utils/buchungen-fields'
 
 type DirectusFlowEvent = {
   event?: string
@@ -39,13 +40,7 @@ export default defineEventHandler(async (event) => {
     const rows = (await directus.request(
       readItems('buchungen', {
         filter: { id: { _eq: id } },
-        fields: [
-          'id', 'status', 'date_created', 'personen_anzahl', 'preis_gesamt',
-          'kontakt_vorname', 'kontakt_nachname', 'kontakt_email', 'kontakt_telefon', 'notizen',
-          'wunsch_datum', 'last_notified_status',
-          'tour.id', 'tour.slug', 'tour.title',
-          'termin.id', 'termin.date_from', 'termin.date_to', 'termin.hinweis',
-        ],
+        fields: [...BUCHUNG_DETAIL_FIELDS_WITH_INTERNAL],
         limit: 1,
       }),
     )) as Array<BuchungDetail & { last_notified_status: string | null }>

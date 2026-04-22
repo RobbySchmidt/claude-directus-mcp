@@ -1,10 +1,10 @@
-import { readItems, createItem, readItem, readMe } from '@directus/sdk'
+import { readItems, createItem, readItem } from '@directus/sdk'
 import type { BuchungCreateInput, BuchungResult, BuchungDetail } from '~~/shared/types/buchung'
 import { useDirectusServer } from '~~/server/utils/directus'
 import { getBelegungProTermin } from '~~/server/utils/kapazitaet'
 import { sendMail, renderBuchungTemplate } from '~~/server/utils/mailer'
-import { getAccessToken } from '~~/server/utils/auth-cookies'
-import { createUserClient } from '~~/server/utils/directus-user'
+import { getCurrentUserId } from '~~/server/utils/require-user'
+import { BUCHUNG_DETAIL_FIELDS } from '~~/server/utils/buchungen-fields'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
@@ -14,17 +14,9 @@ function today(): string {
 }
 
 export default defineEventHandler(async (event): Promise<BuchungResult<BuchungDetail>> => {
-  const token = getAccessToken(event)
-  if (!token) {
+  const userId = await getCurrentUserId(event)
+  if (!userId) {
     return { ok: false, error: 'unauthorized', message: 'Bitte melde dich an.' }
-  }
-  let userId: string
-  try {
-    const client = createUserClient(token)
-    const me = (await client.request(readMe({ fields: ['id'] }))) as { id: string }
-    userId = me.id
-  } catch {
-    return { ok: false, error: 'unauthorized', message: 'Session ungültig.' }
   }
 
   const body = await readBody<BuchungCreateInput>(event)
@@ -67,7 +59,7 @@ export default defineEventHandler(async (event): Promise<BuchungResult<BuchungDe
   if (hasWunsch && !ISO_DATE.test(body.wunsch_datum!)) {
     return { ok: false, error: 'wunsch_datum_past', message: 'Wunschdatum hat ein ungültiges Format.' }
   }
-  if (hasWunsch && body.wunsch_datum! < today()) {
+  if (hasWunsch && body.wunsch_datum! <= today()) {
     return { ok: false, error: 'wunsch_datum_past', message: 'Wunschdatum muss in der Zukunft liegen.' }
   }
 
@@ -153,15 +145,7 @@ export default defineEventHandler(async (event): Promise<BuchungResult<BuchungDe
   )) as { id: string }
 
   const detail = (await directus.request(
-    readItem('buchungen', created.id, {
-      fields: [
-        'id', 'status', 'date_created', 'personen_anzahl', 'preis_gesamt',
-        'kontakt_vorname', 'kontakt_nachname', 'kontakt_email', 'kontakt_telefon', 'notizen',
-        'wunsch_datum',
-        'tour.id', 'tour.slug', 'tour.title',
-        'termin.id', 'termin.date_from', 'termin.date_to', 'termin.hinweis',
-      ],
-    }),
+    readItem('buchungen', created.id, { fields: [...BUCHUNG_DETAIL_FIELDS] }),
   )) as BuchungDetail
 
   const adminTo = process.env.EMAIL_ADMIN
