@@ -26,7 +26,12 @@ function transporter(): Transporter {
     host,
     port,
     secure: port === 465,
+    requireTLS: port !== 465,
     auth: { user, pass },
+    tls: { rejectUnauthorized: false },
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 30_000,
   })
   return cachedTransporter
 }

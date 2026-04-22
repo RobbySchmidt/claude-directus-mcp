@@ -64,8 +64,12 @@ async function tryConnection(port, secure, label) {
     host,
     port,
     secure,
+    requireTLS: !secure,
     auth: { user, pass },
-    connectionTimeout: 10_000,
+    tls: { rejectUnauthorized: false },
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 30_000,
   })
   try {
     await transporter.verify()
