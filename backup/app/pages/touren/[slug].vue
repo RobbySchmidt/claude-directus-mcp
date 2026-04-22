@@ -20,6 +20,8 @@ if (error.value || !tour.value) {
 
 const { public: pub } = useRuntimeConfig()
 
+const buchenHref = computed(() => (tour.value ? `/touren/${tour.value.slug}/buchen` : ''))
+
 useSeoMeta({
   title: () => `${tour.value!.title} | ${pub.siteName}`,
   description: () => tour.value!.subtitle ?? tour.value!.intro ?? tour.value!.title,
@@ -39,7 +41,7 @@ useSeoMeta({
         :region="tour.region"
         :difficulty="tour.difficulty"
         :variant="tour.variant"
-        :booking-url="tour.booking_url"
+        :booking-url="buchenHref"
       />
       <TourFactsBar
         :distance="tour.distance"
@@ -55,9 +57,16 @@ useSeoMeta({
         :season="tour.season"
         :price-from="tour.price_from"
       />
-      <TourCTA :booking-url="tour.booking_url" :title="tour.title" />
+      <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <TourTermine
+          :termine="tour.termine"
+          :tour-slug="tour.slug"
+          :price-from="tour.price_from"
+        />
+      </section>
+      <TourCTA :booking-url="buchenHref" :title="tour.title" />
     </main>
     <SectionsTheFooter />
-    <TourStickyMobileCTA :booking-url="tour.booking_url" :price-from="tour.price_from" />
+    <TourStickyMobileCTA :booking-url="buchenHref" :price-from="tour.price_from" />
   </div>
 </template>
