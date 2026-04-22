@@ -49,6 +49,11 @@ const onSubmit = async () => {
     <SectionsTheHeader />
     <main class="pt-[68px]">
       <section class="mx-auto max-w-md px-4 py-f-16 sm:px-6">
+        <nav class="mb-6 flex gap-4 text-sm">
+          <NuxtLink to="/konto" class="text-muted-foreground hover:text-foreground">Profil</NuxtLink>
+          <NuxtLink to="/konto/passwort" class="font-medium text-foreground">Passwort</NuxtLink>
+          <NuxtLink to="/konto/buchungen" class="text-muted-foreground hover:text-foreground">Buchungen</NuxtLink>
+        </nav>
         <h1 class="font-heading text-f-4xl font-medium text-foreground">Passwort ändern</h1>
         <form class="mt-8 flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm" @submit.prevent="onSubmit">
           <div class="flex flex-col gap-2">

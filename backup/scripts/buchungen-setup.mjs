@@ -347,19 +347,9 @@ async function run() {
     permissions: { status: { _eq: 'published' } },
   });
 
-  console.log('\n✓ Buchungen-Setup abgeschlossen.\n');
-  console.log('Nächste manuelle Schritte in Directus Admin-UI:');
-  console.log('  1. Settings → Flows → "+ Create Flow"');
-  console.log('     Name: "Buchung Status Webhook"');
-  console.log('     Trigger: Event → items.buchungen.update');
-  console.log('     Filter Rule: { "status": { "_in": ["bestaetigt", "abgelehnt", "storniert"] } }');
-  console.log('     Operation: Webhook');
-  console.log('       URL: <NUXT_BASE_URL>/api/internal/booking-status-changed');
-  console.log('       Method: POST');
-  console.log('       Headers: { "X-Internal-Secret": "<INTERNAL_WEBHOOK_SECRET aus .env>" }');
-  console.log('       Request Body: $trigger (Default)');
-  console.log('  2. Testen: Im Directus Admin eine Buchung anlegen, Status auf bestaetigt setzen,');
-  console.log('     prüfen dass Mail ankommt.\n');
+  console.log('\n✓ Buchungen-Setup abgeschlossen.');
+  console.log('Status-Wechsel-Mails werden nicht automatisch verschickt — nach Statusänderung');
+  console.log('in Directus `yarn buchungen:notify` laufen lassen.\n');
 }
 
 run().catch((err) => {

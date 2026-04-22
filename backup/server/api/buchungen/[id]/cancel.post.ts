@@ -1,24 +1,15 @@
-import { readItems, updateItem, readMe } from '@directus/sdk'
+import { readItems, updateItem } from '@directus/sdk'
 import type { BuchungDetail, BuchungResult } from '~~/shared/types/buchung'
 import { useDirectusServer } from '~~/server/utils/directus'
-import { getAccessToken } from '~~/server/utils/auth-cookies'
-import { createUserClient } from '~~/server/utils/directus-user'
+import { getCurrentUserId } from '~~/server/utils/require-user'
 import { sendMail, renderBuchungTemplate } from '~~/server/utils/mailer'
+import { BUCHUNG_DETAIL_FIELDS } from '~~/server/utils/buchungen-fields'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
 export default defineEventHandler(async (event): Promise<BuchungResult<BuchungDetail>> => {
-  const token = getAccessToken(event)
-  if (!token) return { ok: false, error: 'unauthorized', message: 'Bitte melde dich an.' }
-
-  let userId: string
-  try {
-    const client = createUserClient(token)
-    const me = (await client.request(readMe({ fields: ['id'] }))) as { id: string }
-    userId = me.id
-  } catch {
-    return { ok: false, error: 'unauthorized', message: 'Session ungültig.' }
-  }
+  const userId = await getCurrentUserId(event)
+  if (!userId) return { ok: false, error: 'unauthorized', message: 'Bitte melde dich an.' }
 
   const id = getRouterParam(event, 'id')
   if (!id) return { ok: false, error: 'buchung_not_found', message: 'Buchung nicht gefunden.' }
@@ -27,13 +18,7 @@ export default defineEventHandler(async (event): Promise<BuchungResult<BuchungDe
   const rows = (await directus.request(
     readItems('buchungen', {
       filter: { id: { _eq: id }, user: { _eq: userId } },
-      fields: [
-        'id', 'status', 'date_created', 'personen_anzahl', 'preis_gesamt',
-        'kontakt_vorname', 'kontakt_nachname', 'kontakt_email', 'kontakt_telefon', 'notizen',
-        'wunsch_datum',
-        'tour.id', 'tour.slug', 'tour.title',
-        'termin.id', 'termin.date_from', 'termin.date_to', 'termin.hinweis',
-      ],
+      fields: [...BUCHUNG_DETAIL_FIELDS],
       limit: 1,
     }),
   )) as BuchungDetail[]

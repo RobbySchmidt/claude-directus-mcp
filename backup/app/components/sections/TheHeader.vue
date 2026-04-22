@@ -75,7 +75,7 @@ const onMobileLogout = async () => {
         <template v-else>
           <Button variant="ghost" size="sm" as="a" href="/anmelden">Anmelden</Button>
         </template>
-        <Button size="sm" class="bg-primary text-primary-foreground hover:bg-primary/90">
+        <Button size="sm" as="a" href="/#touren" class="bg-primary text-primary-foreground hover:bg-primary/90">
           Tour buchen
         </Button>
       </div>
@@ -174,7 +174,7 @@ const onMobileLogout = async () => {
               Anmelden
             </Button>
           </template>
-          <Button size="lg" class="h-12 w-full justify-center bg-primary text-base text-primary-foreground hover:bg-primary/90">
+          <Button size="lg" as="a" href="/#touren" class="h-12 w-full justify-center bg-primary text-base text-primary-foreground hover:bg-primary/90" @click="mobileOpen = false">
             Tour buchen
           </Button>
           <p class="mt-2 text-center text-xs text-muted-foreground">

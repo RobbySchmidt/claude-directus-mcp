@@ -49,6 +49,11 @@ const onAvatar = async (file: File) => {
     <SectionsTheHeader />
     <main class="pt-[68px]">
       <section class="mx-auto max-w-3xl px-4 py-f-16 sm:px-6 lg:px-8">
+        <nav class="mb-6 flex gap-4 text-sm">
+          <NuxtLink to="/konto" class="font-medium text-foreground">Profil</NuxtLink>
+          <NuxtLink to="/konto/passwort" class="text-muted-foreground hover:text-foreground">Passwort</NuxtLink>
+          <NuxtLink to="/konto/buchungen" class="text-muted-foreground hover:text-foreground">Buchungen</NuxtLink>
+        </nav>
         <h1 class="font-heading text-f-5xl font-medium text-foreground">Mein Konto</h1>
         <p class="mt-2 text-muted-foreground">Pflege hier dein Profil und ändere bei Bedarf dein Passwort.</p>
 
