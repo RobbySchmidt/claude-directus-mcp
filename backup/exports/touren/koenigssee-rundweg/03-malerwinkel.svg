@@ -1,0 +1,91 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Aussichtspunkt Malerwinkel">
+  <defs>
+    <linearGradient id="ks3-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7aacd0" />
+      <stop offset="70%" stop-color="#b8d8ee" />
+      <stop offset="100%" stop-color="#d8eaf8" />
+    </linearGradient>
+    <linearGradient id="ks3-lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a9abf" />
+      <stop offset="100%" stop-color="#2a6080" />
+    </linearGradient>
+    <linearGradient id="ks3-rock" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a5a6a" />
+      <stop offset="100%" stop-color="#1f2b3a" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#ks3-sky)" />
+
+  <!-- Far mountains (opposite bank, deeply recessed) -->
+  <path
+    d="M80 280 L180 190 L280 240 L380 175 L480 230 L580 185 L680 230 L780 200 L800 220 L800 330 L80 330 Z"
+    fill="#7a9ab5"
+  />
+  <path d="M360 190 L380 175 L400 196 L380 207 Z" fill="#fbfaf5" opacity="0.8" />
+  <path d="M560 200 L580 185 L598 204 L580 214 Z" fill="#fbfaf5" opacity="0.75" />
+
+  <!-- Lake (deep channel between cliffs) -->
+  <path
+    d="M80 310 L800 290 L800 500 L0 500 Z"
+    fill="url(#ks3-lake)"
+  />
+  <!-- Reflection shimmer -->
+  <g stroke="#fbfaf5" stroke-width="1.2" opacity="0.2">
+    <line x1="120" y1="340" x2="280" y2="335" />
+    <line x1="320" y1="355" x2="520" y2="348" />
+    <line x1="580" y1="345" x2="740" y2="340" />
+    <line x1="200" y1="375" x2="400" y2="370" />
+    <line x1="450" y1="390" x2="660" y2="384" />
+  </g>
+
+  <!-- Left cliff / foreground hill -->
+  <path
+    d="M0 0 L0 500 L180 500 L160 350 L80 280 L40 200 Z"
+    fill="#2f6b4e"
+  />
+
+  <!-- Large foreground rock (left-center) -->
+  <path
+    d="M100 500 L80 380 L130 320 L210 350 L230 500 Z"
+    fill="url(#ks3-rock)"
+  />
+  <!-- Rock highlight -->
+  <path d="M82 382 L130 322 L148 345 L100 390 Z" fill="#6a7a8a" opacity="0.4" />
+
+  <!-- Some scrub / grass at rock base -->
+  <path
+    d="M80 420 Q120 410 200 420 Q220 425 230 440 L80 450 Z"
+    fill="#2f6b4e"
+  />
+
+  <!-- Opposite bank treeline -->
+  <path
+    d="M100 310 Q200 300 300 308 Q400 316 500 306 Q600 298 700 305 L800 302 L800 330 L80 330 Z"
+    fill="#2f6b4e" opacity="0.7"
+  />
+
+  <!-- Small church/chapel on far shore (right center) -->
+  <g transform="translate(530 295)" fill="#fbfaf5" opacity="0.85">
+    <!-- Body -->
+    <rect x="0" y="0" width="14" height="16" fill="#e8e0d0" />
+    <!-- Roof -->
+    <polygon points="-2,0 7,-8 16,0" fill="#9a6a50" />
+    <!-- Tower / spire -->
+    <rect x="4" y="-18" width="6" height="10" fill="#e8e0d0" />
+    <polygon points="2,-18 7,-26 12,-18" fill="#7a4a38" />
+  </g>
+
+  <!-- Foreground trees (left edge) -->
+  <g fill="#1f4a36">
+    <polygon points="18,350 8,374 28,374" />
+    <polygon points="18,334 6,355 30,355" />
+    <polygon points="18,320 5,340 31,340" />
+    <rect x="15" y="371" width="6" height="12" fill="#5a3a20" />
+
+    <polygon points="50,380 40,402 60,402" />
+    <polygon points="50,364 39,384 61,384" />
+    <rect x="47" y="399" width="6" height="10" fill="#5a3a20" />
+  </g>
+</svg>

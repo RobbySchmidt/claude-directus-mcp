@@ -1,0 +1,97 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Einzelner Wanderer am Watzmann-Grat">
+  <defs>
+    <linearGradient id="wm3-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2a50" />
+      <stop offset="50%" stop-color="#4a6a98" />
+      <stop offset="100%" stop-color="#8ab0d0" />
+    </linearGradient>
+    <linearGradient id="wm3-drop-l" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a4a5a" />
+      <stop offset="100%" stop-color="#0a0e14" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="wm3-drop-r" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a3a4a" />
+      <stop offset="100%" stop-color="#0a0e14" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky (dramatic, high altitude) -->
+  <rect width="800" height="500" fill="url(#wm3-sky)" />
+
+  <!-- Distant peaks sea below -->
+  <path
+    d="M0 220 L60 165 L130 200 L210 148 L290 188 L380 142 L460 182 L550 148 L630 185 L710 152 L800 178 L800 280 L0 280 Z"
+    fill="#3a5a78" opacity="0.7"
+  />
+  <path
+    d="M0 280 L80 235 L160 268 L250 225 L340 258 L430 220 L520 255 L610 222 L700 252 L800 228 L800 340 L0 340 Z"
+    fill="#4a6a88" opacity="0.8"
+  />
+  <!-- Snow caps in distance -->
+  <path d="M192 163 L210 148 L228 166 L210 178 Z" fill="#fbfaf5" opacity="0.65" />
+  <path d="M362 155 L380 142 L398 158 L380 170 Z" fill="#fbfaf5" opacity="0.65" />
+  <path d="M532 162 L550 148 L568 164 L550 176 Z" fill="#fbfaf5" opacity="0.6" />
+
+  <!-- Sharp ridge — left side drops steeply -->
+  <path
+    d="M0 360 L120 300 L300 330 L400 270 L500 320 L680 285 L800 310 L800 500 L0 500 Z"
+    fill="url(#wm3-drop-l)"
+  />
+
+  <!-- Sharp ridge — right side drops steeply (opposite face, slightly lighter) -->
+  <path
+    d="M0 500 L0 420 L120 350 L280 380 L400 310 L520 360 L680 330 L800 355 L800 500 Z"
+    fill="url(#wm3-drop-r)" opacity="0.7"
+  />
+
+  <!-- Narrow ridge crest line -->
+  <path
+    d="M0 390 Q100 345 200 362 Q300 378 400 310 Q500 345 600 330 Q700 316 800 332"
+    fill="none" stroke="#7a8a9a" stroke-width="4" opacity="0.6"
+  />
+
+  <!-- Snow / ice patches on ridge -->
+  <path
+    d="M380 315 Q400 308 420 318 L415 330 Q400 322 385 328 Z"
+    fill="#fbfaf5" opacity="0.55"
+  />
+  <path
+    d="M580 332 Q600 325 618 334 L614 344 Q600 337 582 342 Z"
+    fill="#fbfaf5" opacity="0.45"
+  />
+
+  <!-- Lone wanderer on ridge crest (silhouette, very exposed) -->
+  <g fill="#1f2b3a" transform="translate(400 282)">
+    <!-- Body (leaning slightly into wind) -->
+    <rect x="-4" y="-28" width="9" height="20" rx="2" />
+    <!-- Head -->
+    <circle cx="0" cy="-33" r="7" />
+    <!-- Backpack -->
+    <rect x="4" y="-26" width="9" height="15" rx="2" />
+    <!-- Left leg (bent, step forward) -->
+    <line x1="-2" y1="-8" x2="-8" y2="12" stroke="#1f2b3a" stroke-width="4" stroke-linecap="round" />
+    <!-- Right leg -->
+    <line x1="3" y1="-8" x2="6" y2="12" stroke="#1f2b3a" stroke-width="4" stroke-linecap="round" />
+    <!-- Left arm (out for balance) -->
+    <line x1="-4" y1="-22" x2="-18" y2="-14" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <!-- Right arm (holds pole) -->
+    <line x1="5" y1="-22" x2="14" y2="-8" stroke="#1f2b3a" stroke-width="3" stroke-linecap="round" />
+    <!-- Trekking pole -->
+    <line x1="14" y1="-8" x2="20" y2="16" stroke="#1f2b3a" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Rock outcrops on ridge -->
+  <g fill="#2a3a4a">
+    <path d="M140 380 L170 355 L200 368 L195 390 L135 392 Z" />
+    <path d="M590 342 L620 318 L648 330 L642 352 L585 354 Z" />
+    <ellipse cx="760" cy="362" rx="22" ry="12" />
+  </g>
+
+  <!-- Wind-effect lines (subtle) -->
+  <g stroke="#fbfaf5" stroke-width="1" opacity="0.1">
+    <line x1="50" y1="200" x2="150" y2="198" />
+    <line x1="200" y1="175" x2="320" y2="172" />
+    <line x1="450" y1="190" x2="580" y2="187" />
+    <line x1="620" y1="165" x2="760" y2="163" />
+  </g>
+</svg>

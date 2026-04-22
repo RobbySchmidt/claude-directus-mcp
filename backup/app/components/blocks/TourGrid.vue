@@ -1,13 +1,5 @@
 <script setup lang="ts">
-type TourItem = {
-  title: string
-  region: string
-  difficulty: 'leicht' | 'mittel' | 'schwer'
-  distance: string
-  ascent: string
-  duration: string
-  variant: 'alpine-see' | 'hochgebirge' | 'almwiese'
-}
+import type { TourCardData } from '~~/shared/types/touren'
 
 type TourGridBlock = {
   eyebrow: string | null
@@ -15,7 +7,7 @@ type TourGridBlock = {
   lead: string | null
   cta_label: string | null
   cta_href: string | null
-  tours: TourItem[] | null
+  tours: TourCardData[] | null
 }
 
 const props = defineProps<{ id: string; collection: string; index: number }>()
@@ -42,7 +34,18 @@ const { data: block } = await useAsyncData(
       </div>
 
       <div v-if="block.tours?.length" class="mt-f-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        <TourCard v-for="tour in block.tours" :key="tour.title" v-bind="tour" />
+        <TourCard
+          v-for="tour in block.tours"
+          :key="tour.id"
+          :slug="tour.slug"
+          :title="tour.title"
+          :region="tour.region"
+          :difficulty="tour.difficulty"
+          :variant="tour.variant"
+          :distance="tour.distance"
+          :ascent="tour.ascent"
+          :duration="tour.duration"
+        />
       </div>
 
       <div v-if="block.cta_label" class="mt-f-12 text-center">

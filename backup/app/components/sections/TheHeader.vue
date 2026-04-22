@@ -28,11 +28,20 @@ watch(mobileOpen, (open) => {
 })
 
 const nav = [
-  { label: 'Touren', href: '#touren' },
-  { label: 'Regionen', href: '#regionen' },
-  { label: 'Warum wir', href: '#benefits' },
-  { label: 'Stimmen', href: '#stimmen' },
+  { label: 'Touren', href: '/#touren' },
+  { label: 'Regionen', href: '/#regionen' },
+  { label: 'Warum wir', href: '/#benefits' },
+  { label: 'Stimmen', href: '/#stimmen' },
 ]
+
+const { isLoggedIn, user } = useUser()
+const { logout } = useAuth()
+const router = useRouter()
+const onMobileLogout = async () => {
+  mobileOpen.value = false
+  await logout()
+  await router.push('/')
+}
 </script>
 
 <template>
@@ -41,26 +50,31 @@ const nav = [
     :class="scrolled || mobileOpen ? 'border-b border-border bg-background/80 backdrop-blur-md' : 'bg-transparent'"
   >
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-      <a href="#" class="flex items-center gap-2">
+      <NuxtLink to="/" class="flex items-center gap-2">
         <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <IllustrationsIconPeak class="h-5 w-5" />
         </div>
         <span class="font-heading text-xl font-semibold text-foreground">Alpenpfad</span>
-      </a>
+      </NuxtLink>
 
       <nav class="hidden items-center gap-8 md:flex">
-        <a
+        <NuxtLink
           v-for="item in nav"
           :key="item.href"
-          :href="item.href"
+          :to="item.href"
           class="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
         >
           {{ item.label }}
-        </a>
+        </NuxtLink>
       </nav>
 
       <div class="hidden items-center gap-3 md:flex">
-        <Button variant="ghost" size="sm">Anmelden</Button>
+        <template v-if="isLoggedIn">
+          <AuthUserMenu />
+        </template>
+        <template v-else>
+          <Button variant="ghost" size="sm" as="a" href="/anmelden">Anmelden</Button>
+        </template>
         <Button size="sm" class="bg-primary text-primary-foreground hover:bg-primary/90">
           Tour buchen
         </Button>
@@ -115,10 +129,10 @@ const nav = [
         </div>
 
         <nav class="flex flex-col px-6 py-6">
-          <a
+          <NuxtLink
             v-for="(item, i) in nav"
             :key="item.href"
-            :href="item.href"
+            :to="item.href"
             class="group flex items-center justify-between border-b border-border py-4 font-heading text-2xl text-foreground transition-colors hover:text-primary"
             :style="{ transitionDelay: mobileOpen ? `${i * 60 + 200}ms` : '0ms' }"
             @click="mobileOpen = false"
@@ -133,13 +147,33 @@ const nav = [
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
-          </a>
+          </NuxtLink>
         </nav>
 
         <div class="mt-auto flex flex-col gap-3 border-t border-border px-6 py-6">
-          <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base">
-            Anmelden
-          </Button>
+          <template v-if="isLoggedIn">
+            <NuxtLink
+              to="/konto"
+              class="inline-flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted"
+              @click="mobileOpen = false"
+            >
+              <AuthUserAvatar :user="user" />
+              <span class="font-medium text-foreground">{{ user?.first_name || user?.email }}</span>
+            </NuxtLink>
+            <Button
+              variant="ghost"
+              size="lg"
+              class="h-12 w-full justify-center text-base"
+              @click="onMobileLogout"
+            >
+              Abmelden
+            </Button>
+          </template>
+          <template v-else>
+            <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" as="a" href="/anmelden">
+              Anmelden
+            </Button>
+          </template>
           <Button size="lg" class="h-12 w-full justify-center bg-primary text-base text-primary-foreground hover:bg-primary/90">
             Tour buchen
           </Button>

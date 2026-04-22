@@ -1,7 +1,0 @@
-<template>
-  <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-full w-full">
-    <path d="M4 40 L18 16 L26 28 L34 20 L44 40 Z" fill="currentColor" opacity="0.85" />
-    <path d="M16 22 L18 16 L22 22 L18 26 Z" fill="#fbfaf5" />
-    <path d="M32 24 L34 20 L37 24 L34 28 Z" fill="#fbfaf5" />
-  </svg>
-</template>
