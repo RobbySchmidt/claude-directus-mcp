@@ -1,3 +1,5 @@
+import type { TerminPublic } from './buchung'
+
 export type TourDifficulty = 'leicht' | 'mittel' | 'schwer'
 export type TourVariant = 'alpine-see' | 'hochgebirge' | 'almwiese'
 
@@ -31,4 +33,5 @@ export type TourDetail = TourCardData & {
   price_from: number | null
   booking_url: string | null
   gallery: TourGalleryImage[]
+  termine: TerminPublic[]
 }
