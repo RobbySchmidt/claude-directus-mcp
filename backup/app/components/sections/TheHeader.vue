@@ -33,6 +33,15 @@ const nav = [
   { label: 'Warum wir', href: '/#benefits' },
   { label: 'Stimmen', href: '/#stimmen' },
 ]
+
+const { isLoggedIn, user } = useUser()
+const { logout } = useAuth()
+const router = useRouter()
+const onMobileLogout = async () => {
+  mobileOpen.value = false
+  await logout()
+  await router.push('/')
+}
 </script>
 
 <template>
@@ -60,7 +69,12 @@ const nav = [
       </nav>
 
       <div class="hidden items-center gap-3 md:flex">
-        <Button variant="ghost" size="sm">Anmelden</Button>
+        <template v-if="isLoggedIn">
+          <AuthUserMenu />
+        </template>
+        <template v-else>
+          <Button variant="ghost" size="sm" as="a" href="/anmelden">Anmelden</Button>
+        </template>
         <Button size="sm" class="bg-primary text-primary-foreground hover:bg-primary/90">
           Tour buchen
         </Button>
@@ -137,9 +151,29 @@ const nav = [
         </nav>
 
         <div class="mt-auto flex flex-col gap-3 border-t border-border px-6 py-6">
-          <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base">
-            Anmelden
-          </Button>
+          <template v-if="isLoggedIn">
+            <NuxtLink
+              to="/konto"
+              class="inline-flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted"
+              @click="mobileOpen = false"
+            >
+              <AuthUserAvatar :user="user" />
+              <span class="font-medium text-foreground">{{ user?.first_name || user?.email }}</span>
+            </NuxtLink>
+            <Button
+              variant="ghost"
+              size="lg"
+              class="h-12 w-full justify-center text-base"
+              @click="onMobileLogout"
+            >
+              Abmelden
+            </Button>
+          </template>
+          <template v-else>
+            <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" as="a" href="/anmelden">
+              Anmelden
+            </Button>
+          </template>
           <Button size="lg" class="h-12 w-full justify-center bg-primary text-base text-primary-foreground hover:bg-primary/90">
             Tour buchen
           </Button>
