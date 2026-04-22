@@ -68,6 +68,11 @@ function terminLabel(b: BuchungDetail): string {
   return `Wunschdatum ${formatDatum(b.wunsch_datum ?? '')}`
 }
 
+function siteUrl(): string {
+  const cfg = useRuntimeConfig()
+  return (cfg.public.siteUrl as string | undefined) || 'https://alpenpfad.de'
+}
+
 export function renderBuchungTemplate(
   type: MailType,
   b: BuchungDetail,
@@ -76,6 +81,7 @@ export function renderBuchungTemplate(
   const datum = terminLabel(b)
   const preis = `${b.preis_gesamt} EUR`
   const kontakt = `${b.kontakt_vorname} ${b.kontakt_nachname}`
+  const base = siteUrl().replace(/\/$/, '')
 
   switch (type) {
     case 'admin_neu': {
@@ -112,7 +118,7 @@ export function renderBuchungTemplate(
         `  Personen: ${b.personen_anzahl}`,
         `  Preis: ${preis}`,
         ``,
-        `Du findest deine Anfrage jederzeit unter https://alpenpfad.de/konto/buchungen.`,
+        `Du findest deine Anfrage jederzeit unter ${base}/konto/buchungen.`,
         ``,
         `Bis bald,`,
         `dein Alpenpfad-Team`,
@@ -130,7 +136,7 @@ export function renderBuchungTemplate(
         `Personen: ${b.personen_anzahl}`,
         `Preis: ${preis}`,
         ``,
-        `Details unter https://alpenpfad.de/konto/buchungen/${b.id}.`,
+        `Details unter ${base}/konto/buchungen/${b.id}.`,
         ``,
         `Wir freuen uns auf dich!`,
         `dein Alpenpfad-Team`,
@@ -144,7 +150,7 @@ export function renderBuchungTemplate(
         ``,
         `deine Buchung für ${tourTitel} (${datum}) wurde storniert.`,
         ``,
-        `Falls du erneut buchen möchtest, findest du alle Touren auf https://alpenpfad.de.`,
+        `Falls du erneut buchen möchtest, findest du alle Touren auf ${base}.`,
         ``,
         `dein Alpenpfad-Team`,
       ].join('\n')

@@ -48,6 +48,7 @@ async function onCancel() {
     alert(result.message)
     return
   }
+  await clearNuxtData('buchungen-list')
   await refresh()
 }
 </script>
