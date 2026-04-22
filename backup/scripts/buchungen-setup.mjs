@@ -10,7 +10,6 @@ import {
   readRelations,
   createCollection,
   createField,
-  updateField,
   createRelation,
   readPolicies,
   readPermissions,
@@ -196,6 +195,7 @@ async function run() {
     display_template: '{{ tour.title }} — {{ personen_anzahl }} Pers. ({{ status }})',
     archive_field: 'status',
     archive_value: 'archived',
+    unarchive_value: 'angefragt',
   });
 
   await ensureFields('buchungen', [
