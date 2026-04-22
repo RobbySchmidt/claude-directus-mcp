@@ -52,6 +52,13 @@ function formatDatum(iso: string): string {
   return `${d}.${m}.${y}`
 }
 
+function escHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
 function terminLabel(b: BuchungDetail): string {
   if (b.termin) {
     const von = formatDatum(b.termin.date_from)
@@ -90,7 +97,7 @@ export function renderBuchungTemplate(
         ``,
         `Directus-Buchung-ID: ${b.id}`,
       ].join('\n')
-      return { subject, text, html: `<pre>${text}</pre>` }
+      return { subject, text, html: `<pre>${escHtml(text)}</pre>` }
     }
     case 'user_eingangsbestaetigung': {
       const subject = `Deine Anfrage für ${tourTitel} ist bei uns`
@@ -110,7 +117,7 @@ export function renderBuchungTemplate(
         `Bis bald,`,
         `dein Alpenpfad-Team`,
       ].join('\n')
-      return { subject, text, html: `<pre>${text}</pre>` }
+      return { subject, text, html: `<pre>${escHtml(text)}</pre>` }
     }
     case 'user_bestaetigt': {
       const subject = `Buchung bestätigt: ${tourTitel}`
@@ -128,7 +135,7 @@ export function renderBuchungTemplate(
         `Wir freuen uns auf dich!`,
         `dein Alpenpfad-Team`,
       ].join('\n')
-      return { subject, text, html: `<pre>${text}</pre>` }
+      return { subject, text, html: `<pre>${escHtml(text)}</pre>` }
     }
     case 'user_storniert': {
       const subject = `Buchung storniert: ${tourTitel}`
@@ -141,7 +148,7 @@ export function renderBuchungTemplate(
         ``,
         `dein Alpenpfad-Team`,
       ].join('\n')
-      return { subject, text, html: `<pre>${text}</pre>` }
+      return { subject, text, html: `<pre>${escHtml(text)}</pre>` }
     }
     case 'user_abgelehnt': {
       const subject = `Buchung leider nicht möglich: ${tourTitel}`
@@ -154,7 +161,7 @@ export function renderBuchungTemplate(
         ``,
         `dein Alpenpfad-Team`,
       ].join('\n')
-      return { subject, text, html: `<pre>${text}</pre>` }
+      return { subject, text, html: `<pre>${escHtml(text)}</pre>` }
     }
   }
 }
