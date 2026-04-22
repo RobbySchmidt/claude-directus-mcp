@@ -27,7 +27,7 @@ function onConfirm() {
   <div class="space-y-6">
     <div class="flex flex-wrap items-baseline justify-between gap-2">
       <h1 class="font-heading text-f-3xl text-foreground">{{ buchung.tour.title }}</h1>
-      <BuchungBuchungStatusBadge :status="buchung.status" />
+      <BuchungStatusBadge :status="buchung.status" />
     </div>
 
     <dl class="grid gap-4 rounded-xl border border-border bg-card p-6 shadow-sm sm:grid-cols-2">

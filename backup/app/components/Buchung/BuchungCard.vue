@@ -17,7 +17,7 @@ function formatDatum(iso: string) {
     <div>
       <div class="flex items-center gap-2">
         <span class="font-heading text-lg font-medium text-foreground">{{ buchung.tour.title }}</span>
-        <BuchungBuchungStatusBadge :status="buchung.status" />
+        <BuchungStatusBadge :status="buchung.status" />
       </div>
       <p class="mt-1 text-sm text-muted-foreground">
         <template v-if="buchung.termin">
