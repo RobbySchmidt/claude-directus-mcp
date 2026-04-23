@@ -9,13 +9,51 @@
  */
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { directus, readCollections, createCollection, readItems, createItem } from './directus.mjs'
-import { readPolicies, readPermissions, createPermission } from '@directus/sdk'
+import { directus, readCollections, createCollection, createField, readItems, createItem } from './directus.mjs'
+import { readPolicies, readPermissions, createPermission, createRelation, readFieldsByCollection } from '@directus/sdk'
 
 const DRY = process.argv.includes('--dry-run')
 const ROLLBACK = process.argv.includes('--rollback')
 const BACKUP_DIR = path.resolve('exports/migrations')
 const BACKUP_DATE = '2026-04-23'
+
+// Format: { <collection>: { fields: [translatable...], hasSlug: bool } }
+const CONTENT_TRANSLATIONS = {
+  touren: {
+    fields: [
+      { field: 'slug',         type: 'string', schema: { is_nullable: false } },
+      { field: 'title',        type: 'string', schema: { is_nullable: false } },
+      { field: 'subtitle',     type: 'string', schema: {} },
+      { field: 'intro',        type: 'text',   schema: {} },
+      { field: 'highlights',   type: 'json',   schema: {}, meta: { interface: 'tags', special: ['cast-json'] } },
+      { field: 'included',     type: 'json',   schema: {}, meta: { interface: 'tags', special: ['cast-json'] } },
+      { field: 'not_included', type: 'json',   schema: {}, meta: { interface: 'tags', special: ['cast-json'] } },
+      { field: 'meeting_point', type: 'string', schema: {} },
+      { field: 'season',       type: 'string', schema: {} },
+    ],
+    hasSlug: true,
+  },
+  tour_termine: {
+    fields: [
+      { field: 'hinweis', type: 'string', schema: {} },
+    ],
+    hasSlug: false,
+  },
+  pages: {
+    fields: [
+      { field: 'slug',  type: 'string', schema: { is_nullable: false } },
+      { field: 'title', type: 'string', schema: {} },
+    ],
+    hasSlug: true,
+  },
+  seo: {
+    fields: [
+      { field: 'title',            type: 'text', schema: {} },
+      { field: 'meta_description', type: 'text', schema: {} },
+    ],
+    hasSlug: false,
+  },
+}
 
 const COLLECTIONS_TO_BACKUP = [
   'touren', 'tour_termine', 'pages', 'seo',
@@ -102,6 +140,66 @@ async function ensureLanguagesPermission() {
   console.log('  + read-permission on languages')
 }
 
+async function ensureTranslationsSubtable(parent, cfg) {
+  const subtable = `${parent}_translations`
+  const cols = await directus.request(readCollections())
+  if (cols.find((c) => c.collection === subtable)) {
+    console.log(`  ✓ ${subtable}`)
+    return
+  }
+  if (DRY) { console.log(`  (dry) would create ${subtable}`); return }
+
+  // Parent-Collection-PK-Typ ermitteln (uuid oder integer)
+  const parentFields = await directus.request(readFieldsByCollection(parent))
+  const pk = parentFields.find((f) => f.schema?.is_primary_key)
+  const pkType = pk?.type ?? 'uuid'
+
+  await directus.request(createCollection({
+    collection: subtable,
+    meta: { hidden: true, singleton: false, icon: 'translate' },
+    schema: {},
+    fields: [
+      { field: 'id', type: 'uuid',
+        meta: { hidden: true, interface: 'input', readonly: true, special: ['uuid'] },
+        schema: { is_primary_key: true, has_auto_increment: false } },
+      { field: `${parent}_id`, type: pkType,
+        meta: { hidden: true, interface: 'input', readonly: true },
+        schema: {} },
+      { field: 'languages_code', type: 'string',
+        meta: { hidden: true, interface: 'input' }, schema: { max_length: 8 } },
+      ...cfg.fields.map((f) => ({ ...f })),
+    ],
+  }))
+
+  // Relations: <subtable>.<parent>_id → parent (m2o)
+  await directus.request(createRelation({
+    collection: subtable, field: `${parent}_id`, related_collection: parent,
+    meta: { one_field: 'translations', sort_field: null, one_deselect_action: 'delete', junction_field: 'languages_code' },
+    schema: { on_delete: 'CASCADE' },
+  }))
+  // Relations: <subtable>.languages_code → languages (m2o)
+  await directus.request(createRelation({
+    collection: subtable, field: 'languages_code', related_collection: 'languages',
+    meta: { one_field: null, sort_field: null, junction_field: `${parent}_id` },
+    schema: { on_delete: 'SET NULL' },
+  }))
+
+  // Parent bekommt translations alias-field mit interface 'translations'
+  await directus.request(createField(parent, {
+    field: 'translations', type: 'alias',
+    meta: { interface: 'translations', special: ['translations'], options: { languageField: 'code' } },
+    schema: null,
+  }))
+
+  console.log(`  + ${subtable} (fields: ${cfg.fields.map((f) => f.field).join(', ')})`)
+}
+
+async function ensureContentTranslations() {
+  for (const [parent, cfg] of Object.entries(CONTENT_TRANSLATIONS)) {
+    await ensureTranslationsSubtable(parent, cfg)
+  }
+}
+
 async function run() {
   console.log(`--- i18n-setup ${DRY ? '(DRY RUN)' : ''} ---\n`)
   await fs.mkdir(BACKUP_DIR, { recursive: true })
@@ -122,8 +220,10 @@ async function run() {
     process.exit(0)
   }
 
-  // Tasks 3–7 hängen hier weitere Schritte an:
-  // await ensureContentTranslations()
+  console.log('\n→ Content translations')
+  await ensureContentTranslations()
+
+  // Tasks 4–7 hängen hier weitere Schritte an:
   // await ensureBlockTranslations()
   // await ensureItemSubCollections()
   // await migrateData()
