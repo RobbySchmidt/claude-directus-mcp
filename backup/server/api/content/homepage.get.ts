@@ -21,17 +21,10 @@ export default defineEventHandler(async (event) => {
       'id', 'status', 'seo',
       'translations.*',
       'blocks.*',
-      'blocks.item.*',
-      'blocks.item.translations.*',
     ],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deep: {
       translations: { _filter: { languages_code: { _eq: locale } }, _limit: 1 },
-      blocks: {
-        item: {
-          translations: { _filter: { languages_code: { _eq: locale } }, _limit: 1 },
-        },
-      },
     } as any,
   }))
 
