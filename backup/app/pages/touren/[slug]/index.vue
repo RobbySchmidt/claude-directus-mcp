@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import type { TourDetail } from '~~/shared/types/touren'
+import { setAlternateLocales } from '~/composables/useAlternateLocales'
+
+defineI18nRoute({
+  paths: {
+    de: '/touren/:slug',
+    en: '/tours/:slug',
+  },
+})
 
 const route = useRoute()
 const { locale } = useI18n()
+const localePath = useLocalePath()
 const slug = computed(() => String(route.params.slug))
 
 const { data: tour, error } = await useAsyncData(
@@ -19,9 +28,14 @@ if (error.value || !tour.value) {
   })
 }
 
+watchEffect(() => {
+  setAlternateLocales(tour.value?.alternate_locales ?? null)
+})
+onBeforeUnmount(() => setAlternateLocales(null))
+
 const { public: pub } = useRuntimeConfig()
 
-const buchenHref = computed(() => (tour.value ? `/touren/${tour.value.slug}/buchen` : ''))
+const buchenHref = computed(() => (tour.value ? localePath(`/touren/${tour.value.slug}/buchen`) : ''))
 
 useSeoMeta({
   title: () => `${tour.value!.title} | ${pub.siteName}`,

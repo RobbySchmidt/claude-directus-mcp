@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PageContent } from '~~/shared/types/content'
+import { setAlternateLocales } from '~/composables/useAlternateLocales'
 
 const { public: pub } = useRuntimeConfig()
 const { locale } = useI18n()
@@ -21,6 +22,11 @@ if (error.value) {
     statusMessage: error.value.statusMessage ?? 'Page Not Found',
   })
 }
+
+watchEffect(() => {
+  setAlternateLocales(page.value?.alternate_locales ?? null)
+})
+onBeforeUnmount(() => setAlternateLocales(null))
 
 useSeoMeta({
   title: () => page.value?.seo?.title ?? pub.siteName,

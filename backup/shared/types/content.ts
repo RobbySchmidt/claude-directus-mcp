@@ -19,4 +19,5 @@ export type PageContent = {
   status: string
   seo: Seo | null
   blocks: PageBlockRef[]
+  alternate_locales: Record<string, string>
 }

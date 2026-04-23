@@ -34,4 +34,5 @@ export type TourDetail = TourCardData & {
   booking_url: string | null
   gallery: TourGalleryImage[]
   termine: TerminPublic[]
+  alternate_locales: Record<string, string>
 }
