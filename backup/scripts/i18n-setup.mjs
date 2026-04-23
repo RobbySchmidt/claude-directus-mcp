@@ -59,6 +59,58 @@ const CONTENT_TRANSLATIONS = {
   },
 }
 
+const BLOCK_TRANSLATIONS = {
+  block_heroBanner: [
+    { field: 'title',               type: 'text',   schema: {} },
+    { field: 'eyebrow',             type: 'string', schema: {} },
+    { field: 'lead',                type: 'text',   schema: {} },
+    { field: 'cta_primary_label',   type: 'string', schema: {} },
+    { field: 'cta_secondary_label', type: 'string', schema: {} },
+  ],
+  block_tourGrid: [
+    { field: 'eyebrow',   type: 'string', schema: {} },
+    { field: 'headline',  type: 'string', schema: {} },
+    { field: 'lead',      type: 'text',   schema: {} },
+    { field: 'cta_label', type: 'string', schema: {} },
+  ],
+  block_benefits: [
+    { field: 'eyebrow',  type: 'string', schema: {} },
+    { field: 'headline', type: 'string', schema: {} },
+    { field: 'lead',     type: 'text',   schema: {} },
+  ],
+  block_regionList: [
+    { field: 'eyebrow',   type: 'string', schema: {} },
+    { field: 'headline',  type: 'string', schema: {} },
+    { field: 'lead',      type: 'text',   schema: {} },
+    { field: 'cta_label', type: 'string', schema: {} },
+  ],
+  block_testimonials: [
+    { field: 'eyebrow',  type: 'string', schema: {} },
+    { field: 'headline', type: 'string', schema: {} },
+  ],
+  block_newsletter: [
+    { field: 'eyebrow',       type: 'string', schema: {} },
+    { field: 'headline',      type: 'string', schema: {} },
+    { field: 'lead',          type: 'text',   schema: {} },
+    { field: 'placeholder',   type: 'string', schema: {} },
+    { field: 'cta_label',     type: 'string', schema: {} },
+    { field: 'success_title', type: 'string', schema: {} },
+    { field: 'success_text',  type: 'text',   schema: {} },
+  ],
+  block_carousel: [
+    { field: 'title', type: 'text', schema: {} },
+  ],
+  block_imageText: [
+    { field: 'text', type: 'text', schema: {} },
+  ],
+  block_text: [
+    { field: 'content', type: 'text', schema: {}, meta: { interface: 'input-rich-text-html' } },
+  ],
+  block_banner: [
+    { field: 'title', type: 'text', schema: {} },
+  ],
+}
+
 const COLLECTIONS_TO_BACKUP = [
   'touren', 'tour_termine', 'pages', 'seo',
   'block_heroBanner', 'block_statsBand', 'block_tourGrid', 'block_benefits',
@@ -204,6 +256,12 @@ async function ensureContentTranslations() {
   }
 }
 
+async function ensureBlockTranslations() {
+  for (const [parent, fields] of Object.entries(BLOCK_TRANSLATIONS)) {
+    await ensureTranslationsSubtable(parent, { fields, hasSlug: false })
+  }
+}
+
 async function run() {
   console.log(`--- i18n-setup ${DRY ? '(DRY RUN)' : ''} ---\n`)
   await fs.mkdir(BACKUP_DIR, { recursive: true })
@@ -220,8 +278,10 @@ async function run() {
   console.log('\n→ Content translations')
   await ensureContentTranslations()
 
-  // Tasks 4–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
-  // await ensureBlockTranslations()
+  console.log('\n→ Block translations')
+  await ensureBlockTranslations()
+
+  // Tasks 5–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
   // await ensureItemSubCollections()
   // await migrateData()
   // await seedNavigation()
