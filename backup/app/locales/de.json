@@ -1,12 +1,128 @@
 {
-  "common": {},
-  "nav": {},
-  "cta": {},
-  "auth": {},
-  "booking": { "status": {} },
-  "tour": {},
-  "form": {},
-  "validation": {},
-  "footer": {},
-  "language": {}
+  "common": {
+    "home": "Startseite",
+    "back": "Zurück",
+    "loading": "Lädt…",
+    "error": "Ein Fehler ist aufgetreten.",
+    "not_found_title": "Seite nicht gefunden",
+    "not_found_lead": "Diese Seite existiert nicht oder ist nicht verfügbar.",
+    "not_available_in_language": "Nicht in dieser Sprache verfügbar",
+    "empty_list": "Keine Inhalte verfügbar."
+  },
+  "nav": {
+    "toggle_open": "Menü öffnen",
+    "toggle_close": "Menü schließen",
+    "site_title": "Alpenpfad",
+    "main_navigation": "Hauptnavigation"
+  },
+  "cta": {
+    "book_tour": "Tour buchen",
+    "discover_tours": "Touren entdecken",
+    "contact_us": "Schreib uns",
+    "learn_more": "Mehr erfahren"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "register": "Registrieren",
+    "forgot_password": "Passwort vergessen?",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "password_repeat": "Passwort wiederholen",
+    "login_cta": "Anmelden",
+    "login_sub": "Bei deinem Alpenpfad-Konto",
+    "no_account_yet": "Noch keinen Account?",
+    "already_registered": "Schon registriert?",
+    "create_account": "Account anlegen",
+    "reset_password": "Passwort zurücksetzen",
+    "reset_request": "Link zum Zurücksetzen anfordern",
+    "reset_request_sent": "Falls die E-Mail-Adresse bei uns registriert ist, haben wir dir einen Reset-Link geschickt.",
+    "account": "Mein Konto",
+    "profile": "Profil",
+    "profile_lead": "Pflege hier dein Profil",
+    "security": "Sicherheit",
+    "first_name": "Vorname",
+    "last_name": "Nachname",
+    "save_profile": "Profil speichern",
+    "change_password": "Passwort ändern",
+    "current_password": "Aktuelles Passwort",
+    "new_password": "Neues Passwort",
+    "avatar": "Profilbild",
+    "avatar_upload": "Bild hochladen",
+    "avatar_remove": "Bild entfernen",
+    "register_sub": "Account in 10 Sekunden anlegen",
+    "account_created": "Account angelegt. Du bist eingeloggt."
+  },
+  "booking": {
+    "book_now": "Jetzt buchen",
+    "book_soon": "Buchung in Kürze",
+    "sold_out": "Ausgebucht",
+    "places_left": "noch {count} Plätze",
+    "select_date": "Wähle einen Termin oder gib ein Wunschdatum an",
+    "select_placeholder": "Bitte wählen…",
+    "wish_date": "Wunschdatum",
+    "wish_date_placeholder": "Wunschdatum angeben…",
+    "contact_data": "Kontaktdaten",
+    "first_name": "Vorname",
+    "last_name": "Nachname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "persons": "Personen",
+    "notes": "Besondere Wünsche",
+    "submit_booking": "Buchung anfragen",
+    "my_bookings": "Meine Buchungen",
+    "booking_detail": "Buchungs-Detail",
+    "cancel_booking": "Buchung stornieren",
+    "cancel_confirm": "Möchtest du diese Buchung wirklich stornieren?",
+    "empty_list": "Du hast noch keine Buchungen.",
+    "price_total": "Gesamtpreis",
+    "status": {
+      "angefragt": "Angefragt",
+      "bestaetigt": "Bestätigt",
+      "storniert": "Storniert",
+      "abgelehnt": "Abgelehnt",
+      "durchgefuehrt": "Durchgeführt"
+    }
+  },
+  "tour": {
+    "duration": "Dauer",
+    "difficulty": "Schwierigkeit",
+    "distance": "Länge",
+    "ascent": "Höhenmeter",
+    "included": "Im Preis enthalten",
+    "not_included": "Nicht im Preis enthalten",
+    "meeting_point": "Treffpunkt",
+    "season": "Saison",
+    "organizational": "Organisatorisches",
+    "highlights": "Highlights",
+    "next_dates": "Nächste Termine",
+    "group_size_max": "Gruppe max. {count}",
+    "price_from": "ab {price} €",
+    "per_person": "pro Person"
+  },
+  "form": {
+    "required": "Pflichtfeld",
+    "submit": "Absenden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "loading": "Wird gesendet…",
+    "success": "Gespeichert."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich.",
+    "email": "Bitte eine gültige E-Mail-Adresse angeben.",
+    "min_length": "Mindestens {count} Zeichen.",
+    "max_length": "Maximal {count} Zeichen.",
+    "passwords_dont_match": "Passwörter stimmen nicht überein.",
+    "min_persons": "Mindestens 1 Person.",
+    "invalid": "Ungültig."
+  },
+  "footer": {
+    "brand_claim": "Seit 2014 geführte Wanderungen in den Alpen. Zertifizierte Guides, kleine Gruppen, nachhaltige Organisation.",
+    "copyright": "© {year} Alpenpfad GmbH. Alle Rechte vorbehalten.",
+    "social_aria": "Social Media"
+  },
+  "language": {
+    "switch_to": "Auf {name} wechseln"
+  }
 }
