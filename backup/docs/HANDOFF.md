@@ -129,9 +129,18 @@ Dann: `superpowers:brainstorming` für die Buchungen.
 - Legacy-Redirects: alte unprefixed URLs → 301 auf `/de/...` via `server/middleware/legacy-redirect.ts`.
 - Scope: Transaktionale E-Mails bleiben DE bis Buchungen live gehen (out-of-scope).
 
-**Bekannte Eigenheiten:**
-- `defineI18nRoute` paths müssen Nuxt-Syntax `[slug]` verwenden, NICHT Vue-Router-Syntax `:slug`. Die `@nuxtjs/i18n`-Build-Pipeline escaped `:` zu `\:` (literal colon), was dazu führt, dass dynamische Routen nicht matchen.
-- `hreflang`-Tags für Tour-Detailseiten zeigen server-seitig den DE-Slug auch für EN — die korrekte EN-Slug-Zuordnung passiert client-seitig via `setAlternateLocales`. Für volle SSR-Genauigkeit: `useSetI18nParams()` in der Tour-Page einsetzen.
+**Bekannte Eigenheiten (aus Setup- + Debug-Runden, alle in der aktuellen Codebase berücksichtigt — zum Nachlesen falls beim Erweitern ähnliche Fehler auftreten):**
+
+- **`defineI18nRoute` paths:** Nuxt-Syntax `[slug]` verwenden, NICHT Vue-Router-Syntax `:slug`. `@nuxtjs/i18n` escaped `:` zu `\:` (literal colon), dynamische Routen matchen sonst nicht.
+- **`app.vue` braucht `<NuxtLayout>`:** Ohne expliziten `<NuxtLayout>`-Wrapper in `app.vue` rendert Nuxt das `layouts/default.vue` nicht — Header + Footer wären dann unsichtbar.
+- **Homepage-Endpoint darf Blocks NICHT hydrieren:** [server/api/content/homepage.get.ts](../../server/api/content/homepage.get.ts) fragt nur `blocks.*` ab, NICHT `blocks.item.*`. Wenn `blocks.item.*` abgefragt wird, liefert Directus die kompletten Items als Objekte — der `ContentBlockBuilder` würde dann das ganze Objekt als `:id` propagieren, was die Block-API zum URL-encoden des Objekts und zu `403 Forbidden` führt. Jeder Block lädt seine Daten selbst via `/api/content/block`.
+- **Block-Komponenten müssen `locale` weitergeben:** Alle 7 Blocks in [app/components/blocks/](../../app/components/blocks/) lesen `const { locale } = useI18n()` und übergeben `locale.value` in der Query. Der `useAsyncData`-Key enthält auch die Locale (`block-${collection}-${id}-${locale.value}`), damit SSR-Cache pro Sprache getrennt bleibt. `watch: [locale]` stellt Re-Fetch bei Sprach-Switch sicher.
+- **Gallery M2M-Wrapper muss geflattet werden:** [server/api/content/tour.get.ts](../../server/api/content/tour.get.ts) unwrapped `gallery: [{ directus_files_id: {...} }]` → `gallery: [{...}]` bevor Response. Sonst rendert die Gallery-Komponente keine Bilder (erwartet flache File-Objekte).
+- **Tour-Page braucht `useSetI18nParams`:** Der Language-Switcher respektiert Route-Params nicht automatisch. Auf Tour-Detail muss [app/pages/touren/[slug]/index.vue](../../app/pages/touren/[slug]/index.vue) via `setI18nParams({ de: { slug: alt['de-DE'] }, en: { slug: alt['en-US'] } })` sagen, welcher Slug pro Locale gilt. Sonst landet der Switch auf `/en/tours/<de-slug>` → 404.
+- **Tour-Links via Named-Route:** Nicht `localePath(\`/touren/${slug}\`)` (erkennt das Slug-Template nicht), sondern `localePath({ name: 'touren-slug', params: { slug } })`. Betrifft [TourCard.vue](../../app/components/TourCard.vue), [TourTermine.vue](../../app/components/Tour/TourTermine.vue), [BuchungDetail.vue](../../app/components/Buchung/BuchungDetail.vue). Auto-Route-Namen: `touren-slug` für `pages/touren/[slug]/index.vue`, `touren-slug-buchen` für `.../buchen.vue`.
+- **Directus `display_template`-Referenzen:** Nach der Translation-Migration dürfen `display_template` & Konsorten nicht mehr auf gedroppte Parent-Felder zeigen. `touren.display_template` = `"{{ translations.title }} ({{ region }})"` (nicht `{{ title }}`). Prüfen wenn eine Directus-Admin-Ansicht `403 Forbidden [field does not exist]` wirft.
+- **Layout-Padding:** [layouts/default.vue](../../app/layouts/default.vue) hat `<main class="pt-17">` (=68px) — genau die Header-Höhe. Nicht höher, sonst entsteht sichtbare Lücke zwischen Header und Seiteninhalt.
+- **`hreflang`-Tags auf SSR:** Tour-Hreflang zeigte vorher server-seitig den DE-Slug auch für EN. Der `useSetI18nParams`-Fix oben korrigiert auch das (seit Commit `aaccecb`).
 
 **Relevante Spec + Plan:**
 - `docs/superpowers/specs/2026-04-23-i18n-design.md`
