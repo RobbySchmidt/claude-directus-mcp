@@ -191,7 +191,10 @@ export const BLOCK_ITEMS_EN = {
     'Karwendel':            { name: 'Karwendel' },
   },
   block_heroBanner_trust_signals: {
-    // Currently empty on all hero-banner records. Keep object here for future use.
+    // EN drafts intentionally omitted. The active hero-banner currently has
+    // 2 trust signals in German (e.g. "4.9/5 aus über 2.800 Bewertungen",
+    // "Zertifizierte Bergführer"); they are migrated DE-only and Robby adds
+    // EN translations manually in the Directus admin.
   },
   block_imageText_buttons: {
     // key: DE label

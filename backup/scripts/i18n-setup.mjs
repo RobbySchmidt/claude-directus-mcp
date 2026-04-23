@@ -12,7 +12,7 @@ import path from 'node:path'
 import {
   directus,
   readCollections, createCollection, createField, deleteField,
-  readItems, createItem, updateItem,
+  readItems, createItem,
 } from './directus.mjs'
 import { readPolicies, readPermissions, createPermission, createRelation, readFieldsByCollection } from '@directus/sdk'
 import {
