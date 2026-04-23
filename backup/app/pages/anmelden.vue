@@ -6,10 +6,11 @@ definePageMeta({ layout: false })
 const { public: pub } = useRuntimeConfig()
 const { isLoggedIn } = useUser()
 const { login } = useAuth()
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-useSeoMeta({ title: () => `Anmelden | ${pub.siteName}` })
+useSeoMeta({ title: () => `${t('auth.login')} | ${pub.siteName}` })
 
 const redirectTo = computed(() => {
   const r = route.query.redirect
@@ -37,11 +38,11 @@ const onSubmit = async (input: { email: string; password: string }) => {
 <template>
   <div class="min-h-screen bg-background text-foreground antialiased">
     <SectionsTheHeader />
-    <main class="pt-[68px]">
+    <main class="pt-17">
       <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
         <div class="text-center">
-          <h1 class="font-heading text-f-4xl font-medium text-foreground">Anmelden</h1>
-          <p class="mt-2 text-sm text-muted-foreground">Bei deinem Alpenpfad-Konto</p>
+          <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.login') }}</h1>
+          <p class="mt-2 text-sm text-muted-foreground">{{ $t('auth.login_sub') }}</p>
         </div>
         <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <AuthLoginForm :pending="pending" :error-message="errorMessage" @submit="onSubmit" />

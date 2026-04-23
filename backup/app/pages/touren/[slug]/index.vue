@@ -2,12 +2,13 @@
 import type { TourDetail } from '~~/shared/types/touren'
 
 const route = useRoute()
+const { locale } = useI18n()
 const slug = computed(() => String(route.params.slug))
 
 const { data: tour, error } = await useAsyncData(
-  () => `tour-${slug.value}`,
-  () => $fetch<TourDetail>('/api/content/tour', { query: { slug: slug.value } }),
-  { watch: [slug] },
+  () => `tour-${slug.value}-${locale.value}`,
+  () => $fetch<TourDetail>('/api/content/tour', { query: { slug: slug.value, locale: locale.value } }),
+  { watch: [slug, locale] },
 )
 
 if (error.value || !tour.value) {
@@ -34,7 +35,7 @@ useSeoMeta({
 <template>
   <div v-if="tour" class="min-h-screen bg-background text-foreground antialiased pb-24 md:pb-0">
     <SectionsTheHeader />
-    <main class="pt-[68px]">
+    <main class="pt-17">
       <TourHero
         :title="tour.title"
         :subtitle="tour.subtitle"

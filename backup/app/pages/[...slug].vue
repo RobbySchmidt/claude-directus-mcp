@@ -2,6 +2,7 @@
 import type { PageContent } from '~~/shared/types/content'
 
 const { public: pub } = useRuntimeConfig()
+const { locale } = useI18n()
 const route = useRoute()
 
 const slug = computed(() => {
@@ -11,7 +12,7 @@ const slug = computed(() => {
 })
 
 const { data: page, error } = await useAsyncData(() => route.path, () =>
-  $fetch<PageContent>('/api/content/page', { query: { slug: slug.value } }),
+  $fetch<PageContent>('/api/content/page', { query: { slug: slug.value, locale: locale.value } }),
 )
 
 if (error.value) {
