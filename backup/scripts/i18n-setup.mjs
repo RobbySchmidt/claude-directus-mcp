@@ -18,6 +18,10 @@ const BACKUP_DIR = path.resolve('exports/migrations')
 const BACKUP_DATE = '2026-04-23'
 
 // Format: { <collection>: { fields: [translatable...], hasSlug: bool } }
+// hasSlug: marker for Task 6 migration (unique (lang, slug) would be enforced
+// at the app layer; DB-level composite unique constraint is known-gap — see
+// plan comment at Task 6). Directus v11 has no composite-unique API endpoint;
+// the Task 6 migration's existence check provides functional idempotency.
 const CONTENT_TRANSLATIONS = {
   touren: {
     fields: [
