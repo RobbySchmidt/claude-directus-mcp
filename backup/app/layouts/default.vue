@@ -1,6 +1,6 @@
 <template>
   <WebsiteHeader />
-  <main class="pt-24">
+  <main class="pt-17">
     <slot />
   </main>
   <WebsiteFooter />
