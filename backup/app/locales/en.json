@@ -76,6 +76,11 @@
     "cancel_confirm": "Are you sure you want to cancel this booking?",
     "empty_list": "You have no bookings yet.",
     "price_total": "Total price",
+    "date": "Date",
+    "created_at": "Requested on",
+    "contact_detail": "Booking contact",
+    "name": "Name",
+    "cancel_irreversible": "This action cannot be undone.",
     "status": {
       "angefragt": "Requested",
       "bestaetigt": "Confirmed",
@@ -97,8 +102,16 @@
     "highlights": "Highlights",
     "next_dates": "Upcoming dates",
     "group_size_max": "Group max. {count}",
+    "group_size": "Group max.",
     "price_from": "from {price} €",
-    "per_person": "per person"
+    "price": "Price",
+    "per_person": "per person",
+    "impressions": "Gallery",
+    "price_label": "from",
+    "no_fixed_dates": "No fixed dates right now — book a preferred date directly.",
+    "cta_ready": "Ready for {title}?",
+    "cta_lead": "Secure one of the limited spots and start an adventure to remember.",
+    "to_tour": "View tour"
   },
   "form": {
     "required": "Required",

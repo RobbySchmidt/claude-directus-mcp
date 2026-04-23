@@ -13,17 +13,18 @@ const props = defineProps<{
   tourTitle: string
 }>()
 
+const { t } = useI18n()
 const { public: pub } = useRuntimeConfig()
 
 const srcFor = (img: TourGalleryImage) => `${pub.directusUrl}/assets/${img.id}`
 const altFor = (img: TourGalleryImage, idx: number) =>
-  img.title && img.title.trim().length > 0 ? img.title : `${props.tourTitle} — Bild ${idx + 1}`
+  img.title && img.title.trim().length > 0 ? img.title : `${props.tourTitle} — ${t('tour.impressions')} ${idx + 1}`
 </script>
 
 <template>
   <section v-if="images.length" class="bg-muted/30">
     <div class="mx-auto max-w-7xl px-4 py-f-16 sm:px-6 lg:px-8">
-      <h2 class="font-heading text-f-3xl font-medium text-foreground">Impressionen</h2>
+      <h2 class="font-heading text-f-3xl font-medium text-foreground">{{ $t('tour.impressions') }}</h2>
       <Carousel
         :opts="{ loop: true, align: 'start' }"
         class="mt-8 w-full"

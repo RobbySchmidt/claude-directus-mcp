@@ -19,9 +19,9 @@ function terminPreis(t: TerminPublic, priceFrom: number | null) {
 
 <template>
   <section class="my-f-12">
-    <h2 class="font-heading text-f-2xl font-medium text-foreground">Nächste Termine</h2>
+    <h2 class="font-heading text-f-2xl font-medium text-foreground">{{ $t('tour.next_dates') }}</h2>
     <p v-if="!termine.length" class="mt-3 text-muted-foreground">
-      Aktuell keine festen Termine — buche direkt ein Wunschdatum.
+      {{ $t('tour.no_fixed_dates') }}
     </p>
     <ul v-else class="mt-4 divide-y divide-border rounded-xl border border-border bg-card">
       <li
@@ -36,24 +36,24 @@ function terminPreis(t: TerminPublic, priceFrom: number | null) {
           <p v-if="t.hinweis" class="mt-1 text-sm text-muted-foreground">{{ t.hinweis }}</p>
         </div>
         <div class="flex items-center gap-4 text-sm">
-          <span class="text-muted-foreground">ab {{ terminPreis(t, priceFrom) }} EUR</span>
+          <span class="text-muted-foreground">{{ $t('tour.price_from', { price: terminPreis(t, priceFrom) }) }}</span>
           <span
             v-if="t.verfuegbare_plaetze === -1"
             class="rounded-full border border-border px-2 py-0.5 text-xs"
           >
-            Freie Plätze
+            {{ $t('booking.places_left', { count: '∞' }) }}
           </span>
           <span
             v-else-if="t.ausgebucht"
             class="rounded-full border border-red-300 bg-red-50 px-2 py-0.5 text-xs text-red-900"
           >
-            Ausgebucht
+            {{ $t('booking.sold_out') }}
           </span>
           <span
             v-else
             class="rounded-full border border-green-300 bg-green-50 px-2 py-0.5 text-xs text-green-900"
           >
-            Noch {{ t.verfuegbare_plaetze }} Plätze
+            {{ $t('booking.places_left', { count: t.verfuegbare_plaetze }) }}
           </span>
         </div>
       </li>
@@ -62,7 +62,7 @@ function terminPreis(t: TerminPublic, priceFrom: number | null) {
       :to="`/touren/${tourSlug}/buchen`"
       class="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
     >
-      Jetzt buchen
+      {{ $t('booking.book_now') }}
     </NuxtLink>
   </section>
 </template>

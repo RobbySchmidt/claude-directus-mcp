@@ -76,6 +76,11 @@
     "cancel_confirm": "Möchtest du diese Buchung wirklich stornieren?",
     "empty_list": "Du hast noch keine Buchungen.",
     "price_total": "Gesamtpreis",
+    "date": "Termin",
+    "created_at": "Angefragt am",
+    "contact_detail": "Kontakt zur Buchung",
+    "name": "Name",
+    "cancel_irreversible": "Diese Aktion kann nicht rückgängig gemacht werden.",
     "status": {
       "angefragt": "Angefragt",
       "bestaetigt": "Bestätigt",
@@ -97,8 +102,16 @@
     "highlights": "Highlights",
     "next_dates": "Nächste Termine",
     "group_size_max": "Gruppe max. {count}",
+    "group_size": "Gruppe max.",
     "price_from": "ab {price} €",
-    "per_person": "pro Person"
+    "price": "Preis",
+    "per_person": "pro Person",
+    "impressions": "Impressionen",
+    "price_label": "ab",
+    "no_fixed_dates": "Aktuell keine festen Termine — buche direkt ein Wunschdatum.",
+    "cta_ready": "Bereit für {title}?",
+    "cta_lead": "Sichere dir einen der begrenzten Plätze und starte in ein Abenteuer, das bleibt.",
+    "to_tour": "Zur Tour"
   },
   "form": {
     "required": "Pflichtfeld",

@@ -11,7 +11,7 @@ defineProps<{
       <div class="mx-auto max-w-3xl">
         <p v-if="intro" class="text-f-xl leading-relaxed text-foreground">{{ intro }}</p>
         <div v-if="items?.length" class="mt-f-10">
-          <h2 class="font-heading text-f-3xl font-medium text-foreground">Highlights</h2>
+          <h2 class="font-heading text-f-3xl font-medium text-foreground">{{ $t('tour.highlights') }}</h2>
           <ul class="mt-6 grid gap-3 sm:grid-cols-2">
             <li
               v-for="item in items"
