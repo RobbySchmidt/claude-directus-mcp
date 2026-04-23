@@ -7,8 +7,8 @@ const localePath = useLocalePath()
 definePageMeta({ middleware: 'auth' })
 defineI18nRoute({
   paths: {
-    de: '/konto/buchungen/:id',
-    en: '/account/bookings/:id',
+    de: '/konto/buchungen/[id]',
+    en: '/account/bookings/[id]',
   },
 })
 

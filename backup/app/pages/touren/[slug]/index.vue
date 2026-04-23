@@ -4,8 +4,8 @@ import { setAlternateLocales } from '~/composables/useAlternateLocales'
 
 defineI18nRoute({
   paths: {
-    de: '/touren/:slug',
-    en: '/tours/:slug',
+    de: '/touren/[slug]',
+    en: '/tours/[slug]',
   },
 })
 

@@ -8,8 +8,8 @@ const localePath = useLocalePath()
 definePageMeta({ middleware: 'auth' })
 defineI18nRoute({
   paths: {
-    de: '/touren/:slug/buchen',
-    en: '/tours/:slug/book',
+    de: '/touren/[slug]/buchen',
+    en: '/tours/[slug]/book',
   },
 })
 
