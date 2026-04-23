@@ -81,7 +81,7 @@ async function ensureLanguagesCollection() {
 }
 
 async function ensureLanguagesPermission() {
-  const policies = await directus.request(readPolicies({ filter: { name: { _eq: 'Kunde' } }, limit: 1 }))
+  const policies = await directus.request(readPolicies({ filter: { name: { _eq: 'Kunde Policy' } }, limit: 1 }))
   if (!policies.length) {
     console.log('  ⚠ Kunde-Policy nicht gefunden (Auth-Setup noch nicht gelaufen?) — überspringe')
     return
