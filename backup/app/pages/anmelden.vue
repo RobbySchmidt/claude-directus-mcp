@@ -1,19 +1,28 @@
 <script setup lang="ts">
 import { useSeoMeta } from '#imports'
 
-definePageMeta({ layout: false })
+const localePath = useLocalePath()
+
+definePageMeta({})
+defineI18nRoute({
+  paths: {
+    de: '/anmelden',
+    en: '/login',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { isLoggedIn } = useUser()
 const { login } = useAuth()
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-useSeoMeta({ title: () => `Anmelden | ${pub.siteName}` })
+useSeoMeta({ title: () => `${t('auth.login')} | ${pub.siteName}` })
 
 const redirectTo = computed(() => {
   const r = route.query.redirect
-  return typeof r === 'string' && r.startsWith('/') ? r : '/konto'
+  return typeof r === 'string' && r.startsWith('/') ? r : localePath('/konto')
 })
 
 if (isLoggedIn.value) await router.replace(redirectTo.value)
@@ -35,19 +44,13 @@ const onSubmit = async (input: { email: string; password: string }) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main class="pt-[68px]">
-      <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
-        <div class="text-center">
-          <h1 class="font-heading text-f-4xl font-medium text-foreground">Anmelden</h1>
-          <p class="mt-2 text-sm text-muted-foreground">Bei deinem Alpenpfad-Konto</p>
-        </div>
-        <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <AuthLoginForm :pending="pending" :error-message="errorMessage" @submit="onSubmit" />
-        </div>
-      </section>
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
+    <div class="text-center">
+      <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.login') }}</h1>
+      <p class="mt-2 text-sm text-muted-foreground">{{ $t('auth.login_sub') }}</p>
+    </div>
+    <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <AuthLoginForm :pending="pending" :error-message="errorMessage" @submit="onSubmit" />
+    </div>
+  </section>
 </template>

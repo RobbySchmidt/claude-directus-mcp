@@ -10,6 +10,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{ cancel: [] }>()
 
+const localePath = useLocalePath()
+
 function formatDatum(iso: string) {
   const [y, m, d] = iso.split('-')
   return `${d}.${m}.${y}`
@@ -32,7 +34,7 @@ function onConfirm() {
 
     <dl class="grid gap-4 rounded-xl border border-border bg-card p-6 shadow-sm sm:grid-cols-2">
       <div>
-        <dt class="text-xs uppercase text-muted-foreground">Termin</dt>
+        <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.date') }}</dt>
         <dd class="mt-1 font-medium text-foreground">
           <template v-if="buchung.termin">
             {{ formatDatum(buchung.termin.date_from) }} – {{ formatDatum(buchung.termin.date_to) }}
@@ -41,20 +43,20 @@ function onConfirm() {
             </span>
           </template>
           <template v-else-if="buchung.wunsch_datum">
-            Wunschdatum: {{ formatDatum(buchung.wunsch_datum) }}
+            {{ $t('booking.wish_date') }}: {{ formatDatum(buchung.wunsch_datum) }}
           </template>
         </dd>
       </div>
       <div>
-        <dt class="text-xs uppercase text-muted-foreground">Personen</dt>
+        <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.persons') }}</dt>
         <dd class="mt-1 font-medium text-foreground">{{ buchung.personen_anzahl }}</dd>
       </div>
       <div>
-        <dt class="text-xs uppercase text-muted-foreground">Preis (Snapshot)</dt>
+        <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.price_total') }}</dt>
         <dd class="mt-1 font-medium text-foreground">{{ buchung.preis_gesamt }} EUR</dd>
       </div>
       <div>
-        <dt class="text-xs uppercase text-muted-foreground">Angefragt am</dt>
+        <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.created_at') }}</dt>
         <dd class="mt-1 font-medium text-foreground">
           {{ new Date(buchung.date_created).toLocaleDateString('de-DE') }}
         </dd>
@@ -62,23 +64,23 @@ function onConfirm() {
     </dl>
 
     <div class="rounded-xl border border-border bg-card p-6 shadow-sm">
-      <h2 class="font-heading text-lg text-foreground">Kontakt zur Buchung</h2>
+      <h2 class="font-heading text-lg text-foreground">{{ $t('booking.contact_detail') }}</h2>
       <dl class="mt-4 grid gap-2 text-sm sm:grid-cols-2">
         <div>
-          <dt class="text-xs uppercase text-muted-foreground">Name</dt>
+          <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.name') }}</dt>
           <dd>{{ buchung.kontakt_vorname }} {{ buchung.kontakt_nachname }}</dd>
         </div>
         <div>
-          <dt class="text-xs uppercase text-muted-foreground">E-Mail</dt>
+          <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.email') }}</dt>
           <dd>{{ buchung.kontakt_email }}</dd>
         </div>
         <div>
-          <dt class="text-xs uppercase text-muted-foreground">Telefon</dt>
+          <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.phone') }}</dt>
           <dd>{{ buchung.kontakt_telefon }}</dd>
         </div>
       </dl>
       <div v-if="buchung.notizen" class="mt-4">
-        <dt class="text-xs uppercase text-muted-foreground">Notizen</dt>
+        <dt class="text-xs uppercase text-muted-foreground">{{ $t('booking.notes') }}</dt>
         <dd class="mt-1 whitespace-pre-line text-sm text-foreground">{{ buchung.notizen }}</dd>
       </div>
     </div>
@@ -91,31 +93,31 @@ function onConfirm() {
           :title="cancelDisabledReason ?? ''"
           @click="confirmOpen = true"
         >
-          {{ pending ? 'Wird storniert…' : 'Buchung stornieren' }}
+          {{ pending ? $t('form.loading') : $t('booking.cancel_booking') }}
         </Button>
         <span v-if="!canCancel && cancelDisabledReason" class="text-xs text-muted-foreground">
           {{ cancelDisabledReason }}
         </span>
       </template>
       <NuxtLink
-        :to="`/touren/${buchung.tour.slug}`"
+        :to="localePath({ name: 'touren-slug', params: { slug: buchung.tour.slug } })"
         class="text-sm font-medium text-primary hover:underline"
       >
-        Zur Tour
+        {{ $t('tour.to_tour') }}
       </NuxtLink>
     </div>
 
     <AlertDialog v-model:open="confirmOpen">
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Buchung wirklich stornieren?</AlertDialogTitle>
+          <AlertDialogTitle>{{ $t('booking.cancel_confirm') }}</AlertDialogTitle>
           <AlertDialogDescription>
-            Diese Aktion kann nicht rückgängig gemacht werden.
+            {{ $t('booking.cancel_irreversible') }}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Abbrechen</AlertDialogCancel>
-          <AlertDialogAction @click="onConfirm">Stornieren</AlertDialogAction>
+          <AlertDialogCancel>{{ $t('form.cancel') }}</AlertDialogCancel>
+          <AlertDialogAction @click="onConfirm">{{ $t('booking.cancel_booking') }}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

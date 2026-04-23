@@ -47,7 +47,7 @@ const difficultyColor: Record<TourDifficulty, string> = {
             :href="bookingUrl"
             class="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Jetzt buchen
+            {{ $t('booking.book_now') }}
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 12h14" />
             </svg>
@@ -58,7 +58,7 @@ const difficultyColor: Record<TourDifficulty, string> = {
             disabled
             class="inline-flex items-center justify-center gap-2 rounded-full bg-muted px-6 py-3 text-sm font-medium text-muted-foreground cursor-not-allowed"
           >
-            Buchung in Kürze
+            {{ $t('booking.book_soon') }}
           </button>
         </div>
       </div>

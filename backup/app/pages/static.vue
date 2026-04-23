@@ -1,29 +1,20 @@
 <script setup lang="ts">
-useHead({
-  title: 'Alpenpfad — Geführte Wanderungen in den Alpen',
-  meta: [
-    {
-      name: 'description',
-      content:
-        'Geführte Wanderungen durch die schönsten Regionen der Alpen. Zertifizierte Guides, kleine Gruppen, nachhaltig organisiert.',
-    },
-  ],
-  htmlAttrs: { lang: 'de' },
+const { public: pub } = useRuntimeConfig()
+const { locale, t } = useI18n()
+
+useSeoMeta({
+  title: () => `${t('nav.site_title')} — ${t('footer.brand_claim').split('.')[0]}`,
+  description: () => t('footer.brand_claim'),
+  htmlAttrs: { lang: locale.value },
 })
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main>
-      <SectionsSectionHero />
-      <SectionsSectionStats />
-      <SectionsSectionTours />
-      <SectionsSectionBenefits />
-      <SectionsSectionRegions />
-      <SectionsSectionTestimonials />
-      <SectionsSectionNewsletter />
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <SectionsSectionHero />
+  <SectionsSectionStats />
+  <SectionsSectionTours />
+  <SectionsSectionBenefits />
+  <SectionsSectionRegions />
+  <SectionsSectionTestimonials />
+  <SectionsSectionNewsletter />
 </template>

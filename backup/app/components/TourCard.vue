@@ -10,6 +10,8 @@ defineProps<{
   variant: 'alpine-see' | 'hochgebirge' | 'almwiese'
 }>()
 
+const localePath = useLocalePath()
+
 const difficultyColor = {
   leicht: 'bg-primary/10 text-primary',
   mittel: 'bg-accent/20 text-accent-foreground',
@@ -38,7 +40,7 @@ const difficultyColor = {
         </p>
         <h3 class="mt-1 font-heading text-f-2xl font-medium text-foreground">
           <NuxtLink
-            :to="`/touren/${slug}`"
+            :to="localePath({ name: 'touren-slug', params: { slug } })"
             class="outline-none before:absolute before:inset-0 before:content-['']"
           >
             {{ title }}

@@ -10,7 +10,7 @@ defineProps<{
     <div class="mx-auto max-w-7xl px-4 py-f-16 sm:px-6 lg:px-8">
       <div class="mx-auto grid max-w-4xl gap-10 sm:grid-cols-2">
         <div v-if="included?.length">
-          <h2 class="font-heading text-f-2xl font-medium text-foreground">Dabei</h2>
+          <h2 class="font-heading text-f-2xl font-medium text-foreground">{{ $t('tour.included') }}</h2>
           <ul class="mt-5 space-y-3">
             <li v-for="item in included" :key="item" class="flex items-start gap-3">
               <svg
@@ -28,7 +28,7 @@ defineProps<{
           </ul>
         </div>
         <div v-if="notIncluded?.length">
-          <h2 class="font-heading text-f-2xl font-medium text-foreground">Nicht dabei</h2>
+          <h2 class="font-heading text-f-2xl font-medium text-foreground">{{ $t('tour.not_included') }}</h2>
           <ul class="mt-5 space-y-3">
             <li v-for="item in notIncluded" :key="item" class="flex items-start gap-3">
               <svg

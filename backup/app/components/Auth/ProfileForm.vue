@@ -48,27 +48,27 @@ const onSubmit = () =>
     <div class="flex items-center gap-4">
       <AuthUserAvatar :user="user" size="lg" />
       <div class="flex flex-col gap-2">
-        <Button type="button" variant="ghost" size="sm" @click="onPickAvatar">Bild wählen</Button>
+        <Button type="button" variant="ghost" size="sm" @click="onPickAvatar">{{ $t('auth.avatar_upload') }}</Button>
         <span class="text-xs text-muted-foreground">PNG/JPG, max. 2 MB</span>
         <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onFileChange" />
       </div>
     </div>
     <div class="grid gap-5 sm:grid-cols-2">
       <div class="flex flex-col gap-2">
-        <Label for="prof-first">Vorname</Label>
+        <Label for="prof-first">{{ $t('auth.first_name') }}</Label>
         <Input id="prof-first" v-model="firstName" autocomplete="given-name" />
       </div>
       <div class="flex flex-col gap-2">
-        <Label for="prof-last">Nachname</Label>
+        <Label for="prof-last">{{ $t('auth.last_name') }}</Label>
         <Input id="prof-last" v-model="lastName" autocomplete="family-name" />
       </div>
     </div>
     <div class="flex flex-col gap-2">
-      <Label for="prof-email">E-Mail</Label>
+      <Label for="prof-email">{{ $t('auth.email') }}</Label>
       <Input id="prof-email" v-model="email" type="email" required autocomplete="email" />
     </div>
     <p v-if="message" class="text-sm text-primary" role="status">{{ message }}</p>
     <p v-if="errorMessage" class="text-sm text-destructive" role="alert">{{ errorMessage }}</p>
-    <Button type="submit" :disabled="pending" class="self-start">{{ pending ? 'Wird gespeichert …' : 'Änderungen speichern' }}</Button>
+    <Button type="submit" :disabled="pending" class="self-start">{{ pending ? $t('form.loading') : $t('auth.save_profile') }}</Button>
   </form>
 </template>

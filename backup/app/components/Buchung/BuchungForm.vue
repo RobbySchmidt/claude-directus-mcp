@@ -23,6 +23,8 @@ const emit = defineEmits<{
   submit: [payload: BuchungCreateInput]
 }>()
 
+const { t } = useI18n()
+
 const WUNSCH_VALUE = '__wunsch__'
 
 function todayIso(): string {
@@ -40,31 +42,34 @@ function formatDatum(iso: string) {
   return `${d}.${m}.${y}`
 }
 
-function terminLabel(t: TerminPublic) {
-  const von = formatDatum(t.date_from)
-  const bis = formatDatum(t.date_to)
+function terminLabel(termin: TerminPublic) {
+  const von = formatDatum(termin.date_from)
+  const bis = formatDatum(termin.date_to)
   const rest =
-    t.verfuegbare_plaetze === -1
+    termin.verfuegbare_plaetze === -1
       ? ''
-      : t.ausgebucht
-        ? ' — Ausgebucht'
-        : ` — noch ${t.verfuegbare_plaetze} Plätze`
+      : termin.ausgebucht
+        ? ` — ${t('booking.sold_out')}`
+        : ` — ${t('booking.places_left', { count: termin.verfuegbare_plaetze })}`
   return `${von} – ${bis}${rest}`
 }
 
-const formSchema = toTypedSchema(
+const buildSchema = () =>
   z
     .object({
-      termin: z.string().min(1, 'Bitte wähle einen Termin oder Wunschdatum.'),
+      termin: z.string().min(1, { message: t('validation.required') }),
       wunschDatum: z.string().optional(),
       personen: z.coerce
-        .number({ message: 'Personenzahl muss eine Zahl sein.' })
-        .int('Personenzahl muss ganzzahlig sein.')
-        .min(1, 'Mindestens 1 Person.'),
-      vorname: z.string().min(1, 'Vorname ist ein Pflichtfeld.'),
-      nachname: z.string().min(1, 'Nachname ist ein Pflichtfeld.'),
-      email: z.string().min(1, 'E-Mail ist ein Pflichtfeld.').email('Ungültige E-Mail-Adresse.'),
-      telefon: z.string().min(1, 'Telefon ist ein Pflichtfeld.'),
+        .number({ message: t('validation.invalid') })
+        .int(t('validation.invalid'))
+        .min(1, { message: t('validation.min_persons') }),
+      vorname: z.string().min(1, { message: t('validation.required') }),
+      nachname: z.string().min(1, { message: t('validation.required') }),
+      email: z
+        .string()
+        .min(1, { message: t('validation.required') })
+        .email({ message: t('validation.email') }),
+      telefon: z.string().min(1, { message: t('validation.required') }),
       notizen: z.string().optional(),
     })
     .superRefine((data, ctx) => {
@@ -73,18 +78,19 @@ const formSchema = toTypedSchema(
           ctx.addIssue({
             code: 'custom',
             path: ['wunschDatum'],
-            message: 'Bitte gib ein Wunschdatum an.',
+            message: t('validation.required'),
           })
         } else if (data.wunschDatum <= todayIso()) {
           ctx.addIssue({
             code: 'custom',
             path: ['wunschDatum'],
-            message: 'Wunschdatum muss in der Zukunft liegen.',
+            message: t('validation.invalid'),
           })
         }
       }
-    }),
-)
+    })
+
+const formSchema = computed(() => toTypedSchema(buildSchema()))
 
 const form = useForm({
   validationSchema: formSchema,
@@ -102,7 +108,7 @@ const form = useForm({
 
 const currentTerminValue = form.values.termin
 const selectedTermin = computed(() =>
-  props.termine.find((t) => t.id === form.values.termin) ?? null,
+  props.termine.find((termin) => termin.id === form.values.termin) ?? null,
 )
 
 const maxPersonen = computed(() => {
@@ -142,30 +148,30 @@ const onSubmit = form.handleSubmit((values) => {
 <template>
   <form class="space-y-6" @submit="onSubmit">
     <div>
-      <h2 class="font-heading text-f-2xl font-medium text-foreground">{{ tourTitle }} buchen</h2>
+      <h2 class="font-heading text-f-2xl font-medium text-foreground">{{ tourTitle }}</h2>
       <p class="mt-1 text-sm text-muted-foreground">
-        Wähle einen Termin oder gib ein Wunschdatum an. Wir bestätigen deine Anfrage innerhalb von 48 Stunden.
+        {{ $t('booking.select_date') }}
       </p>
     </div>
 
     <FormField v-slot="{ componentField }" name="termin">
       <FormItem>
-        <FormLabel>Termin *</FormLabel>
+        <FormLabel>{{ $t('booking.select_date') }} *</FormLabel>
         <FormControl>
           <select
             v-bind="componentField"
             class="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
           >
-            <option value="">Bitte wählen…</option>
+            <option value="">{{ $t('booking.select_placeholder') }}</option>
             <option
-              v-for="t in termine"
-              :key="t.id"
-              :value="t.id"
-              :disabled="t.ausgebucht"
+              v-for="termin in termine"
+              :key="termin.id"
+              :value="termin.id"
+              :disabled="termin.ausgebucht"
             >
-              {{ terminLabel(t) }}
+              {{ terminLabel(termin) }}
             </option>
-            <option :value="WUNSCH_VALUE">Wunschdatum angeben…</option>
+            <option :value="WUNSCH_VALUE">{{ $t('booking.wish_date_placeholder') }}</option>
           </select>
         </FormControl>
         <FormMessage />
@@ -174,7 +180,7 @@ const onSubmit = form.handleSubmit((values) => {
 
     <FormField v-if="form.values.termin === WUNSCH_VALUE" v-slot="{ componentField }" name="wunschDatum">
       <FormItem>
-        <FormLabel>Wunschdatum *</FormLabel>
+        <FormLabel>{{ $t('booking.wish_date') }} *</FormLabel>
         <FormControl>
           <Input type="date" :min="tomorrowIso()" v-bind="componentField" />
         </FormControl>
@@ -184,62 +190,65 @@ const onSubmit = form.handleSubmit((values) => {
 
     <FormField v-slot="{ componentField }" name="personen">
       <FormItem>
-        <FormLabel>Personen *</FormLabel>
+        <FormLabel>{{ $t('booking.persons') }} *</FormLabel>
         <FormControl>
           <Input type="number" :min="1" :max="maxPersonen" v-bind="componentField" />
         </FormControl>
-        <FormDescription>Max. {{ maxPersonen }} Personen</FormDescription>
+        <FormDescription>{{ $t('tour.group_size_max', { count: maxPersonen }) }}</FormDescription>
         <FormMessage />
       </FormItem>
     </FormField>
 
-    <div class="grid gap-4 sm:grid-cols-2">
-      <FormField v-slot="{ componentField }" name="vorname">
-        <FormItem>
-          <FormLabel>Vorname *</FormLabel>
-          <FormControl>
-            <Input type="text" v-bind="componentField" />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
+    <div>
+      <h3 class="mb-4 font-medium text-foreground">{{ $t('booking.contact_data') }}</h3>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <FormField v-slot="{ componentField }" name="vorname">
+          <FormItem>
+            <FormLabel>{{ $t('booking.first_name') }} *</FormLabel>
+            <FormControl>
+              <Input type="text" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-      <FormField v-slot="{ componentField }" name="nachname">
-        <FormItem>
-          <FormLabel>Nachname *</FormLabel>
-          <FormControl>
-            <Input type="text" v-bind="componentField" />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
+        <FormField v-slot="{ componentField }" name="nachname">
+          <FormItem>
+            <FormLabel>{{ $t('booking.last_name') }} *</FormLabel>
+            <FormControl>
+              <Input type="text" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-      <FormField v-slot="{ componentField }" name="email">
-        <FormItem>
-          <FormLabel>E-Mail *</FormLabel>
-          <FormControl>
-            <Input type="email" v-bind="componentField" />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
+        <FormField v-slot="{ componentField }" name="email">
+          <FormItem>
+            <FormLabel>{{ $t('booking.email') }} *</FormLabel>
+            <FormControl>
+              <Input type="email" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
 
-      <FormField v-slot="{ componentField }" name="telefon">
-        <FormItem>
-          <FormLabel>Telefon *</FormLabel>
-          <FormControl>
-            <Input type="tel" v-bind="componentField" />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      </FormField>
+        <FormField v-slot="{ componentField }" name="telefon">
+          <FormItem>
+            <FormLabel>{{ $t('booking.phone') }} *</FormLabel>
+            <FormControl>
+              <Input type="tel" v-bind="componentField" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        </FormField>
+      </div>
     </div>
 
     <FormField v-slot="{ componentField }" name="notizen">
       <FormItem>
-        <FormLabel>Notizen (optional)</FormLabel>
+        <FormLabel>{{ $t('booking.notes') }}</FormLabel>
         <FormControl>
-          <Textarea rows="4" placeholder="Besondere Wünsche, Fragen…" v-bind="componentField" />
+          <Textarea rows="4" :placeholder="$t('booking.notes')" v-bind="componentField" />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -247,18 +256,18 @@ const onSubmit = form.handleSubmit((values) => {
 
     <div class="rounded-md border border-border bg-muted/40 p-4">
       <div class="flex items-baseline justify-between">
-        <span class="text-sm font-medium text-foreground">Preis (Snapshot)</span>
+        <span class="text-sm font-medium text-foreground">{{ $t('booking.price_total') }}</span>
         <span class="font-heading text-f-xl text-foreground">{{ preisGesamt }} EUR</span>
       </div>
       <p class="mt-1 text-xs text-muted-foreground">
-        {{ selectedPrice }} EUR × {{ form.values.personen ?? 1 }} Personen
+        {{ selectedPrice }} EUR × {{ form.values.personen ?? 1 }} {{ $t('booking.persons').toLowerCase() }}
       </p>
     </div>
 
     <p v-if="errorMessage" class="text-sm text-red-700">{{ errorMessage }}</p>
 
     <Button type="submit" :disabled="pending" size="lg" class="w-full">
-      {{ pending ? 'Wird gesendet…' : 'Anfrage senden' }}
+      {{ pending ? $t('form.loading') : $t('booking.submit_booking') }}
     </Button>
   </form>
 </template>

@@ -3,14 +3,6 @@ import type { BuchungStatus } from '~~/shared/types/buchung'
 
 const props = defineProps<{ status: BuchungStatus }>()
 
-const label: Record<BuchungStatus, string> = {
-  angefragt: 'Angefragt',
-  bestaetigt: 'Bestätigt',
-  storniert: 'Storniert',
-  abgelehnt: 'Abgelehnt',
-  durchgefuehrt: 'Durchgeführt',
-}
-
 const cls: Record<BuchungStatus, string> = {
   angefragt: 'bg-yellow-100 text-yellow-900 border-yellow-300',
   bestaetigt: 'bg-green-100 text-green-900 border-green-300',
@@ -25,6 +17,6 @@ const cls: Record<BuchungStatus, string> = {
     class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium"
     :class="cls[props.status]"
   >
-    {{ label[props.status] }}
+    {{ $t(`booking.status.${props.status}`) }}
   </span>
 </template>

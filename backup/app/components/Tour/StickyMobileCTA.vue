@@ -15,7 +15,7 @@ const priceText = (v: number | null) =>
   >
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
       <div v-if="priceFrom !== null" class="flex flex-col">
-        <span class="text-xs text-muted-foreground">ab</span>
+        <span class="text-xs text-muted-foreground">{{ $t('tour.price_label') }}</span>
         <span class="font-heading text-f-lg font-medium text-foreground">{{ priceText(priceFrom) }}</span>
       </div>
       <a
@@ -23,7 +23,7 @@ const priceText = (v: number | null) =>
         :href="bookingUrl"
         class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
       >
-        Jetzt buchen
+        {{ $t('booking.book_now') }}
       </a>
       <button
         v-else
@@ -31,7 +31,7 @@ const priceText = (v: number | null) =>
         disabled
         class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-muted px-5 py-3 text-sm font-medium text-muted-foreground cursor-not-allowed"
       >
-        Buchung in Kürze
+        {{ $t('booking.book_soon') }}
       </button>
     </div>
   </div>

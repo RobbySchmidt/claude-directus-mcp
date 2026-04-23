@@ -117,3 +117,30 @@ Vor dem Start der Buchungs-Spec:
 - [ ] Policy-Entscheidung zu I1 (Suspended-User-Sessions) — optional, kann auch später.
 
 Dann: `superpowers:brainstorming` für die Buchungen.
+
+### Feature 3 — Zweisprachigkeit (DE/EN, abgeschlossen)
+
+- `languages`-Collection mit `de-DE` + `en-US`. N-Sprachen-ready: weitere Sprachen lassen sich per Directus-Admin + `nuxt.config.ts`-Eintrag hinzufügen.
+- 15 Translations-Subtables (4 Stammdaten + 10 Blocks + `navigation_items`) + 7 Item-Sub-Collections (für ehemalige JSON-Arrays in Blocks).
+- Setup-Script `scripts/i18n-setup.mjs` idempotent, liest DE-Werte aus Backups unter `exports/migrations/`. Rollback-Flag implementiert als Hinweis (manuelle Restore aus JSON-Backups).
+- Navigation aus Directus gezogen (3 Records: `Main`, `Footer`, `FooterLegal`, je mit DE+EN Translations). Alte `TheHeader.vue` + `TheFooter.vue` entfernt; `app/layouts/default.vue` rendert jetzt `WebsiteHeader` + `WebsiteFooter`.
+- Frontend: `@nuxtjs/i18n@9.5.6` mit `strategy: 'prefix'`, `restructureDir: false` (wegen Nuxt 4 `srcDir: 'app/'`). Slugs pro Sprache: `defineI18nRoute({ paths: { de: '...', en: '...' } })` auf statischen Pages; Tour-/Page-Slugs kommen aus Directus-Translations.
+- Zod-Validation lokalisiert via `zod-i18n-map`.
+- Legacy-Redirects: alte unprefixed URLs → 301 auf `/de/...` via `server/middleware/legacy-redirect.ts`.
+- Scope: Transaktionale E-Mails bleiben DE bis Buchungen live gehen (out-of-scope).
+
+**Bekannte Eigenheiten:**
+- `defineI18nRoute` paths müssen Nuxt-Syntax `[slug]` verwenden, NICHT Vue-Router-Syntax `:slug`. Die `@nuxtjs/i18n`-Build-Pipeline escaped `:` zu `\:` (literal colon), was dazu führt, dass dynamische Routen nicht matchen.
+- `hreflang`-Tags für Tour-Detailseiten zeigen server-seitig den DE-Slug auch für EN — die korrekte EN-Slug-Zuordnung passiert client-seitig via `setAlternateLocales`. Für volle SSR-Genauigkeit: `useSetI18nParams()` in der Tour-Page einsetzen.
+
+**Relevante Spec + Plan:**
+- `docs/superpowers/specs/2026-04-23-i18n-design.md`
+- `docs/superpowers/plans/2026-04-23-i18n.md`
+
+**Neue Konventionen für Folgearbeiten:**
+- Alle UI-Strings neu hinzukommender Komponenten in `locales/de.json` + `locales/en.json` eintragen (es gibt ~150 Keys organisiert nach Namespaces `common`, `nav`, `cta`, `auth`, `booking`, `tour`, `form`, `validation`, `footer`, `language`).
+- Neue Content-Collections mit Text: Translations-Subtable analog zu `CONTENT_TRANSLATIONS` im Setup-Script.
+- Interne Links immer `useLocalePath()` nutzen statt hardcoded `to="/..."`.
+- Neuer Block-Typ: in `server/api/content/block.get.ts` in `BLOCK_CONFIG` eintragen.
+- EN-Content-Drafts für neue Items: `scripts/i18n-content-en.mjs` erweitern, dann `yarn i18n:setup` ausführen (idempotent).
+- `defineI18nRoute` mit dynamischen Segmenten: immer `[param]` statt `:param`.

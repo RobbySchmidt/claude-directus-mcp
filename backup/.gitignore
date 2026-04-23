@@ -22,3 +22,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# i18n migration backups (generated, not for VCS)
+exports/migrations/

@@ -11,6 +11,7 @@ import {
 const { user } = useUser()
 const { logout } = useAuth()
 const router = useRouter()
+const localePath = useLocalePath()
 
 const onLogout = async () => {
   await logout()
@@ -29,7 +30,7 @@ const displayName = computed(() => {
   <DropdownMenu>
     <DropdownMenuTrigger
       class="inline-flex items-center gap-2 rounded-full transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      :aria-label="`Mein Konto (${displayName})`"
+      :aria-label="`${$t('auth.account')} (${displayName})`"
     >
       <AuthUserAvatar :user="user" />
     </DropdownMenuTrigger>
@@ -39,13 +40,13 @@ const displayName = computed(() => {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem as-child>
-        <NuxtLink to="/konto">Mein Konto</NuxtLink>
+        <NuxtLink :to="localePath('/konto')">{{ $t('auth.account') }}</NuxtLink>
       </DropdownMenuItem>
       <DropdownMenuItem as-child>
-        <NuxtLink to="/konto/passwort">Passwort ändern</NuxtLink>
+        <NuxtLink :to="localePath('/konto/passwort')">{{ $t('auth.change_password') }}</NuxtLink>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem @click="onLogout">Abmelden</DropdownMenuItem>
+      <DropdownMenuItem @click="onLogout">{{ $t('auth.logout') }}</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

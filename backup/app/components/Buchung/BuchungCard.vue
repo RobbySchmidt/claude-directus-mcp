@@ -24,12 +24,12 @@ function formatDatum(iso: string) {
           {{ formatDatum(buchung.termin.date_from) }} – {{ formatDatum(buchung.termin.date_to) }}
         </template>
         <template v-else-if="buchung.wunsch_datum">
-          Wunschdatum: {{ formatDatum(buchung.wunsch_datum) }}
+          {{ $t('booking.wish_date') }}: {{ formatDatum(buchung.wunsch_datum) }}
         </template>
       </p>
     </div>
     <div class="text-right">
-      <div class="text-sm text-muted-foreground">{{ buchung.personen_anzahl }} Pers.</div>
+      <div class="text-sm text-muted-foreground">{{ buchung.personen_anzahl }} {{ $t('booking.persons').toLowerCase() }}</div>
       <div class="font-heading text-lg text-foreground">{{ buchung.preis_gesamt }} EUR</div>
     </div>
   </NuxtLink>

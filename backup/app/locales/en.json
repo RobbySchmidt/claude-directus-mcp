@@ -1,0 +1,146 @@
+{
+  "zod": {
+    "errors": {
+      "invalid_type_received_undefined": "This field is required."
+    }
+  },
+  "common": {
+    "home": "Home",
+    "back": "Back",
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "not_found_title": "Page not found",
+    "not_found_lead": "This page doesn't exist or isn't available.",
+    "not_available_in_language": "Not available in this language",
+    "empty_list": "No content available."
+  },
+  "nav": {
+    "toggle_open": "Open menu",
+    "toggle_close": "Close menu",
+    "site_title": "Alpenpfad",
+    "main_navigation": "Main navigation"
+  },
+  "cta": {
+    "book_tour": "Book a tour",
+    "discover_tours": "Discover tours",
+    "contact_us": "Contact us",
+    "learn_more": "Learn more"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "register": "Sign up",
+    "forgot_password": "Forgot password?",
+    "email": "Email",
+    "password": "Password",
+    "password_repeat": "Repeat password",
+    "login_cta": "Log in",
+    "login_sub": "To your Alpenpfad account",
+    "no_account_yet": "No account yet?",
+    "already_registered": "Already registered?",
+    "create_account": "Create account",
+    "reset_password": "Reset password",
+    "reset_request": "Request reset link",
+    "reset_request_sent": "If the email is registered with us, we've sent you a reset link.",
+    "account": "My account",
+    "profile": "Profile",
+    "profile_lead": "Manage your profile here",
+    "security": "Security",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "save_profile": "Save profile",
+    "change_password": "Change password",
+    "current_password": "Current password",
+    "new_password": "New password",
+    "avatar": "Avatar",
+    "avatar_upload": "Upload image",
+    "avatar_remove": "Remove image",
+    "register_sub": "Create an account in 10 seconds",
+    "account_created": "Account created. You are logged in."
+  },
+  "booking": {
+    "book_now": "Book now",
+    "book_soon": "Booking opening soon",
+    "sold_out": "Sold out",
+    "places_left": "{count} spots left",
+    "select_date": "Pick a date or enter your preferred date",
+    "select_placeholder": "Please choose…",
+    "wish_date": "Preferred date",
+    "wish_date_placeholder": "Enter preferred date…",
+    "contact_data": "Contact details",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "persons": "Participants",
+    "notes": "Special requests",
+    "submit_booking": "Request booking",
+    "my_bookings": "My bookings",
+    "booking_detail": "Booking detail",
+    "cancel_booking": "Cancel booking",
+    "cancel_confirm": "Are you sure you want to cancel this booking?",
+    "empty_list": "You have no bookings yet.",
+    "price_total": "Total price",
+    "date": "Date",
+    "created_at": "Requested on",
+    "contact_detail": "Booking contact",
+    "name": "Name",
+    "cancel_irreversible": "This action cannot be undone.",
+    "status": {
+      "angefragt": "Requested",
+      "bestaetigt": "Confirmed",
+      "storniert": "Cancelled",
+      "abgelehnt": "Declined",
+      "durchgefuehrt": "Completed"
+    }
+  },
+  "tour": {
+    "duration": "Duration",
+    "difficulty": "Difficulty",
+    "distance": "Distance",
+    "ascent": "Elevation",
+    "included": "Included",
+    "not_included": "Not included",
+    "meeting_point": "Meeting point",
+    "season": "Season",
+    "organizational": "Organizational",
+    "highlights": "Highlights",
+    "next_dates": "Upcoming dates",
+    "group_size_max": "Group max. {count}",
+    "group_size": "Group max.",
+    "price_from": "from {price} €",
+    "price": "Price",
+    "per_person": "per person",
+    "impressions": "Gallery",
+    "price_label": "from",
+    "no_fixed_dates": "No fixed dates right now — book a preferred date directly.",
+    "cta_ready": "Ready for {title}?",
+    "cta_lead": "Secure one of the limited spots and start an adventure to remember.",
+    "to_tour": "View tour"
+  },
+  "form": {
+    "required": "Required",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Submitting…",
+    "success": "Saved."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "min_length": "At least {count} characters.",
+    "max_length": "At most {count} characters.",
+    "passwords_dont_match": "Passwords do not match.",
+    "min_persons": "At least 1 participant.",
+    "invalid": "Invalid."
+  },
+  "footer": {
+    "brand_claim": "Guided hikes in the Alps since 2014. Certified guides, small groups, sustainable organization.",
+    "copyright": "© {year} Alpenpfad GmbH. All rights reserved.",
+    "social_aria": "Social media"
+  },
+  "language": {
+    "switch_to": "Switch to {name}"
+  }
+}
