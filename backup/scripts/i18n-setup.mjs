@@ -9,8 +9,15 @@
  */
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { directus, readCollections, createCollection, createField, readItems, createItem } from './directus.mjs'
+import {
+  directus,
+  readCollections, createCollection, createField, deleteField,
+  readItems, createItem, updateItem,
+} from './directus.mjs'
 import { readPolicies, readPermissions, createPermission, createRelation, readFieldsByCollection } from '@directus/sdk'
+import {
+  TOUREN_EN, TOUR_TERMINE_EN, PAGES_EN, SEO_EN, BLOCK_SCALARS_EN, BLOCK_ITEMS_EN,
+} from './i18n-content-en.mjs'
 
 const DRY = process.argv.includes('--dry-run')
 const ROLLBACK = process.argv.includes('--rollback')
@@ -412,6 +419,212 @@ async function ensureItemSubCollections() {
   }
 }
 
+async function migrateScalarTranslations() {
+  // Order: 4 stammdaten + 10 blocks. Each gets a uniform migration.
+  const migrations = [
+    { parent: 'touren',       fields: CONTENT_TRANSLATIONS.touren.fields,       enMap: TOUREN_EN,      matchBy: 'slug' },
+    { parent: 'tour_termine', fields: CONTENT_TRANSLATIONS.tour_termine.fields, enMap: TOUR_TERMINE_EN, matchBy: 'id' },
+    { parent: 'pages',        fields: CONTENT_TRANSLATIONS.pages.fields,        enMap: PAGES_EN,        matchBy: 'slug' },
+    { parent: 'seo',          fields: CONTENT_TRANSLATIONS.seo.fields,          enMap: SEO_EN,          matchBy: 'DEFAULT' },
+    ...Object.entries(BLOCK_TRANSLATIONS).map(([parent, cfg]) => ({
+      parent,
+      fields: cfg.fields,
+      enMap: BLOCK_SCALARS_EN[parent] ?? { DEFAULT: {} },
+      matchBy: 'DEFAULT',
+    })),
+  ]
+  for (const m of migrations) {
+    await migrateOneScalar(m)
+  }
+}
+
+async function migrateOneScalar({ parent, fields, enMap, matchBy }) {
+  const backupFile = path.join(BACKUP_DIR, `${BACKUP_DATE}-i18n-${parent}.json`)
+  const records = JSON.parse(await fs.readFile(backupFile, 'utf8'))
+  console.log(`  migrating ${parent} (${records.length} records)`)
+  for (const rec of records) {
+    const parentFk = `${parent}_id`
+    const existing = await directus.request(readItems(`${parent}_translations`, {
+      filter: { [parentFk]: { _eq: rec.id } }, limit: -1,
+    }))
+
+    // DE-Translation
+    if (!existing.find((t) => t.languages_code === 'de-DE')) {
+      const dePayload = { [parentFk]: rec.id, languages_code: 'de-DE' }
+      for (const f of fields) {
+        dePayload[f.field] = rec[f.field] ?? null
+      }
+      if (DRY) {
+        console.log(`    (dry) would create DE ${parent}/${rec.id}`)
+      } else {
+        await directus.request(createItem(`${parent}_translations`, dePayload))
+        console.log(`    + DE ${parent}/${rec.id}`)
+      }
+    } else {
+      console.log(`    ✓ DE ${parent}/${rec.id}`)
+    }
+
+    // EN-Translation
+    if (!existing.find((t) => t.languages_code === 'en-US')) {
+      const matchKey = matchBy === 'DEFAULT' ? 'DEFAULT' : rec[matchBy]
+      const enData = enMap[matchKey] ?? enMap.DEFAULT ?? null
+      if (enData) {
+        const enPayload = { [parentFk]: rec.id, languages_code: 'en-US' }
+        for (const f of fields) {
+          enPayload[f.field] = enData[f.field] ?? null
+        }
+        if (DRY) {
+          console.log(`    (dry) would create EN ${parent}/${rec.id}`)
+        } else {
+          await directus.request(createItem(`${parent}_translations`, enPayload))
+          console.log(`    + EN ${parent}/${rec.id}`)
+        }
+      } else {
+        console.log(`    ⚠ no EN draft for ${parent}/${rec.id} (match=${matchKey}) — skipped`)
+      }
+    } else {
+      console.log(`    ✓ EN ${parent}/${rec.id}`)
+    }
+  }
+
+  // Drop moved scalar fields from the parent table — only when all DE translations exist.
+  const de = await directus.request(readItems(`${parent}_translations`, {
+    filter: { languages_code: { _eq: 'de-DE' } }, limit: -1, fields: [`${parent}_id`],
+  }))
+  if (de.length >= records.length) {
+    const parentFields = await directus.request(readFieldsByCollection(parent))
+    for (const f of fields) {
+      if (parentFields.find((pf) => pf.field === f.field)) {
+        if (DRY) {
+          console.log(`    (dry) would drop ${parent}.${f.field}`)
+        } else {
+          await directus.request(deleteField(parent, f.field))
+          console.log(`    - dropped ${parent}.${f.field}`)
+        }
+      }
+    }
+  } else {
+    console.log(`    ⚠ DE coverage ${de.length}/${records.length} — skipping field removal`)
+  }
+}
+
+// Which field on each item acts as the matching key for BLOCK_ITEMS_EN lookup
+const ITEM_KEY_SOURCE = {
+  block_statsBand_items:          'label',
+  block_benefits_items:           'title',
+  block_testimonials_items:       'name',
+  block_regionList_regions:       'name',
+  block_heroBanner_trust_signals: 'label',
+  block_imageText_buttons:        'label',
+  block_banner_buttons:           'label',
+}
+
+// Which JSON field on the parent record holds the source array
+const ITEM_JSON_FIELD = {
+  block_statsBand_items:          'items',
+  block_benefits_items:           'items',
+  block_testimonials_items:       'items',
+  block_regionList_regions:       'regions',
+  block_heroBanner_trust_signals: 'trust_signals',
+  block_imageText_buttons:        'buttons',
+  block_banner_buttons:           'buttons',
+}
+
+async function migrateItemSubCollections() {
+  for (const cfg of ITEM_SUBCOLLECTIONS) {
+    await migrateOneItemSub(cfg)
+  }
+}
+
+async function migrateOneItemSub(cfg) {
+  const { parent, collection, scalarFields, translationFields } = cfg
+  const jsonField = ITEM_JSON_FIELD[collection]
+  const keyField = ITEM_KEY_SOURCE[collection]
+  const backupFile = path.join(BACKUP_DIR, `${BACKUP_DATE}-i18n-${parent}.json`)
+  const records = JSON.parse(await fs.readFile(backupFile, 'utf8'))
+  const parentFk = `${parent}_id`
+  const enMap = BLOCK_ITEMS_EN[collection] ?? {}
+
+  console.log(`  migrating items: ${collection}`)
+
+  for (const rec of records) {
+    const itemsArr = rec[jsonField] ?? []
+    if (!Array.isArray(itemsArr) || !itemsArr.length) continue
+
+    const existingItems = await directus.request(readItems(collection, {
+      filter: { [parentFk]: { _eq: rec.id } }, limit: -1,
+    }))
+    if (existingItems.length >= itemsArr.length) {
+      console.log(`    ✓ ${collection}/${rec.id} (${existingItems.length} items exist)`)
+      continue
+    }
+
+    let sortCounter = 10
+    for (const jsonItem of itemsArr) {
+      const scalarPayload = { [parentFk]: rec.id, sort: sortCounter }
+      sortCounter += 10
+
+      for (const f of scalarFields) {
+        if (f.field === 'tour') {
+          // m2o on touren: match by DE-title against touren_translations
+          const touren = await directus.request(readItems('touren', {
+            filter: { translations: { _and: [{ languages_code: { _eq: 'de-DE' } }, { title: { _eq: jsonItem.tour } }] } },
+            limit: 1, fields: ['id'],
+          }))
+          if (touren.length) {
+            scalarPayload.tour = touren[0].id
+          } else {
+            scalarPayload.tour = null
+            scalarPayload.tour_fallback = jsonItem.tour ?? null
+          }
+        } else if (f.field === 'tour_fallback') {
+          // set above in the tour branch if needed
+        } else {
+          scalarPayload[f.field] = jsonItem[f.field] ?? null
+        }
+      }
+
+      if (DRY) {
+        console.log(`    (dry) would insert item into ${collection}`)
+        continue
+      }
+      const inserted = await directus.request(createItem(collection, scalarPayload))
+
+      // DE translation for the item
+      const dePayload = { [`${collection}_id`]: inserted.id, languages_code: 'de-DE' }
+      for (const tf of translationFields) {
+        dePayload[tf.field] = jsonItem[tf.field] ?? null
+      }
+      await directus.request(createItem(`${collection}_translations`, dePayload))
+
+      // EN translation for the item
+      const key = jsonItem[keyField]
+      const enData = enMap[key]
+      if (enData) {
+        const enPayload = { [`${collection}_id`]: inserted.id, languages_code: 'en-US' }
+        for (const tf of translationFields) {
+          enPayload[tf.field] = enData[tf.field] ?? null
+        }
+        await directus.request(createItem(`${collection}_translations`, enPayload))
+      } else {
+        console.log(`      ⚠ no EN draft for item key="${key}" in ${collection}`)
+      }
+    }
+    console.log(`    + ${collection}/${rec.id} (${itemsArr.length} items)`)
+  }
+
+  // Drop the JSON-array field from the parent table after migration
+  const parentFields = await directus.request(readFieldsByCollection(parent))
+  if (parentFields.find((f) => f.field === jsonField)) {
+    if (DRY) {
+      console.log(`    (dry) would drop ${parent}.${jsonField}`)
+    } else {
+      await directus.request(deleteField(parent, jsonField))
+      console.log(`    - dropped ${parent}.${jsonField}`)
+    }
+  }
+}
+
 async function run() {
   console.log(`--- i18n-setup ${DRY ? '(DRY RUN)' : ''} ---\n`)
   await fs.mkdir(BACKUP_DIR, { recursive: true })
@@ -434,8 +647,13 @@ async function run() {
   console.log('\n→ Item sub-collections')
   await ensureItemSubCollections()
 
-  // Tasks 6–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
-  // await migrateData()
+  console.log('\n→ Migrate scalar content')
+  await migrateScalarTranslations()
+
+  console.log('\n→ Migrate item sub-collections')
+  await migrateItemSubCollections()
+
+  // Task 7 hängt hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
   // await seedNavigation()
   // await ensurePermissions()
   // await printReport()
