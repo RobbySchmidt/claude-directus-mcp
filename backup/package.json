@@ -16,7 +16,8 @@
     "buchungen:setup": "node scripts/buchungen-setup.mjs",
     "buchungen:seed-termine": "node scripts/buchungen-seed-termine.mjs",
     "buchungen:notify": "node scripts/buchungen-notify.mjs",
-    "buchungen:mail-test": "node scripts/buchungen-mail-test.mjs"
+    "buchungen:mail-test": "node scripts/buchungen-mail-test.mjs",
+    "i18n:setup": "node scripts/i18n-setup.mjs"
   },
   "dependencies": {
     "@directus/sdk": "^21.2.2",
