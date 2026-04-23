@@ -213,23 +213,23 @@ async function run() {
   await ensureLanguagesCollection()
   await ensureLanguagesPermission()
 
-  // NOTE: This ROLLBACK check must remain AFTER all task calls above so that
-  // --rollback only runs once all backups + (no-op) task phases have executed.
-  if (ROLLBACK) {
-    console.log('\nRollback not yet implemented — manual restore from exports/migrations/')
-    process.exit(0)
-  }
-
   console.log('\n→ Content translations')
   await ensureContentTranslations()
 
-  // Tasks 4–7 hängen hier weitere Schritte an:
+  // Tasks 4–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
   // await ensureBlockTranslations()
   // await ensureItemSubCollections()
   // await migrateData()
   // await seedNavigation()
   // await ensurePermissions()
   // await printReport()
+
+  // NOTE: This ROLLBACK check must remain the LAST step before "--- done ---".
+  // New task calls go ABOVE this block, never below it.
+  if (ROLLBACK) {
+    console.log('\nRollback not yet implemented — manual restore from exports/migrations/')
+    process.exit(0)
+  }
 
   console.log('\n--- done ---')
 }
