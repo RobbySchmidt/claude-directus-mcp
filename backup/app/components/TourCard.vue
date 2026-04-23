@@ -40,7 +40,7 @@ const difficultyColor = {
         </p>
         <h3 class="mt-1 font-heading text-f-2xl font-medium text-foreground">
           <NuxtLink
-            :to="localePath(`/touren/${slug}`)"
+            :to="localePath({ name: 'touren-slug', params: { slug } })"
             class="outline-none before:absolute before:inset-0 before:content-['']"
           >
             {{ title }}

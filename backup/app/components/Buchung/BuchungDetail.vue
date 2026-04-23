@@ -100,7 +100,7 @@ function onConfirm() {
         </span>
       </template>
       <NuxtLink
-        :to="localePath(`/touren/${buchung.tour.slug}`)"
+        :to="localePath({ name: 'touren-slug', params: { slug: buchung.tour.slug } })"
         class="text-sm font-medium text-primary hover:underline"
       >
         {{ $t('tour.to_tour') }}
