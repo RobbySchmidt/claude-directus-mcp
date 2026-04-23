@@ -1,0 +1,12 @@
+{
+  "common": {},
+  "nav": {},
+  "cta": {},
+  "auth": {},
+  "booking": { "status": {} },
+  "tour": {},
+  "form": {},
+  "validation": {},
+  "footer": {},
+  "language": {}
+}
