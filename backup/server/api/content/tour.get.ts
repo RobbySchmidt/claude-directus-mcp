@@ -76,10 +76,16 @@ export default defineEventHandler(async (event) => {
     return { ...rest, hinweis: tt.hinweis ?? null, verfuegbare_plaetze: frei, ausgebucht: frei <= 0 }
   })
 
-  const { translations, ...rest } = tour
+  // Flatten gallery m2m wrapper: [{ directus_files_id: { ... } }] → [{ ... }]
+  const gallery = Array.isArray(tour.gallery)
+    ? (tour.gallery as any[]).map((g: any) => g?.directus_files_id ?? g).filter(Boolean)
+    : []
+
+  const { translations, gallery: _g, ...rest } = tour
   return {
     ...rest,
     ...t,
+    gallery,
     termine,
     alternate_locales: Object.fromEntries((altRows as any[]).map((a: any) => [a.languages_code, a.slug])),
   }

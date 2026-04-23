@@ -33,6 +33,19 @@ watchEffect(() => {
 })
 onBeforeUnmount(() => setAlternateLocales(null))
 
+// Tell i18n which slug belongs to which locale so the language switcher
+// and hreflang tags point to the correct per-locale URL instead of reusing
+// the current locale's slug across all languages.
+const setI18nParams = useSetI18nParams()
+watchEffect(() => {
+  const alt = tour.value?.alternate_locales
+  if (!alt) return
+  setI18nParams({
+    de: { slug: alt['de-DE'] ?? '' },
+    en: { slug: alt['en-US'] ?? '' },
+  })
+})
+
 const { public: pub } = useRuntimeConfig()
 
 const buchenHref = computed(() => (tour.value ? localePath(`/touren/${tour.value.slug}/buchen`) : ''))
