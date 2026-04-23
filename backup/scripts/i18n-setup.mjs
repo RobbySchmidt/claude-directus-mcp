@@ -355,45 +355,53 @@ async function ensureItemSubCollection(cfg, existingCols) {
 
   // Sub-Collection selbst
   if (!cols.find((c) => c.collection === collection)) {
-    if (DRY) { console.log(`  (dry) would create ${collection}`); return }
-    await directus.request(createCollection({
-      collection, meta: { hidden: true, singleton: false, icon: 'list_alt', sort_field: 'sort' }, schema: {},
-      fields: [
-        { field: 'id', type: 'uuid',
-          meta: { hidden: true, interface: 'input', readonly: true, special: ['uuid'] },
-          schema: { is_primary_key: true } },
-        { field: parentFk, type: parentPkType,
-          meta: { hidden: true, interface: 'input', readonly: true }, schema: {} },
-        { field: 'sort', type: 'integer',
-          meta: { hidden: true, interface: 'input' }, schema: {} },
-        ...scalarFields.map((f) => {
-          // strip 'related' before sending to Directus; it's our own marker
-          const { related, ...rest } = f
-          return rest
-        }),
-      ],
-    }))
-    // Parent-FK-Relation (m2o + one_field on parent for drag-and-drop list)
-    await directus.request(createRelation({
-      collection, field: parentFk, related_collection: parent,
-      meta: { one_field: aliasOnParent, sort_field: 'sort', one_deselect_action: 'delete' },
-      schema: { on_delete: 'CASCADE' },
-    }))
-    // Eventuelle weitere Relations (z.B. testimonials.tour → touren)
-    for (const f of scalarFields) {
-      if (f.related) {
-        await directus.request(createRelation({
-          collection, field: f.field, related_collection: f.related,
-          meta: {}, schema: { on_delete: 'SET NULL' },
-        }))
+    if (DRY) {
+      console.log(`  (dry) would create ${collection}`)
+    } else {
+      await directus.request(createCollection({
+        collection, meta: { hidden: true, singleton: false, icon: 'list_alt', sort_field: 'sort' }, schema: {},
+        fields: [
+          { field: 'id', type: 'uuid',
+            meta: { hidden: true, interface: 'input', readonly: true, special: ['uuid'] },
+            schema: { is_primary_key: true } },
+          { field: parentFk, type: parentPkType,
+            meta: { hidden: true, interface: 'input', readonly: true }, schema: {} },
+          { field: 'sort', type: 'integer',
+            meta: { hidden: true, interface: 'input' }, schema: {} },
+          ...scalarFields.map((f) => {
+            // strip 'related' before sending to Directus; it's our own marker
+            const { related, ...rest } = f
+            return rest
+          }),
+        ],
+      }))
+      // NOTE: Directus clears the parent's pre-existing JSON-array column
+      // (e.g. block_benefits.items) as a side-effect of registering this
+      // one_field relation. Original data is preserved in Task 1's backup
+      // files under exports/migrations/2026-04-23-i18n-<parent>.json —
+      // Task 6 migrates from there, not from the live parent row.
+      await directus.request(createRelation({
+        collection, field: parentFk, related_collection: parent,
+        meta: { one_field: aliasOnParent, sort_field: 'sort', one_deselect_action: 'delete' },
+        schema: { on_delete: 'CASCADE' },
+      }))
+      // Eventuelle weitere Relations (z.B. testimonials.tour → touren)
+      for (const f of scalarFields) {
+        if (f.related) {
+          await directus.request(createRelation({
+            collection, field: f.field, related_collection: f.related,
+            meta: {}, schema: { on_delete: 'SET NULL' },
+          }))
+        }
       }
+      console.log(`  + ${collection}`)
     }
-    console.log(`  + ${collection}`)
   } else {
     console.log(`  ✓ ${collection}`)
   }
 
-  // Translations-Subtable (reuse existing helper)
+  // Translations-Subtable (reuse existing helper) — always reach this call
+  // so dry-run reports both the collection AND its translations subtable.
   await ensureTranslationsSubtable(collection, { fields: translationFields, hasSlug: false }, cols)
 }
 
