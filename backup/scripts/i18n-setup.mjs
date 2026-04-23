@@ -199,6 +199,56 @@ const ITEM_SUBCOLLECTIONS = [
   },
 ]
 
+const NAV_SEED = {
+  Main: {
+    items: [
+      { title_de: 'Touren',     title_en: 'Tours',        type: 'url',  url: '/#touren' },
+      { title_de: 'Regionen',   title_en: 'Regions',      type: 'url',  url: '/#regionen' },
+      { title_de: 'Warum wir',  title_en: 'Why Us',       type: 'url',  url: '/#benefits' },
+      { title_de: 'Stimmen',    title_en: 'Testimonials', type: 'url',  url: '/#stimmen' },
+    ],
+  },
+  Footer: {
+    items: [
+      { title_de: 'Touren',      title_en: 'Tours',   type: 'url', url: '#', children: [
+        { title_de: 'Tagestouren',      title_en: 'Day Tours',     type: 'url', url: '#' },
+        { title_de: 'Mehrtägig',        title_en: 'Multi-Day',     type: 'url', url: '#' },
+        { title_de: 'Hochtouren',       title_en: 'Alpine Tours',  type: 'url', url: '#' },
+        { title_de: 'Familientouren',   title_en: 'Family Tours',  type: 'url', url: '#' },
+        { title_de: 'Winter-Wandern',   title_en: 'Winter Hiking', type: 'url', url: '#' },
+      ]},
+      { title_de: 'Regionen',    title_en: 'Regions', type: 'url', url: '#', children: [
+        { title_de: 'Berchtesgaden',    title_en: 'Berchtesgaden',    type: 'url', url: '#' },
+        { title_de: 'Dolomiten',        title_en: 'Dolomites',        type: 'url', url: '#' },
+        { title_de: 'Zillertal',        title_en: 'Zillertal',        type: 'url', url: '#' },
+        { title_de: 'Berner Oberland',  title_en: 'Bernese Oberland', type: 'url', url: '#' },
+        { title_de: 'Alle Regionen',    title_en: 'All Regions',      type: 'url', url: '#' },
+      ]},
+      { title_de: 'Unternehmen', title_en: 'Company', type: 'url', url: '#', children: [
+        { title_de: 'Über uns',        title_en: 'About',       type: 'url', url: '#' },
+        { title_de: 'Unsere Guides',   title_en: 'Our Guides',  type: 'url', url: '#' },
+        { title_de: 'Partner',         title_en: 'Partners',    type: 'url', url: '#' },
+        { title_de: 'Presse',          title_en: 'Press',       type: 'url', url: '#' },
+        { title_de: 'Karriere',        title_en: 'Careers',     type: 'url', url: '#' },
+      ]},
+      { title_de: 'Service',     title_en: 'Service', type: 'url', url: '#', children: [
+        { title_de: 'Kontakt',           title_en: 'Contact',    type: 'url', url: '#' },
+        { title_de: 'FAQ',               title_en: 'FAQ',        type: 'url', url: '#' },
+        { title_de: 'Ausrüstungs-Guide', title_en: 'Gear Guide', type: 'url', url: '#' },
+        { title_de: 'Gutscheine',        title_en: 'Vouchers',   type: 'url', url: '#' },
+        { title_de: 'Hilfe',             title_en: 'Help',       type: 'url', url: '#' },
+      ]},
+    ],
+  },
+  FooterLegal: {
+    items: [
+      { title_de: 'Impressum',   title_en: 'Imprint',          type: 'url', url: '#' },
+      { title_de: 'Datenschutz', title_en: 'Privacy Policy',   type: 'url', url: '#' },
+      { title_de: 'AGB',         title_en: 'Terms of Service', type: 'url', url: '#' },
+    ],
+  },
+}
+
 const COLLECTIONS_TO_BACKUP = [
   'touren', 'tour_termine', 'pages', 'seo',
   'block_heroBanner', 'block_statsBand', 'block_tourGrid', 'block_benefits',
@@ -625,6 +675,149 @@ async function migrateOneItemSub(cfg) {
   }
 }
 
+async function ensureNavigationItemsTranslations() {
+  await ensureTranslationsSubtable('navigation_items', {
+    fields: [
+      { field: 'title', type: 'string', schema: {} },
+    ],
+    hasSlug: false,
+  })
+}
+
+async function seedNavigation() {
+  for (const [navTitle, cfg] of Object.entries(NAV_SEED)) {
+    let navId
+    const nav = await directus.request(readItems('navigation', {
+      filter: { title: { _eq: navTitle } }, limit: 1,
+    }))
+    if (nav.length) {
+      navId = nav[0].id
+      console.log(`  ✓ nav ${navTitle} (id=${navId})`)
+    } else {
+      if (DRY) { console.log(`  (dry) would create nav ${navTitle}`); continue }
+      const created = await directus.request(createItem('navigation', {
+        title: navTitle, isLastMenuItemHighlighted: false,
+      }))
+      navId = created.id
+      console.log(`  + nav ${navTitle} (id=${navId})`)
+    }
+
+    // Items
+    let sort = 10
+    for (const item of cfg.items) {
+      const itemId = await seedNavItem(navId, null, item, sort)
+      sort += 10
+      // Children
+      if (item.children && itemId) {
+        let csort = 10
+        for (const child of item.children) {
+          await seedNavItem(navId, itemId, child, csort)
+          csort += 10
+        }
+      }
+    }
+  }
+}
+
+async function seedNavItem(navigationId, parentId, item, sortValue) {
+  const existing = await directus.request(readItems('navigation_items', {
+    filter: {
+      navigation: { _eq: navigationId },
+      parent: parentId === null ? { _null: true } : { _eq: parentId },
+      translations: { _and: [{ languages_code: { _eq: 'de-DE' } }, { title: { _eq: item.title_de } }] },
+    },
+    limit: 1,
+  }))
+  if (existing.length) {
+    console.log(`    ✓ item ${item.title_de}`)
+    return existing[0].id
+  }
+  if (DRY) { console.log(`    (dry) would insert item ${item.title_de}`); return null }
+
+  const inserted = await directus.request(createItem('navigation_items', {
+    navigation: navigationId,
+    parent: parentId,
+    sort: sortValue,
+    type: item.type,
+    url: item.url ?? null,
+    open_in_new_tab: item.open_in_new_tab ?? false,
+  }))
+  await directus.request(createItem('navigation_items_translations', {
+    navigation_items_id: inserted.id, languages_code: 'de-DE', title: item.title_de,
+  }))
+  await directus.request(createItem('navigation_items_translations', {
+    navigation_items_id: inserted.id, languages_code: 'en-US', title: item.title_en,
+  }))
+  console.log(`    + item ${item.title_de} / ${item.title_en}`)
+  return inserted.id
+}
+
+async function ensureTranslationReadPermissions() {
+  const policies = await directus.request(readPolicies({ filter: { name: { _eq: 'Kunde Policy' } }, limit: 1 }))
+  if (!policies.length) return
+  const policyId = policies[0].id
+
+  const allCollections = [
+    ...Object.keys(CONTENT_TRANSLATIONS).map((c) => `${c}_translations`),
+    ...Object.keys(BLOCK_TRANSLATIONS).map((c) => `${c}_translations`),
+    ...ITEM_SUBCOLLECTIONS.flatMap((cfg) => [cfg.collection, `${cfg.collection}_translations`]),
+    'navigation_items_translations',
+  ]
+
+  for (const col of allCollections) {
+    const existing = await directus.request(readPermissions({
+      filter: { policy: { _eq: policyId }, collection: { _eq: col }, action: { _eq: 'read' } },
+      limit: 1,
+    }))
+    if (existing.length) {
+      console.log(`    ✓ read on ${col}`)
+      continue
+    }
+    if (DRY) { console.log(`    (dry) would add read on ${col}`); continue }
+    await directus.request(createPermission({
+      policy: policyId, collection: col, action: 'read', fields: ['*'], permissions: {}, validation: {},
+    }))
+    console.log(`    + read on ${col}`)
+  }
+}
+
+async function printReport() {
+  console.log('\n--- i18n report ---')
+  const languages = await directus.request(readItems('languages', { limit: -1 }))
+  console.log(`  languages:        ${languages.map((l) => l.code).join(', ')}`)
+
+  for (const parent of Object.keys(CONTENT_TRANSLATIONS)) {
+    const main = await directus.request(readItems(parent, { limit: -1, fields: ['id'] }))
+    const de = await directus.request(readItems(`${parent}_translations`, {
+      filter: { languages_code: { _eq: 'de-DE' } }, limit: -1, fields: [`${parent}_id`],
+    }))
+    const en = await directus.request(readItems(`${parent}_translations`, {
+      filter: { languages_code: { _eq: 'en-US' } }, limit: -1, fields: [`${parent}_id`],
+    }))
+    console.log(`  ${parent.padEnd(20)} records=${main.length}  DE=${de.length}  EN=${en.length}`)
+  }
+  for (const parent of Object.keys(BLOCK_TRANSLATIONS)) {
+    const main = await directus.request(readItems(parent, { limit: -1, fields: ['id'] }))
+    const de = await directus.request(readItems(`${parent}_translations`, {
+      filter: { languages_code: { _eq: 'de-DE' } }, limit: -1, fields: [`${parent}_id`],
+    }))
+    const en = await directus.request(readItems(`${parent}_translations`, {
+      filter: { languages_code: { _eq: 'en-US' } }, limit: -1, fields: [`${parent}_id`],
+    }))
+    console.log(`  ${parent.padEnd(20)} records=${main.length}  DE=${de.length}  EN=${en.length}`)
+  }
+  for (const cfg of ITEM_SUBCOLLECTIONS) {
+    const items = await directus.request(readItems(cfg.collection, { limit: -1, fields: ['id'] }))
+    const de = await directus.request(readItems(`${cfg.collection}_translations`, {
+      filter: { languages_code: { _eq: 'de-DE' } }, limit: -1, fields: [`${cfg.collection}_id`],
+    }))
+    const en = await directus.request(readItems(`${cfg.collection}_translations`, {
+      filter: { languages_code: { _eq: 'en-US' } }, limit: -1, fields: [`${cfg.collection}_id`],
+    }))
+    console.log(`  ${cfg.collection.padEnd(40)} items=${items.length}  DE=${de.length}  EN=${en.length}`)
+  }
+}
+
 async function run() {
   console.log(`--- i18n-setup ${DRY ? '(DRY RUN)' : ''} ---\n`)
   await fs.mkdir(BACKUP_DIR, { recursive: true })
@@ -653,10 +846,16 @@ async function run() {
   console.log('\n→ Migrate item sub-collections')
   await migrateItemSubCollections()
 
-  // Task 7 hängt hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
-  // await seedNavigation()
-  // await ensurePermissions()
-  // await printReport()
+  console.log('\n→ Navigation items translations')
+  await ensureNavigationItemsTranslations()
+
+  console.log('\n→ Navigation seed')
+  await seedNavigation()
+
+  console.log('\n→ Translation read-permissions')
+  await ensureTranslationReadPermissions()
+
+  await printReport()
 
   // NOTE: This ROLLBACK check must remain the LAST step before "--- done ---".
   // New task calls go ABOVE this block, never below it.
