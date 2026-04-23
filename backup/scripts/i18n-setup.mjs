@@ -9,7 +9,8 @@
  */
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { directus, readItems } from './directus.mjs'
+import { directus, readCollections, createCollection, readItems, createItem } from './directus.mjs'
+import { readPolicies, readPermissions, createPermission } from '@directus/sdk'
 
 const DRY = process.argv.includes('--dry-run')
 const ROLLBACK = process.argv.includes('--rollback')
@@ -40,6 +41,67 @@ async function backupCollection(name) {
   console.log(`  + backup: ${name} (${data.length} records)`)
 }
 
+async function ensureLanguagesCollection() {
+  const cols = await directus.request(readCollections())
+  const exists = cols.find((c) => c.collection === 'languages')
+  if (!exists) {
+    if (DRY) { console.log('  (dry) would create languages collection'); return }
+    await directus.request(createCollection({
+      collection: 'languages',
+      meta: { icon: 'translate', note: 'Aktive Frontend-Sprachen', hidden: false, singleton: false },
+      schema: {},
+      fields: [
+        { field: 'code', type: 'string', schema: { is_primary_key: true, is_nullable: false, max_length: 8 },
+          meta: { interface: 'input', required: true, width: 'half' } },
+        { field: 'name', type: 'string', schema: { is_nullable: false, max_length: 64 },
+          meta: { interface: 'input', required: true, width: 'half' } },
+        { field: 'direction', type: 'string', schema: { default_value: 'ltr', is_nullable: false, max_length: 3 },
+          meta: { interface: 'select-dropdown', options: { choices: [{ text: 'LTR', value: 'ltr' }, { text: 'RTL', value: 'rtl' }] } } },
+      ],
+    }))
+    console.log('  + languages collection')
+  } else {
+    console.log('  ✓ languages collection')
+  }
+
+  const seeds = [
+    { code: 'de-DE', name: 'Deutsch', direction: 'ltr' },
+    { code: 'en-US', name: 'English', direction: 'ltr' },
+  ]
+  const existing = await directus.request(readItems('languages', { limit: -1 }))
+  for (const s of seeds) {
+    if (existing.find((e) => e.code === s.code)) {
+      console.log(`    ✓ ${s.code}`)
+      continue
+    }
+    if (DRY) { console.log(`    (dry) would seed ${s.code}`); continue }
+    await directus.request(createItem('languages', s))
+    console.log(`    + ${s.code}`)
+  }
+}
+
+async function ensureLanguagesPermission() {
+  const policies = await directus.request(readPolicies({ filter: { name: { _eq: 'Kunde' } }, limit: 1 }))
+  if (!policies.length) {
+    console.log('  ⚠ Kunde-Policy nicht gefunden (Auth-Setup noch nicht gelaufen?) — überspringe')
+    return
+  }
+  const policyId = policies[0].id
+  const perms = await directus.request(readPermissions({
+    filter: { policy: { _eq: policyId }, collection: { _eq: 'languages' }, action: { _eq: 'read' } },
+    limit: 1,
+  }))
+  if (perms.length) {
+    console.log('  ✓ read-permission on languages')
+    return
+  }
+  if (DRY) { console.log('  (dry) would add read-permission on languages'); return }
+  await directus.request(createPermission({
+    policy: policyId, collection: 'languages', action: 'read', fields: ['*'], permissions: {}, validation: {},
+  }))
+  console.log('  + read-permission on languages')
+}
+
 async function run() {
   console.log(`--- i18n-setup ${DRY ? '(DRY RUN)' : ''} ---\n`)
   await fs.mkdir(BACKUP_DIR, { recursive: true })
@@ -49,13 +111,18 @@ async function run() {
     await backupCollection(c)
   }
 
+  console.log('\n→ Languages')
+  await ensureLanguagesCollection()
+  await ensureLanguagesPermission()
+
+  // NOTE: This ROLLBACK check must remain AFTER all task calls above so that
+  // --rollback only runs once all backups + (no-op) task phases have executed.
   if (ROLLBACK) {
     console.log('\nRollback not yet implemented — manual restore from exports/migrations/')
     process.exit(0)
   }
 
-  // Tasks 2–7 hängen hier weitere Schritte an:
-  // await ensureLanguagesCollection()
+  // Tasks 3–7 hängen hier weitere Schritte an:
   // await ensureContentTranslations()
   // await ensureBlockTranslations()
   // await ensureItemSubCollections()
