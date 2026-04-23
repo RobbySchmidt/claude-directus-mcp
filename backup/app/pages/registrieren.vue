@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useSeoMeta } from '#imports'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false })
+defineI18nRoute({
+  paths: {
+    de: '/registrieren',
+    en: '/register',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { isLoggedIn } = useUser()
@@ -11,7 +19,7 @@ const router = useRouter()
 
 useSeoMeta({ title: () => `${t('auth.register')} | ${pub.siteName}` })
 
-if (isLoggedIn.value) await router.replace('/konto')
+if (isLoggedIn.value) await router.replace(localePath('/konto'))
 
 const pending = ref(false)
 const errorMessage = ref<string | null>(null)
@@ -25,7 +33,7 @@ const onSubmit = async (input: { email: string; password: string }) => {
     errorMessage.value = res.message
     return
   }
-  await router.push('/konto')
+  await router.push(localePath('/konto'))
 }
 </script>
 

@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useSeoMeta } from '#imports'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false })
+defineI18nRoute({
+  paths: {
+    de: '/anmelden',
+    en: '/login',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { isLoggedIn } = useUser()
@@ -14,7 +22,7 @@ useSeoMeta({ title: () => `${t('auth.login')} | ${pub.siteName}` })
 
 const redirectTo = computed(() => {
   const r = route.query.redirect
-  return typeof r === 'string' && r.startsWith('/') ? r : '/konto'
+  return typeof r === 'string' && r.startsWith('/') ? r : localePath('/konto')
 })
 
 if (isLoggedIn.value) await router.replace(redirectTo.value)

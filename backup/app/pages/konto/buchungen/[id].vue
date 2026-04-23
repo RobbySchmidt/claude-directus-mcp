@@ -2,7 +2,15 @@
 import { useSeoMeta } from '#imports'
 import type { BuchungDetail, BuchungResult } from '~~/shared/types/buchung'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false, middleware: 'auth' })
+defineI18nRoute({
+  paths: {
+    de: '/konto/buchungen/:id',
+    en: '/account/bookings/:id',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { t } = useI18n()
@@ -60,7 +68,7 @@ async function onCancel() {
     <main class="pt-17">
       <section class="mx-auto max-w-3xl px-4 py-f-12 sm:px-6 lg:px-8">
         <NuxtLink
-          to="/konto/buchungen"
+          :to="localePath('/konto/buchungen')"
           class="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
           ← {{ $t('booking.my_bookings') }}

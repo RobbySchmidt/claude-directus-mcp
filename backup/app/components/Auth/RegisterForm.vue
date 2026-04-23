@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 const emit = defineEmits<{ submit: [{ email: string; password: string }] }>()
 defineProps<{ pending?: boolean; errorMessage?: string | null }>()
 
+const localePath = useLocalePath()
+
 const email = ref('')
 const password = ref('')
 const confirm = ref('')
@@ -45,7 +47,7 @@ const onSubmit = () => {
     <Button type="submit" :disabled="pending || !canSubmit">{{ pending ? $t('form.loading') : $t('auth.create_account') }}</Button>
     <p class="text-center text-sm text-muted-foreground">
       {{ $t('auth.already_registered') }}
-      <NuxtLink to="/anmelden" class="text-primary hover:underline">{{ $t('auth.login') }}</NuxtLink>
+      <NuxtLink :to="localePath('/anmelden')" class="text-primary hover:underline">{{ $t('auth.login') }}</NuxtLink>
     </p>
   </form>
 </template>

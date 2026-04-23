@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const scrolled = ref(false)
 const mobileOpen = ref(false)
+const localePath = useLocalePath()
 
 const onScroll = () => {
   scrolled.value = window.scrollY > 40
@@ -73,7 +74,7 @@ const onMobileLogout = async () => {
           <AuthUserMenu />
         </template>
         <template v-else>
-          <Button variant="ghost" size="sm" as="a" href="/anmelden">Anmelden</Button>
+          <Button variant="ghost" size="sm" as="a" :href="localePath('/anmelden')">Anmelden</Button>
         </template>
         <Button size="sm" as="a" href="/#touren" class="bg-primary text-primary-foreground hover:bg-primary/90">
           Tour buchen
@@ -153,7 +154,7 @@ const onMobileLogout = async () => {
         <div class="mt-auto flex flex-col gap-3 border-t border-border px-6 py-6">
           <template v-if="isLoggedIn">
             <NuxtLink
-              to="/konto"
+              :to="localePath('/konto')"
               class="inline-flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted"
               @click="mobileOpen = false"
             >
@@ -170,7 +171,7 @@ const onMobileLogout = async () => {
             </Button>
           </template>
           <template v-else>
-            <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" as="a" href="/anmelden">
+            <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" as="a" :href="localePath('/anmelden')">
               Anmelden
             </Button>
           </template>

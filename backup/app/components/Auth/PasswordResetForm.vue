@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 const emit = defineEmits<{ submit: [{ password: string }] }>()
 defineProps<{ pending?: boolean; success?: boolean; errorMessage?: string | null }>()
 
+const localePath = useLocalePath()
+
 const password = ref('')
 const confirm = ref('')
 
@@ -27,7 +29,7 @@ const onSubmit = () => {
   <form class="flex flex-col gap-5" @submit.prevent="onSubmit">
     <div v-if="success" class="rounded-lg bg-primary/10 p-4 text-sm text-foreground" role="status">
       {{ $t('auth.reset_password') }}
-      <NuxtLink to="/anmelden" class="font-medium text-primary hover:underline">{{ $t('auth.login') }}</NuxtLink>
+      <NuxtLink :to="localePath('/anmelden')" class="font-medium text-primary hover:underline">{{ $t('auth.login') }}</NuxtLink>
     </div>
     <template v-else>
       <div class="flex flex-col gap-2">

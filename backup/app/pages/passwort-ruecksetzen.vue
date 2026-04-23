@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useSeoMeta } from '#imports'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false })
+defineI18nRoute({
+  paths: {
+    de: '/passwort-ruecksetzen',
+    en: '/reset-password',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { resetPassword } = useAuth()
@@ -42,7 +50,7 @@ const onSubmit = async (input: { password: string }) => {
         <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
           <div v-if="tokenMissing" class="text-sm text-destructive" role="alert">
             {{ $t('common.error') }}
-            <NuxtLink to="/passwort-vergessen" class="text-primary hover:underline">{{ $t('auth.reset_request') }}</NuxtLink>
+            <NuxtLink :to="localePath('/passwort-vergessen')" class="text-primary hover:underline">{{ $t('auth.reset_request') }}</NuxtLink>
           </div>
           <AuthPasswordResetForm v-else :pending="pending" :success="success" :error-message="errorMessage" @submit="onSubmit" />
         </div>

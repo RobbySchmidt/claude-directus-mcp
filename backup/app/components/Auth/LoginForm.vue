@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 const emit = defineEmits<{ submit: [{ email: string; password: string }] }>()
 defineProps<{ pending?: boolean; errorMessage?: string | null }>()
 
+const localePath = useLocalePath()
+
 const email = ref('')
 const password = ref('')
 const onSubmit = () => emit('submit', { email: email.value, password: password.value })
@@ -20,7 +22,7 @@ const onSubmit = () => emit('submit', { email: email.value, password: password.v
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-between">
         <Label for="login-password">{{ $t('auth.password') }}</Label>
-        <NuxtLink to="/passwort-vergessen" class="text-xs text-muted-foreground hover:text-foreground">
+        <NuxtLink :to="localePath('/passwort-vergessen')" class="text-xs text-muted-foreground hover:text-foreground">
           {{ $t('auth.forgot_password') }}
         </NuxtLink>
       </div>
@@ -30,7 +32,7 @@ const onSubmit = () => emit('submit', { email: email.value, password: password.v
     <Button type="submit" :disabled="pending">{{ pending ? $t('form.loading') : $t('auth.login_cta') }}</Button>
     <p class="text-center text-sm text-muted-foreground">
       {{ $t('auth.no_account_yet') }}
-      <NuxtLink to="/registrieren" class="text-primary hover:underline">{{ $t('auth.register') }}</NuxtLink>
+      <NuxtLink :to="localePath('/registrieren')" class="text-primary hover:underline">{{ $t('auth.register') }}</NuxtLink>
     </p>
   </form>
 </template>

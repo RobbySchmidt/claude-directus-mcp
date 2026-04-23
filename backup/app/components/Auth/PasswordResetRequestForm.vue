@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 const emit = defineEmits<{ submit: [{ email: string }] }>()
 defineProps<{ pending?: boolean; sent?: boolean; errorMessage?: string | null }>()
 
+const localePath = useLocalePath()
+
 const email = ref('')
 const onSubmit = () => emit('submit', { email: email.value })
 </script>
@@ -27,7 +29,7 @@ const onSubmit = () => emit('submit', { email: email.value })
       <Button type="submit" :disabled="pending">{{ pending ? $t('form.loading') : $t('auth.reset_request') }}</Button>
     </template>
     <p class="text-center text-sm text-muted-foreground">
-      <NuxtLink to="/anmelden" class="text-primary hover:underline">{{ $t('common.back') }}</NuxtLink>
+      <NuxtLink :to="localePath('/anmelden')" class="text-primary hover:underline">{{ $t('common.back') }}</NuxtLink>
     </p>
   </form>
 </template>

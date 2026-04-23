@@ -11,6 +11,7 @@ import {
 const { user } = useUser()
 const { logout } = useAuth()
 const router = useRouter()
+const localePath = useLocalePath()
 
 const onLogout = async () => {
   await logout()
@@ -39,10 +40,10 @@ const displayName = computed(() => {
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem as-child>
-        <NuxtLink to="/konto">{{ $t('auth.account') }}</NuxtLink>
+        <NuxtLink :to="localePath('/konto')">{{ $t('auth.account') }}</NuxtLink>
       </DropdownMenuItem>
       <DropdownMenuItem as-child>
-        <NuxtLink to="/konto/passwort">{{ $t('auth.change_password') }}</NuxtLink>
+        <NuxtLink :to="localePath('/konto/passwort')">{{ $t('auth.change_password') }}</NuxtLink>
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem @click="onLogout">{{ $t('auth.logout') }}</DropdownMenuItem>

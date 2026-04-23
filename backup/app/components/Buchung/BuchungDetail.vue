@@ -10,6 +10,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{ cancel: [] }>()
 
+const localePath = useLocalePath()
+
 function formatDatum(iso: string) {
   const [y, m, d] = iso.split('-')
   return `${d}.${m}.${y}`
@@ -98,7 +100,7 @@ function onConfirm() {
         </span>
       </template>
       <NuxtLink
-        :to="`/touren/${buchung.tour.slug}`"
+        :to="localePath(`/touren/${buchung.tour.slug}`)"
         class="text-sm font-medium text-primary hover:underline"
       >
         {{ $t('tour.to_tour') }}

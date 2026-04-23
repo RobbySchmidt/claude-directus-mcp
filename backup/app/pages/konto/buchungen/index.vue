@@ -2,7 +2,15 @@
 import { useSeoMeta } from '#imports'
 import type { BuchungListItem, BuchungResult } from '~~/shared/types/buchung'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false, middleware: 'auth' })
+defineI18nRoute({
+  paths: {
+    de: '/konto/buchungen',
+    en: '/account/bookings',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { t } = useI18n()
@@ -29,9 +37,9 @@ const justCreatedId = computed(() => {
     <main class="pt-17">
       <section class="mx-auto max-w-3xl px-4 py-f-12 sm:px-6 lg:px-8">
         <nav class="mb-6 flex gap-4 text-sm">
-          <NuxtLink to="/konto" class="text-muted-foreground hover:text-foreground">{{ $t('auth.profile') }}</NuxtLink>
-          <NuxtLink to="/konto/passwort" class="text-muted-foreground hover:text-foreground">{{ $t('auth.password') }}</NuxtLink>
-          <NuxtLink to="/konto/buchungen" class="font-medium text-foreground">{{ $t('booking.my_bookings') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto')" class="text-muted-foreground hover:text-foreground">{{ $t('auth.profile') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto/passwort')" class="text-muted-foreground hover:text-foreground">{{ $t('auth.password') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto/buchungen')" class="font-medium text-foreground">{{ $t('booking.my_bookings') }}</NuxtLink>
         </nav>
 
         <h1 class="font-heading text-f-5xl font-medium text-foreground">{{ $t('booking.my_bookings') }}</h1>

@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { useSeoMeta } from '#imports'
 import { Input } from '@/components/ui/input'
+
+const localePath = useLocalePath()
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 
 definePageMeta({ layout: false, middleware: 'auth' })
+defineI18nRoute({
+  paths: {
+    de: '/konto/passwort',
+    en: '/account/password',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { updateProfile } = useAuth()
@@ -52,9 +60,9 @@ const onSubmit = async () => {
     <main class="pt-17">
       <section class="mx-auto max-w-md px-4 py-f-16 sm:px-6">
         <nav class="mb-6 flex gap-4 text-sm">
-          <NuxtLink to="/konto" class="text-muted-foreground hover:text-foreground">{{ $t('auth.profile') }}</NuxtLink>
-          <NuxtLink to="/konto/passwort" class="font-medium text-foreground">{{ $t('auth.password') }}</NuxtLink>
-          <NuxtLink to="/konto/buchungen" class="text-muted-foreground hover:text-foreground">{{ $t('booking.my_bookings') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto')" class="text-muted-foreground hover:text-foreground">{{ $t('auth.profile') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto/passwort')" class="font-medium text-foreground">{{ $t('auth.password') }}</NuxtLink>
+          <NuxtLink :to="localePath('/konto/buchungen')" class="text-muted-foreground hover:text-foreground">{{ $t('booking.my_bookings') }}</NuxtLink>
         </nav>
         <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.change_password') }}</h1>
         <form class="mt-8 flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 shadow-sm" @submit.prevent="onSubmit">
@@ -73,7 +81,7 @@ const onSubmit = async () => {
           <p v-if="message" class="text-sm text-primary" role="status">{{ message }}</p>
           <p v-if="localError || errorMessage" class="text-sm text-destructive" role="alert">{{ localError || errorMessage }}</p>
           <Button type="submit" :disabled="pending || !canSubmit">{{ pending ? $t('form.loading') : $t('auth.change_password') }}</Button>
-          <NuxtLink to="/konto" class="text-center text-sm text-muted-foreground hover:text-foreground">
+          <NuxtLink :to="localePath('/konto')" class="text-center text-sm text-muted-foreground hover:text-foreground">
             {{ $t('common.back') }}
           </NuxtLink>
         </form>

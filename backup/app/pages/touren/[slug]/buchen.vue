@@ -3,7 +3,15 @@ import { useSeoMeta } from '#imports'
 import type { TourDetail } from '~~/shared/types/touren'
 import type { BuchungCreateInput } from '~~/shared/types/buchung'
 
+const localePath = useLocalePath()
+
 definePageMeta({ layout: false, middleware: 'auth' })
+defineI18nRoute({
+  paths: {
+    de: '/touren/:slug/buchen',
+    en: '/tours/:slug/book',
+  },
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -37,7 +45,7 @@ const onSubmit = async (payload: BuchungCreateInput) => {
     errorMessage.value = res.message
     return
   }
-  await router.push(`/konto/buchungen?created=${res.data.id}`)
+  await router.push(localePath(`/konto/buchungen`) + `?created=${res.data.id}`)
 }
 </script>
 
@@ -47,7 +55,7 @@ const onSubmit = async (payload: BuchungCreateInput) => {
     <main class="pt-17">
       <section class="mx-auto max-w-2xl px-4 py-f-12 sm:px-6 lg:px-8">
         <NuxtLink
-          :to="`/touren/${slug}`"
+          :to="localePath(`/touren/${slug}`)"
           class="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           ← {{ $t('common.back') }}

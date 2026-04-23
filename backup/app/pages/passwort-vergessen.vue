@@ -2,6 +2,12 @@
 import { useSeoMeta } from '#imports'
 
 definePageMeta({ layout: false })
+defineI18nRoute({
+  paths: {
+    de: '/passwort-vergessen',
+    en: '/forgot-password',
+  },
+})
 
 const { public: pub } = useRuntimeConfig()
 const { requestPasswordReset } = useAuth()

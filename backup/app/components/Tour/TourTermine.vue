@@ -7,6 +7,8 @@ defineProps<{
   priceFrom: number | null
 }>()
 
+const localePath = useLocalePath()
+
 function formatDatum(iso: string) {
   const [y, m, d] = iso.split('-')
   return `${d}.${m}.${y}`
@@ -59,7 +61,7 @@ function terminPreis(t: TerminPublic, priceFrom: number | null) {
       </li>
     </ul>
     <NuxtLink
-      :to="`/touren/${tourSlug}/buchen`"
+      :to="localePath(`/touren/${tourSlug}/buchen`)"
       class="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
     >
       {{ $t('booking.book_now') }}
