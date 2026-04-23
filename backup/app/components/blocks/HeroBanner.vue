@@ -15,12 +15,14 @@ type HeroBannerBlock = {
 }
 
 const props = defineProps<{ id: string; collection: string; index: number }>()
+const { locale } = useI18n()
 
 const { data: block } = await useAsyncData(
-  `block-${props.collection}-${props.id}`,
+  `block-${props.collection}-${props.id}-${locale.value}`,
   () => $fetch<HeroBannerBlock>('/api/content/block', {
-    query: { collection: props.collection, id: props.id },
+    query: { collection: props.collection, id: props.id, locale: locale.value },
   }),
+  { watch: [locale] },
 )
 
 // Parse the rich-text title. Expected shape: `<p>TEXT <strong>HIGHLIGHT</strong> TEXT</p>`

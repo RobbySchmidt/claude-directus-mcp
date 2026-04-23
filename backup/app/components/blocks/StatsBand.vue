@@ -3,12 +3,14 @@ type StatItem = { value: string; label: string; icon: string }
 type StatsBandBlock = { items: StatItem[] | null }
 
 const props = defineProps<{ id: string; collection: string; index: number }>()
+const { locale } = useI18n()
 
 const { data: block } = await useAsyncData(
-  `block-${props.collection}-${props.id}`,
+  `block-${props.collection}-${props.id}-${locale.value}`,
   () => $fetch<StatsBandBlock>('/api/content/block', {
-    query: { collection: props.collection, id: props.id },
+    query: { collection: props.collection, id: props.id, locale: locale.value },
   }),
+  { watch: [locale] },
 )
 </script>
 
