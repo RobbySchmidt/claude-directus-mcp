@@ -1,187 +1,142 @@
-<template>  
-  <header 
-    id="siteHeader" 
-    class="sticky top-0 z-40 w-full xl:border-r-3 !border-r-secondary xl:h-screen overflow-y-auto pr-4 md:pr-8 xl:px-0 bg-white xl:border-l-[15px]"
-    :class="{'lg:pr-0' : navigation.isLastMenuItemHighlighted}"
-    :style="{ 'border-color': activeBorderColor }">
+<script setup lang="ts">
+const { main } = await useNavigation()
+const { isLoggedIn, user } = useUser()
+const { logout } = useAuth()
+const localePath = useLocalePath()
+const router = useRouter()
 
-    <div 
-      class="flex justify-between items-center xl:block"
-      :class="{'xl:max-w-[1100px] 3xl:max-w-[1300px] ' : !navigation.isLastMenuItemHighlighted}">
-      <NuxtLink
-        to="/"
-        @click="closeMenu"
-        class="relative z-50 my-2.5 xl:my-12 pl-2 md:pl-4 xl:pl-8 block">
-        <img 
-        :src="route.path.startsWith('/rosengarten') ? getAssetUrl() + general.logo_secondary.filename_disk : getAssetUrl() + general.logo_main.filename_disk" 
-        :alt="general.logo_main.title"
-        class="block w-[200px] xl:w-full max-w-[340px] h-[77px]">
-      </NuxtLink>
-      
-      <WebsiteMainMenu :navigation="mainNavigation" :facilities="facilities" :subNavigation="subNavigation" :bottomNavigation="bottomNavigation"/>
-      
-      <button
-        @click="store.menuOpen = !store.menuOpen"
-        aria-controls="main-menu"
-        aria-label="Navigation öffnen"            
-        class="focus:outline-none relative w-7 h-14 xl:hidden z-50">
-          <span class="block absolute h-0.5 w-7 transform transition duration-300 ease-in-out bg-black" :class="store.menuOpen ? 'rotate-45': ' -translate-y-1.5'"></span>
-          <span class="block absolute  h-0.5 w-5 transform transition duration-300 ease-in-out bg-black" :class="store.menuOpen ? 'opacity-0' : ''"></span>
-          <span class="block absolute  h-0.5 w-7 transform  transition duration-300 ease-in-out bg-black" :class="store.menuOpen ? '-rotate-45': 'translate-y-1.5'"></span>
-      </button>
-      
-    </div>
-  </header>  
-</template>
+const mobileOpen = ref(false)
+const scrolled = ref(false)
 
-<script setup>   
-  import { useStore } from "~~/store/store";
-  const { getItems } = useDirectusItems();
-  
-  const route = useRoute()
-  const store = useStore();
- 	
-  function closeMenu() {
-    store.menuOpen = false
-    store.subMenuOpen = false
-  }
+const onScroll = () => { scrolled.value = window.scrollY > 40 }
+const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') mobileOpen.value = false }
 
-  const { 
-    data: navigation, 
-    pending: mainNavigationPending, 
-    error: mainNavigationError 
-  } = await useAsyncData(
-  'mainNavigation', 
-    () => getItems({
-      collection: 'navigation',
-      params: {
-        fields: ['title', 'items.*', 'items.page.slug', 'items.children.page.slug', 'items.children.*', 'isLastMenuItemHighlighted'],
-      },
-    }),
-    { 
-      transform: data => data
-    }
-  );
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('keydown', onKey)
+  onScroll()
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('keydown', onKey)
+  if (typeof document !== 'undefined') document.documentElement.style.overflow = ''
+})
+watch(mobileOpen, (open) => {
+  if (typeof document === 'undefined') return
+  document.documentElement.style.overflow = open ? 'hidden' : ''
+})
 
-  const mainNavigation = computed(() => {
-    return navigation.value.find(n => n.title === 'Main')
-  })
-
-  const subNavigation = computed(() => {
-    return navigation.value.find(n => n.title === 'SubNavigation')
-  })
-
-  const bottomNavigation = computed(() => {
-    return navigation.value.find(n => n.title === 'BottomNavigation')
-  })
-
-  const {
-    data: general,
-    pending: pendingGeneral,
-    error: errorGeneral,
-  } = await useAsyncData('headerConf', () => {
-    return getItems({      
-      collection: "general",      
-      params: {
-      fields: [
-        'logo_main.*',
-        'logo_secondary.*',
-      ],
-    }
-    })
-    },
-    {
-      transform: (data) => data,
-    }
-  )
-
-  const {
-    data: facilities,
-    pending: pendingFacilities,
-    error: errorFacilities,
-  } = await useAsyncData('facilities', () => {
-    return getItems({      
-      collection: "facilities",      
-      params: {
-      fields: [
-        '*',
-        '*.*',
-      ],
-    }
-    })
-    },
-    {
-      transform: (data) => data,
-    }
-  )
-
- const activeBorderColor = computed(() => {
-  if (!facilities.value) return 'var(--color-primary)';
-
-  const segments = route.path.split('/').filter(Boolean);
-  const firstSegment = segments[0];
-
-  const facility = facilities.value.find(f => f.slug === firstSegment);
-  return facility?.color || 'var(--color-primary)';
-});
-
-
-  const loaded = ref(false)
-  // onMounted(() => {
-  //     setTimeout(function() {
-  //       loaded.value = true
-
-  //       const firstPartOfPath = route.path.split('/')[1];      
-
-  //       if (navigation && navigation.value.items && navigation.value.items.length > 0) {
-  //       const matchingItem = navigation.value.items.find(item => {
-  //         const firstPartOfUrl = item.url ? item.url.split('/')[1] : null;
-  //         return item.url && firstPartOfUrl === firstPartOfPath;
-  //       });
-  //       if (matchingItem && matchingItem.children && matchingItem.children.length > 0) {
-  //         subNavi.value = true;          
-  //       } else {
-  //         subNavi.value = false;
-  //       }
-  //     } else {
-  //       subNavi.value = false;
-  //     }
-
-  //     }, 10);
-  // })
-
-
-
-  // watch(
-  //   () => [route.path, navigation],
-  //   ([currentPath, navigationData]) => {
-  //     const firstPartOfPath = route.path.split('/')[1];
-  //     if (navigationData && navigationData.value.items && navigationData.value.items.length > 0) {
-  //       const matchingItem = navigationData.value.items.find(item => {
-  //         const firstPartOfUrl = item.url ? item.url.split('/')[1] : null;
-  //         return item.url && firstPartOfUrl === firstPartOfPath;
-  //       });
-  //       if (matchingItem && matchingItem.children && matchingItem.children.length > 0) {
-  //         subNavi.value = true;          
-  //       } else {
-  //         subNavi.value = false;
-  //       }
-  //     } else {
-  //       subNavi.value = false;
-  //     }
-
-  //   }
-  // );
-
-  // watch(
-  //   () => store.menuOpen,
-  //   (newValue) => {
-  //     if (newValue) {
-  //       document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
-  //     } else {
-  //       document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
-  //     }
-  //   },
-  // );
-  
+async function onMobileLogout() {
+  mobileOpen.value = false
+  await logout()
+  await router.push(localePath('/'))
+}
 </script>
+
+<template>
+  <header
+    class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+    :class="scrolled || mobileOpen ? 'border-b border-border bg-background/80 backdrop-blur-md' : 'bg-transparent'"
+  >
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+      <NuxtLink :to="localePath('/')" class="flex items-center gap-2">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <IllustrationsIconPeak class="h-5 w-5" />
+        </div>
+        <span class="font-heading text-xl font-semibold text-foreground">{{ $t('nav.site_title') }}</span>
+      </NuxtLink>
+
+      <WebsiteMainMenu :items="main" class="hidden md:flex" />
+
+      <div class="hidden items-center gap-3 md:flex">
+        <WebsiteLanguageSwitcher />
+        <template v-if="isLoggedIn">
+          <AuthUserMenu />
+        </template>
+        <template v-else>
+          <Button variant="ghost" size="sm" as-child>
+            <NuxtLink :to="localePath('/anmelden')">{{ $t('auth.login') }}</NuxtLink>
+          </Button>
+        </template>
+        <Button size="sm" as-child class="bg-primary text-primary-foreground hover:bg-primary/90">
+          <NuxtLink :to="localePath('/#touren')">{{ $t('cta.book_tour') }}</NuxtLink>
+        </Button>
+      </div>
+
+      <button
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground md:hidden"
+        :aria-label="mobileOpen ? $t('nav.toggle_close') : $t('nav.toggle_open')"
+        :aria-expanded="mobileOpen"
+        @click="mobileOpen = !mobileOpen"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        enter-from-class="translate-x-full"
+        enter-to-class="translate-x-0"
+        leave-active-class="transition-transform duration-400 ease-in"
+        leave-from-class="translate-x-0"
+        leave-to-class="translate-x-full"
+      >
+        <aside
+          v-if="mobileOpen"
+          class="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-background md:hidden"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="$t('nav.main_navigation')"
+        >
+          <div class="flex items-center justify-between border-b border-border px-6 py-5">
+            <div class="flex items-center gap-2">
+              <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <IllustrationsIconPeak class="h-5 w-5" />
+              </div>
+              <span class="font-heading text-lg font-semibold">{{ $t('nav.site_title') }}</span>
+            </div>
+            <button
+              class="inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-muted"
+              :aria-label="$t('nav.toggle_close')"
+              @click="mobileOpen = false"
+            >
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6l-12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <WebsiteMainMenu :items="main" class="flex flex-col px-6 py-6" mobile @navigate="mobileOpen = false" />
+
+          <div class="mt-auto flex flex-col gap-3 border-t border-border px-6 py-6">
+            <WebsiteLanguageSwitcher class="justify-center" />
+            <template v-if="isLoggedIn">
+              <NuxtLink
+                :to="localePath('/konto')"
+                class="inline-flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted"
+                @click="mobileOpen = false"
+              >
+                <AuthUserAvatar :user="user" />
+                <span class="font-medium">{{ user?.first_name || user?.email }}</span>
+              </NuxtLink>
+              <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" @click="onMobileLogout">
+                {{ $t('auth.logout') }}
+              </Button>
+            </template>
+            <template v-else>
+              <Button variant="ghost" size="lg" class="h-12 w-full justify-center text-base" as-child>
+                <NuxtLink :to="localePath('/anmelden')">{{ $t('auth.login') }}</NuxtLink>
+              </Button>
+            </template>
+            <Button size="lg" class="h-12 w-full justify-center bg-primary text-base" as-child @click="mobileOpen = false">
+              <NuxtLink :to="localePath('/#touren')">{{ $t('cta.book_tour') }}</NuxtLink>
+            </Button>
+          </div>
+        </aside>
+      </Transition>
+    </Teleport>
+  </header>
+</template>
