@@ -1,4 +1,9 @@
 {
+  "zod": {
+    "errors": {
+      "invalid_type_received_undefined": "Dieses Feld ist erforderlich."
+    }
+  },
   "common": {
     "home": "Startseite",
     "back": "Zurück",

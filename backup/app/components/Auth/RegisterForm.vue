@@ -6,16 +6,18 @@ import { Button } from '@/components/ui/button'
 const emit = defineEmits<{ submit: [{ email: string; password: string }] }>()
 defineProps<{ pending?: boolean; errorMessage?: string | null }>()
 
+const { t } = useI18n()
 const localePath = useLocalePath()
 
 const email = ref('')
 const password = ref('')
 const confirm = ref('')
 
-// TODO(Task 26): migrate to zod-i18n-map
 const localError = computed(() => {
-  if (password.value && password.value.length < 8) return 'Passwort muss mindestens 8 Zeichen lang sein'
-  if (confirm.value && confirm.value !== password.value) return 'Passwörter stimmen nicht überein'
+  if (password.value && password.value.length < 8)
+    return t('validation.min_length', { count: 8 })
+  if (confirm.value && confirm.value !== password.value)
+    return t('validation.passwords_dont_match')
   return null
 })
 

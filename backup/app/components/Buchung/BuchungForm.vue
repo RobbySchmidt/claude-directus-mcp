@@ -45,7 +45,6 @@ function formatDatum(iso: string) {
 function terminLabel(termin: TerminPublic) {
   const von = formatDatum(termin.date_from)
   const bis = formatDatum(termin.date_to)
-  // TODO(Task 26): migrate sold_out / places_left suffix to zod-i18n-map
   const rest =
     termin.verfuegbare_plaetze === -1
       ? ''
@@ -55,20 +54,22 @@ function terminLabel(termin: TerminPublic) {
   return `${von} – ${bis}${rest}`
 }
 
-// TODO(Task 26): migrate Zod error messages to zod-i18n-map
-const formSchema = toTypedSchema(
+const buildSchema = () =>
   z
     .object({
-      termin: z.string().min(1, 'Bitte wähle einen Termin oder Wunschdatum.'),
+      termin: z.string().min(1, { message: t('validation.required') }),
       wunschDatum: z.string().optional(),
       personen: z.coerce
-        .number({ message: 'Personenzahl muss eine Zahl sein.' })
-        .int('Personenzahl muss ganzzahlig sein.')
-        .min(1, 'Mindestens 1 Person.'),
-      vorname: z.string().min(1, 'Vorname ist ein Pflichtfeld.'),
-      nachname: z.string().min(1, 'Nachname ist ein Pflichtfeld.'),
-      email: z.string().min(1, 'E-Mail ist ein Pflichtfeld.').email('Ungültige E-Mail-Adresse.'),
-      telefon: z.string().min(1, 'Telefon ist ein Pflichtfeld.'),
+        .number({ message: t('validation.invalid') })
+        .int(t('validation.invalid'))
+        .min(1, { message: t('validation.min_persons') }),
+      vorname: z.string().min(1, { message: t('validation.required') }),
+      nachname: z.string().min(1, { message: t('validation.required') }),
+      email: z
+        .string()
+        .min(1, { message: t('validation.required') })
+        .email({ message: t('validation.email') }),
+      telefon: z.string().min(1, { message: t('validation.required') }),
       notizen: z.string().optional(),
     })
     .superRefine((data, ctx) => {
@@ -77,18 +78,19 @@ const formSchema = toTypedSchema(
           ctx.addIssue({
             code: 'custom',
             path: ['wunschDatum'],
-            message: 'Bitte gib ein Wunschdatum an.',
+            message: t('validation.required'),
           })
         } else if (data.wunschDatum <= todayIso()) {
           ctx.addIssue({
             code: 'custom',
             path: ['wunschDatum'],
-            message: 'Wunschdatum muss in der Zukunft liegen.',
+            message: t('validation.invalid'),
           })
         }
       }
-    }),
-)
+    })
+
+const formSchema = computed(() => toTypedSchema(buildSchema()))
 
 const form = useForm({
   validationSchema: formSchema,
