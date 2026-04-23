@@ -47,41 +47,37 @@ useSeoMeta({
 </script>
 
 <template>
-  <div v-if="tour" class="min-h-screen bg-background text-foreground antialiased pb-24 md:pb-0">
-    <SectionsTheHeader />
-    <main class="pt-17">
-      <TourHero
-        :title="tour.title"
-        :subtitle="tour.subtitle"
-        :region="tour.region"
-        :difficulty="tour.difficulty"
-        :variant="tour.variant"
-        :booking-url="buchenHref"
-      />
-      <TourFactsBar
-        :distance="tour.distance"
-        :ascent="tour.ascent"
-        :duration="tour.duration"
-        :group-size-max="tour.group_size_max"
-      />
-      <TourHighlights :intro="tour.intro" :items="tour.highlights" />
-      <TourGallery :images="tour.gallery" :tour-title="tour.title" />
-      <TourIncluded :included="tour.included" :not-included="tour.not_included" />
-      <TourOrganizational
-        :meeting-point="tour.meeting_point"
-        :season="tour.season"
+  <template v-if="tour">
+    <TourHero
+      :title="tour.title"
+      :subtitle="tour.subtitle"
+      :region="tour.region"
+      :difficulty="tour.difficulty"
+      :variant="tour.variant"
+      :booking-url="buchenHref"
+    />
+    <TourFactsBar
+      :distance="tour.distance"
+      :ascent="tour.ascent"
+      :duration="tour.duration"
+      :group-size-max="tour.group_size_max"
+    />
+    <TourHighlights :intro="tour.intro" :items="tour.highlights" />
+    <TourGallery :images="tour.gallery" :tour-title="tour.title" />
+    <TourIncluded :included="tour.included" :not-included="tour.not_included" />
+    <TourOrganizational
+      :meeting-point="tour.meeting_point"
+      :season="tour.season"
+      :price-from="tour.price_from"
+    />
+    <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <TourTermine
+        :termine="tour.termine"
+        :tour-slug="tour.slug"
         :price-from="tour.price_from"
       />
-      <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <TourTermine
-          :termine="tour.termine"
-          :tour-slug="tour.slug"
-          :price-from="tour.price_from"
-        />
-      </section>
-      <TourCTA :booking-url="buchenHref" :title="tour.title" />
-    </main>
-    <SectionsTheFooter />
+    </section>
+    <TourCTA :booking-url="buchenHref" :title="tour.title" />
     <TourStickyMobileCTA :booking-url="buchenHref" :price-from="tour.price_from" />
-  </div>
+  </template>
 </template>

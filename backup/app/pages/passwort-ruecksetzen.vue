@@ -3,7 +3,7 @@ import { useSeoMeta } from '#imports'
 
 const localePath = useLocalePath()
 
-definePageMeta({ layout: false })
+definePageMeta({})
 defineI18nRoute({
   paths: {
     de: '/passwort-ruecksetzen',
@@ -40,22 +40,16 @@ const onSubmit = async (input: { password: string }) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main class="pt-17">
-      <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
-        <div class="text-center">
-          <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.reset_password') }}</h1>
-        </div>
-        <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <div v-if="tokenMissing" class="text-sm text-destructive" role="alert">
-            {{ $t('common.error') }}
-            <NuxtLink :to="localePath('/passwort-vergessen')" class="text-primary hover:underline">{{ $t('auth.reset_request') }}</NuxtLink>
-          </div>
-          <AuthPasswordResetForm v-else :pending="pending" :success="success" :error-message="errorMessage" @submit="onSubmit" />
-        </div>
-      </section>
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
+    <div class="text-center">
+      <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.reset_password') }}</h1>
+    </div>
+    <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <div v-if="tokenMissing" class="text-sm text-destructive" role="alert">
+        {{ $t('common.error') }}
+        <NuxtLink :to="localePath('/passwort-vergessen')" class="text-primary hover:underline">{{ $t('auth.reset_request') }}</NuxtLink>
+      </div>
+      <AuthPasswordResetForm v-else :pending="pending" :success="success" :error-message="errorMessage" @submit="onSubmit" />
+    </div>
+  </section>
 </template>

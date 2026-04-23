@@ -43,11 +43,5 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main>
-      <WebsiteContentBlockBuilder v-if="page?.blocks?.length" :blocks="page.blocks" />
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <WebsiteContentBlockBuilder v-if="page?.blocks?.length" :blocks="page.blocks" />
 </template>

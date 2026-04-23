@@ -3,7 +3,7 @@ import { useSeoMeta } from '#imports'
 
 const localePath = useLocalePath()
 
-definePageMeta({ layout: false })
+definePageMeta({})
 defineI18nRoute({
   paths: {
     de: '/anmelden',
@@ -44,19 +44,13 @@ const onSubmit = async (input: { email: string; password: string }) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main class="pt-17">
-      <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
-        <div class="text-center">
-          <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.login') }}</h1>
-          <p class="mt-2 text-sm text-muted-foreground">{{ $t('auth.login_sub') }}</p>
-        </div>
-        <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <AuthLoginForm :pending="pending" :error-message="errorMessage" @submit="onSubmit" />
-        </div>
-      </section>
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <section class="mx-auto flex max-w-md flex-col gap-8 px-4 py-f-16 sm:px-6">
+    <div class="text-center">
+      <h1 class="font-heading text-f-4xl font-medium text-foreground">{{ $t('auth.login') }}</h1>
+      <p class="mt-2 text-sm text-muted-foreground">{{ $t('auth.login_sub') }}</p>
+    </div>
+    <div class="rounded-2xl border border-border bg-card p-6 shadow-sm">
+      <AuthLoginForm :pending="pending" :error-message="errorMessage" @submit="onSubmit" />
+    </div>
+  </section>
 </template>

@@ -4,7 +4,7 @@ import type { BuchungDetail, BuchungResult } from '~~/shared/types/buchung'
 
 const localePath = useLocalePath()
 
-definePageMeta({ layout: false, middleware: 'auth' })
+definePageMeta({ middleware: 'auth' })
 defineI18nRoute({
   paths: {
     de: '/konto/buchungen/:id',
@@ -63,26 +63,20 @@ async function onCancel() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main class="pt-17">
-      <section class="mx-auto max-w-3xl px-4 py-f-12 sm:px-6 lg:px-8">
-        <NuxtLink
-          :to="localePath('/konto/buchungen')"
-          class="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          ← {{ $t('booking.my_bookings') }}
-        </NuxtLink>
-        <BuchungDetail
-          v-if="buchung"
-          :buchung="buchung"
-          :can-cancel="cancelState.canCancel"
-          :cancel-disabled-reason="cancelState.reason"
-          :pending="pending"
-          @cancel="onCancel"
-        />
-      </section>
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <section class="mx-auto max-w-3xl px-4 py-f-12 sm:px-6 lg:px-8">
+    <NuxtLink
+      :to="localePath('/konto/buchungen')"
+      class="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+    >
+      ← {{ $t('booking.my_bookings') }}
+    </NuxtLink>
+    <BuchungDetail
+      v-if="buchung"
+      :buchung="buchung"
+      :can-cancel="cancelState.canCancel"
+      :cancel-disabled-reason="cancelState.reason"
+      :pending="pending"
+      @cancel="onCancel"
+    />
+  </section>
 </template>

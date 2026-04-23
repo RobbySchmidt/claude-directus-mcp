@@ -10,17 +10,11 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="min-h-screen bg-background text-foreground antialiased">
-    <SectionsTheHeader />
-    <main>
-      <SectionsSectionHero />
-      <SectionsSectionStats />
-      <SectionsSectionTours />
-      <SectionsSectionBenefits />
-      <SectionsSectionRegions />
-      <SectionsSectionTestimonials />
-      <SectionsSectionNewsletter />
-    </main>
-    <SectionsTheFooter />
-  </div>
+  <SectionsSectionHero />
+  <SectionsSectionStats />
+  <SectionsSectionTours />
+  <SectionsSectionBenefits />
+  <SectionsSectionRegions />
+  <SectionsSectionTestimonials />
+  <SectionsSectionNewsletter />
 </template>
