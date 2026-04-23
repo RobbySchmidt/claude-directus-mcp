@@ -59,36 +59,37 @@ const CONTENT_TRANSLATIONS = {
   },
 }
 
+// Refactor A: normalized to { fields: [...], hasSlug: bool } matching CONTENT_TRANSLATIONS shape
 const BLOCK_TRANSLATIONS = {
-  block_heroBanner: [
+  block_heroBanner: { fields: [
     { field: 'title',               type: 'text',   schema: {} },
     { field: 'eyebrow',             type: 'string', schema: {} },
     { field: 'lead',                type: 'text',   schema: {} },
     { field: 'cta_primary_label',   type: 'string', schema: {} },
     { field: 'cta_secondary_label', type: 'string', schema: {} },
-  ],
-  block_tourGrid: [
+  ], hasSlug: false },
+  block_tourGrid: { fields: [
     { field: 'eyebrow',   type: 'string', schema: {} },
     { field: 'headline',  type: 'string', schema: {} },
     { field: 'lead',      type: 'text',   schema: {} },
     { field: 'cta_label', type: 'string', schema: {} },
-  ],
-  block_benefits: [
+  ], hasSlug: false },
+  block_benefits: { fields: [
     { field: 'eyebrow',  type: 'string', schema: {} },
     { field: 'headline', type: 'string', schema: {} },
     { field: 'lead',     type: 'text',   schema: {} },
-  ],
-  block_regionList: [
+  ], hasSlug: false },
+  block_regionList: { fields: [
     { field: 'eyebrow',   type: 'string', schema: {} },
     { field: 'headline',  type: 'string', schema: {} },
     { field: 'lead',      type: 'text',   schema: {} },
     { field: 'cta_label', type: 'string', schema: {} },
-  ],
-  block_testimonials: [
+  ], hasSlug: false },
+  block_testimonials: { fields: [
     { field: 'eyebrow',  type: 'string', schema: {} },
     { field: 'headline', type: 'string', schema: {} },
-  ],
-  block_newsletter: [
+  ], hasSlug: false },
+  block_newsletter: { fields: [
     { field: 'eyebrow',       type: 'string', schema: {} },
     { field: 'headline',      type: 'string', schema: {} },
     { field: 'lead',          type: 'text',   schema: {} },
@@ -96,20 +97,100 @@ const BLOCK_TRANSLATIONS = {
     { field: 'cta_label',     type: 'string', schema: {} },
     { field: 'success_title', type: 'string', schema: {} },
     { field: 'success_text',  type: 'text',   schema: {} },
-  ],
-  block_carousel: [
+  ], hasSlug: false },
+  block_carousel: { fields: [
     { field: 'title', type: 'text', schema: {} },
-  ],
-  block_imageText: [
+  ], hasSlug: false },
+  block_imageText: { fields: [
     { field: 'text', type: 'text', schema: {} },
-  ],
-  block_text: [
+  ], hasSlug: false },
+  block_text: { fields: [
     { field: 'content', type: 'text', schema: {}, meta: { interface: 'input-rich-text-html' } },
-  ],
-  block_banner: [
+  ], hasSlug: false },
+  block_banner: { fields: [
     { field: 'title', type: 'text', schema: {} },
-  ],
+  ], hasSlug: false },
 }
+
+// Each entry: { parent, collection, aliasOnParent, scalarFields[], translationFields[] }
+// scalarFields[].related — optional — triggers m2o relation creation to the named collection
+const ITEM_SUBCOLLECTIONS = [
+  {
+    parent: 'block_statsBand', collection: 'block_statsBand_items',
+    aliasOnParent: 'items',
+    scalarFields: [
+      { field: 'icon', type: 'string', schema: {}, meta: { interface: 'input' } },
+    ],
+    translationFields: [
+      { field: 'value', type: 'string', schema: {} },
+      { field: 'label', type: 'string', schema: {} },
+    ],
+  },
+  {
+    parent: 'block_benefits', collection: 'block_benefits_items',
+    aliasOnParent: 'items',
+    scalarFields: [
+      { field: 'icon', type: 'string', schema: {}, meta: { interface: 'input' } },
+    ],
+    translationFields: [
+      { field: 'title',       type: 'string', schema: {} },
+      { field: 'description', type: 'text',   schema: {} },
+    ],
+  },
+  {
+    parent: 'block_testimonials', collection: 'block_testimonials_items',
+    aliasOnParent: 'items',
+    scalarFields: [
+      { field: 'name',          type: 'string', schema: {} },
+      { field: 'initials',      type: 'string', schema: { max_length: 4 } },
+      { field: 'tour',          type: 'uuid',   schema: {}, meta: { interface: 'select-dropdown-m2o', special: ['m2o'] }, related: 'touren' },
+      { field: 'tour_fallback', type: 'string', schema: {}, meta: { note: 'Fallback-Text falls Tour-Relation null' } },
+    ],
+    translationFields: [
+      { field: 'quote', type: 'text', schema: {} },
+    ],
+  },
+  {
+    parent: 'block_regionList', collection: 'block_regionList_regions',
+    aliasOnParent: 'regions',
+    scalarFields: [
+      { field: 'tours', type: 'integer', schema: { default_value: 0 } },
+    ],
+    translationFields: [
+      { field: 'name', type: 'string', schema: {} },
+    ],
+  },
+  {
+    parent: 'block_heroBanner', collection: 'block_heroBanner_trust_signals',
+    aliasOnParent: 'trust_signals',
+    scalarFields: [
+      { field: 'icon', type: 'string', schema: {}, meta: { interface: 'input' } },
+    ],
+    translationFields: [
+      { field: 'label', type: 'string', schema: {} },
+    ],
+  },
+  {
+    parent: 'block_imageText', collection: 'block_imageText_buttons',
+    aliasOnParent: 'buttons',
+    scalarFields: [
+      { field: 'url', type: 'string', schema: {} },
+    ],
+    translationFields: [
+      { field: 'label', type: 'string', schema: {} },
+    ],
+  },
+  {
+    parent: 'block_banner', collection: 'block_banner_buttons',
+    aliasOnParent: 'buttons',
+    scalarFields: [
+      { field: 'url', type: 'string', schema: {} },
+    ],
+    translationFields: [
+      { field: 'label', type: 'string', schema: {} },
+    ],
+  },
+]
 
 const COLLECTIONS_TO_BACKUP = [
   'touren', 'tour_termine', 'pages', 'seo',
@@ -196,9 +277,9 @@ async function ensureLanguagesPermission() {
   console.log('  + read-permission on languages')
 }
 
-async function ensureTranslationsSubtable(parent, cfg) {
+async function ensureTranslationsSubtable(parent, cfg, existingCols) {
   const subtable = `${parent}_translations`
-  const cols = await directus.request(readCollections())
+  const cols = existingCols ?? await directus.request(readCollections())
   if (cols.find((c) => c.collection === subtable)) {
     console.log(`  ✓ ${subtable}`)
     return
@@ -251,14 +332,75 @@ async function ensureTranslationsSubtable(parent, cfg) {
 }
 
 async function ensureContentTranslations() {
+  const cols = await directus.request(readCollections())
   for (const [parent, cfg] of Object.entries(CONTENT_TRANSLATIONS)) {
-    await ensureTranslationsSubtable(parent, cfg)
+    await ensureTranslationsSubtable(parent, cfg, cols)
   }
 }
 
 async function ensureBlockTranslations() {
-  for (const [parent, fields] of Object.entries(BLOCK_TRANSLATIONS)) {
-    await ensureTranslationsSubtable(parent, { fields, hasSlug: false })
+  const cols = await directus.request(readCollections())
+  for (const [parent, cfg] of Object.entries(BLOCK_TRANSLATIONS)) {
+    await ensureTranslationsSubtable(parent, cfg, cols)
+  }
+}
+
+async function ensureItemSubCollection(cfg, existingCols) {
+  const { parent, collection, aliasOnParent, scalarFields, translationFields } = cfg
+  const cols = existingCols ?? await directus.request(readCollections())
+  const parentFields = await directus.request(readFieldsByCollection(parent))
+  const parentPk = parentFields.find((f) => f.schema?.is_primary_key)
+  const parentPkType = parentPk?.type ?? 'uuid'
+  const parentFk = `${parent}_id`
+
+  // Sub-Collection selbst
+  if (!cols.find((c) => c.collection === collection)) {
+    if (DRY) { console.log(`  (dry) would create ${collection}`); return }
+    await directus.request(createCollection({
+      collection, meta: { hidden: true, singleton: false, icon: 'list_alt', sort_field: 'sort' }, schema: {},
+      fields: [
+        { field: 'id', type: 'uuid',
+          meta: { hidden: true, interface: 'input', readonly: true, special: ['uuid'] },
+          schema: { is_primary_key: true } },
+        { field: parentFk, type: parentPkType,
+          meta: { hidden: true, interface: 'input', readonly: true }, schema: {} },
+        { field: 'sort', type: 'integer',
+          meta: { hidden: true, interface: 'input' }, schema: {} },
+        ...scalarFields.map((f) => {
+          // strip 'related' before sending to Directus; it's our own marker
+          const { related, ...rest } = f
+          return rest
+        }),
+      ],
+    }))
+    // Parent-FK-Relation (m2o + one_field on parent for drag-and-drop list)
+    await directus.request(createRelation({
+      collection, field: parentFk, related_collection: parent,
+      meta: { one_field: aliasOnParent, sort_field: 'sort', one_deselect_action: 'delete' },
+      schema: { on_delete: 'CASCADE' },
+    }))
+    // Eventuelle weitere Relations (z.B. testimonials.tour → touren)
+    for (const f of scalarFields) {
+      if (f.related) {
+        await directus.request(createRelation({
+          collection, field: f.field, related_collection: f.related,
+          meta: {}, schema: { on_delete: 'SET NULL' },
+        }))
+      }
+    }
+    console.log(`  + ${collection}`)
+  } else {
+    console.log(`  ✓ ${collection}`)
+  }
+
+  // Translations-Subtable (reuse existing helper)
+  await ensureTranslationsSubtable(collection, { fields: translationFields, hasSlug: false }, cols)
+}
+
+async function ensureItemSubCollections() {
+  const cols = await directus.request(readCollections())
+  for (const cfg of ITEM_SUBCOLLECTIONS) {
+    await ensureItemSubCollection(cfg, cols)
   }
 }
 
@@ -281,8 +423,10 @@ async function run() {
   console.log('\n→ Block translations')
   await ensureBlockTranslations()
 
-  // Tasks 5–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
-  // await ensureItemSubCollections()
+  console.log('\n→ Item sub-collections')
+  await ensureItemSubCollections()
+
+  // Tasks 6–7 hängen hier weitere Schritte an (NEW CALLS GO ABOVE THIS LINE):
   // await migrateData()
   // await seedNavigation()
   // await ensurePermissions()
